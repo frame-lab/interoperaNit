@@ -1,0 +1,7 @@
+  
+interface - interface for the ontology aligner
+Usage: python interface -args
+-h     Prints this help
+-r     Executes the algorithm to read the ontology
+-a     Executes the algorithm to make an align of the ontologys
+-t     Executes the training algorithm
