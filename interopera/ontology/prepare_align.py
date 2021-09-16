@@ -34,7 +34,7 @@ class PrepareAlign:
         domain_parameters = []
         domain_entities = []
 
-        for line in ontology:
+        for line in ontology['file']:
             if 'CREATE TABLE IF NOT EXISTS ' in line:
                 words = line.split(' ')
                 domain_name = words[5].replace('"', '')
