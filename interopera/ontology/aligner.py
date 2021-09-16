@@ -21,7 +21,7 @@ class Aligner:
                 second_ontology.domain_name)
 
     def distance_parameter(self, first_ontology, second_ontology):
-        if any(first_parameter != 'id' and textdistance.hamming(first_parameter, second_parameter)
+        if any(first_parameter['parameter'] != 'id' and textdistance.hamming(first_parameter['parameter'], second_parameter['parameter'])
                for second_parameter in second_ontology.domain_parameters for first_parameter in first_ontology.domain_parameters):
             first_ontology.match_parameters.append(
                 second_ontology.domain_name)
@@ -57,11 +57,11 @@ class Aligner:
     def synonym_parameter(self, first_ontology, second_ontology):
         for first_parameter in first_ontology.domain_parameters:
             synonyms = []
-            for syn in wordnet.synsets(first_parameter):
+            for syn in wordnet.synsets(first_parameter['parameter']):
                 for lm in syn.lemmas():
                     synonyms.append(lm.name())
             for second_parameter in second_ontology.domain_parameters:
-                if second_parameter in synonyms and first_parameter != 'id':
+                if second_parameter['parameter'] in synonyms and first_parameter['parameter'] != 'id':
                     first_ontology.match_subclasses.append(
                         second_ontology.domain_name)
 
@@ -84,7 +84,7 @@ class Aligner:
                 second_ontology.domain_name)
 
     def ident_parameter(self, first_ontology, second_ontology):
-        if any(parameter != 'id' and parameter in first_ontology.domain_parameters for parameter in second_ontology.domain_parameters):
+        if any(first_parameter['parameter'] != 'id' and second_parameter == first_parameter for second_parameter in second_ontology.domain_parameters for first_parameter in first_ontology.domain_parameters):
             first_ontology.match_parameters.append(
                 second_ontology.domain_name)
 
