@@ -29,7 +29,8 @@ class Aligner:
                         first_parameter['parameter'], second_parameter['parameter']) > 0.9:
                     first_ontology.match_parameters.append({
                         'domain_name': second_ontology.domain_name,
-                        'domain_parameter': second_parameter
+                        'domain_parameter': second_parameter,
+                        'my_parameter': first_parameter
                     })
 
     def align_distance(self):
@@ -72,7 +73,8 @@ class Aligner:
                 if second_parameter['parameter'] in synonyms and first_parameter['parameter'] != 'id':
                     first_ontology.match_subclasses.append({
                         'domain_name': second_ontology.domain_name,
-                        'domain_parameter': second_parameter
+                        'domain_parameter': second_parameter,
+                        'my_parameter': first_parameter
                     })
 
     def align_synonym(self):
@@ -101,7 +103,8 @@ class Aligner:
                 if first_parameter['parameter'] != 'id' and second_parameter['parameter'] == first_parameter['parameter']:
                     first_ontology.match_parameters.append({
                         'domain_name': second_ontology.domain_name,
-                        'domain_parameter': second_parameter
+                        'domain_parameter': second_parameter,
+                        'my_parameter': first_parameter
                     })
                     break
 
