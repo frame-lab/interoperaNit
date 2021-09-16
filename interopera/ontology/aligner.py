@@ -8,24 +8,25 @@ class Aligner:
         self.ontologies = ontologies
 
     def distance_name(self, first_ontology, second_ontology):
-        if textdistance.hamming(
+        if textdistance.hamming.normalized_similarity(
                 first_ontology.domain_name,
-                second_ontology.domain_name):
+                second_ontology.domain_name) > 0.9:
             first_ontology.match_name.append(
                 second_ontology.domain_name)
 
     def distance_subclass(self, first_ontology, second_ontology):
         for first_subclass in first_ontology.domain_subclasses:
             for second_subclass in second_ontology.domain_subclasses:
-                if textdistance.hamming(first_subclass, second_subclass):
+                if textdistance.hamming.normalized_similarity(
+                        first_subclass, second_subclass) > 0.9:
                     first_ontology.match_subclasses.append(
                         second_ontology.domain_name)
 
     def distance_parameter(self, first_ontology, second_ontology):
         for first_parameter in first_ontology.domain_parameters:
             for second_parameter in second_ontology.domain_parameters:
-                if first_parameter['parameter'] != 'id' and textdistance.hamming(
-                        first_parameter['parameter'], second_parameter['parameter']):
+                if first_parameter['parameter'] != 'id' and textdistance.hamming.normalized_similarity(
+                        first_parameter['parameter'], second_parameter['parameter']) > 0.9:
                     first_ontology.match_parameters.append({
                         'domain_name': second_ontology.domain_name,
                         'domain_parameter': second_parameter
