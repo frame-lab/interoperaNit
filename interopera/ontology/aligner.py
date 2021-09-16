@@ -15,16 +15,21 @@ class Aligner:
                 second_ontology.domain_name)
 
     def distance_subclass(self, first_ontology, second_ontology):
-        if any(textdistance.hamming(first_subclass, second_subclass)
-               for second_subclass in second_ontology.domain_subclasses for first_subclass in first_ontology.domain_subclasses):
-            first_ontology.match_subclasses.append(
-                second_ontology.domain_name)
+        for first_subclass in first_ontology.domain_subclasses:
+            for second_subclass in second_ontology.domain_subclasses:
+                if textdistance.hamming(first_subclass, second_subclass):
+                    first_ontology.match_subclasses.append(
+                        second_ontology.domain_name)
 
     def distance_parameter(self, first_ontology, second_ontology):
-        if any(first_parameter['parameter'] != 'id' and textdistance.hamming(first_parameter['parameter'], second_parameter['parameter'])
-               for second_parameter in second_ontology.domain_parameters for first_parameter in first_ontology.domain_parameters):
-            first_ontology.match_parameters.append(
-                second_ontology.domain_name)
+        for first_parameter in first_ontology.domain_parameters:
+            for second_parameter in second_ontology.domain_parameters:
+                if first_parameter['parameter'] != 'id' and textdistance.hamming(
+                        first_parameter['parameter'], second_parameter['parameter']):
+                    first_ontology.match_parameters.append({
+                        'domain_name': second_ontology.domain_name,
+                        'domain_parameter': second_parameter
+                    })
 
     def align_distance(self):
         for i in range(len(self.ontologies)):
@@ -50,8 +55,10 @@ class Aligner:
                     synonyms.append(lm.name())
             for second_subclass in second_ontology.domain_subclasses:
                 if second_subclass in synonyms:
-                    first_ontology.match_subclasses.append(
-                        second_ontology.domain_name)
+                    first_ontology.match_subclasses.append({
+                        'domain_name': second_ontology.domain_name,
+                        'domain_subclass': second_subclass
+                    })
                     break
 
     def synonym_parameter(self, first_ontology, second_ontology):
@@ -62,8 +69,10 @@ class Aligner:
                     synonyms.append(lm.name())
             for second_parameter in second_ontology.domain_parameters:
                 if second_parameter['parameter'] in synonyms and first_parameter['parameter'] != 'id':
-                    first_ontology.match_subclasses.append(
-                        second_ontology.domain_name)
+                    first_ontology.match_subclasses.append({
+                        'domain_name': second_ontology.domain_name,
+                        'domain_parameter': second_parameter
+                    })
 
     def align_synonym(self):
         for i in range(len(self.ontologies)):
@@ -78,15 +87,22 @@ class Aligner:
                 second_ontology.domain_name)
 
     def ident_subclass(self, first_ontology, second_ontology):
-        if any(
-                subclass in first_ontology.domain_subclasses for subclass in second_ontology.domain_subclasses):
-            first_ontology.match_subclasses.append(
-                second_ontology.domain_name)
+        for subclass in second_ontology.domain_subclasses:
+            if subclass in first_ontology.domain_subclasses:
+                first_ontology.match_subclasses.append({
+                    'domain_name': second_ontology.domain_name,
+                    'domain_subclass': subclass
+                })
 
     def ident_parameter(self, first_ontology, second_ontology):
-        if any(first_parameter['parameter'] != 'id' and second_parameter == first_parameter for second_parameter in second_ontology.domain_parameters for first_parameter in first_ontology.domain_parameters):
-            first_ontology.match_parameters.append(
-                second_ontology.domain_name)
+        for first_parameter in first_ontology.domain_parameters:
+            for second_parameter in second_ontology.domain_parameters:
+                if first_parameter['parameter'] != 'id' and second_parameter['parameter'] == first_parameter['parameter']:
+                    first_ontology.match_parameters.append({
+                        'domain_name': second_ontology.domain_name,
+                        'domain_parameter': second_parameter
+                    })
+                    break
 
     def align_ident(self):
         for i in range(len(self.ontologies)):
