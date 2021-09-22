@@ -1,62 +1,50 @@
-from ontology.get_ontogies import GetOntologies
-from ontology.prepare_align import PrepareAlign
-from ontology.aligner import Aligner
-from ontology.generate_files import GenerateFiles
+from base.get_bases import GetBases
+from base.prepare_align import PrepareAlign
+from base.aligner import Aligner
 import nltk
 import sys
 
 
-class OntoInterface:
+class Interface:
     def print_help(self):
         help = open('help', 'r')
         print(help.read())
         help.close()
 
-    def _generate_aligner(self):
-        get_ontos = GetOntologies()
-        get_ontos.samples()
-        get_ontos.is_same_extension()
-        prepare = PrepareAlign(get_ontos.ontogies)
-        prepare.prepare_ontologies()
-        return Aligner(prepare.processed_ontologies)
+    def generate_aligner(self):
+        get_bases = GetBases()
+        get_bases.samples()
+        prepare = PrepareAlign(get_bases.bases)
+        prepare.prepare_bases()
+        return Aligner(prepare.processed_bases)
 
-    def align_ontology_distance(self):
-        aligner = self._generate_aligner()
-        aligner.align_distance()
-        generator = GenerateFiles(aligner.ontologies)
-        generator.make_files()
-
-    def align_ontology_synonym(self):
+    def align_base_synonym(self, aligner):
         nltk.download('wordnet')
-        aligner = self._generate_aligner()
         aligner.align_synonym()
-        generator = GenerateFiles(aligner.ontologies)
-        generator.make_files()
 
-    def align_ontology_ident(self):
-        aligner = self._generate_aligner()
-        aligner.align_ident()
-        generator = GenerateFiles(aligner.ontologies)
-        generator.make_files()
+    def align_base_translation(self, aligner):
+        aligner.align_translation()
 
-    def align_ontology_match_entity(self):
-        aligner = self._generate_aligner()
+    def align_base_distance(self, aligner):
+        aligner.align_distance()
+
+    def align_base_match_entity(self, aligner):
         aligner.align_match_entity()
-        generator = GenerateFiles(aligner.ontologies)
-        generator.make_files()
+
+
+interface = Interface()
+aligner = interface.generate_aligner()
 
 if len(sys.argv) > 1:
-    face = OntoInterface()
-    type = sys.argv[1]
-    if type == '-h':
-        face.print_help()
-    elif type == '-ad':
-        face.align_ontology_distance()
-    elif type == '-as':
-        face.align_ontology_synonym()
-    elif type == '-ai':
-        face.align_ontology_ident()
-    elif type == '-am':
-        face.align_ontology_match_entity()
-else:
-    print('you have to pass a routine parameter')
+    for pos in range(1, len(sys.argv)):
+        type = sys.argv[pos]
+        if type == '-h':
+            interface.print_help()
+        elif type == '-s':
+            interface.align_base_synonym(aligner)
+        elif type == '-t':
+            interface.align_base_translation(aligner)
+        elif type == '-d':
+            interface.align_base_distance(aligner)
+
+interface.align_base_match_entity(aligner)

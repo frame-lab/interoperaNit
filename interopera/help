@@ -1,8 +1,7 @@
   
-interface - interface for the ontology aligner
+interface - interface for the base aligner
 Usage: python interface -args
 -h     Prints this help
--ad     Executes the algorithm to make an align of the ontologys with editing distance
--as     Executes the algorithm to make an align of the ontologys with synonym
--ai     Executes the algorithm to make an align of the ontologys with identity
--am     Executes the algorithm to make an align of the ontologys with match entity
+-s     Executes the algorithm to make an align of the bases with synonym
+-t     Executes the algorithm to make an align of the bases with translation
+-d     Executes the algorithm to make an align of the bases with editing distance

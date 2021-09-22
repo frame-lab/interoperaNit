@@ -1,4 +1,4 @@
-APIDOC_TITLE = "Ontology aligner"
+APIDOC_TITLE = "Base aligner"
 APIDOC_DESCRIPTION = "Documentation of the aligner"
 APIDOC_VERSION = "0.1.0"
 
