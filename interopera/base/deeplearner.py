@@ -4,17 +4,11 @@ import deepmatcher as dm
 class Deeplearner:
     def __init__(self) -> None:
         self.model = dm.MatchingModel()
+        self._make_model()
 
-    def _parser_input(self, bases):
-        f = open(f'bigbase.csv', 'w')
-        for base in bases:
-            separator = ','
-            f.write(f'{separator.join(base.parameters)}\n')
-            for entity in base.entities:
-                f.write(f'{separator.join(entity)}\n')
-
-    def make_model(self):
+    def _make_model(self):
         train, validation, test = dm.data.process(
+            cache='best_model.pth',
             path='train',
             train='amz_goog_train.csv',
             validation='amz_goog_validation.csv',
@@ -29,9 +23,17 @@ class Deeplearner:
             trained_model=self.model)
         self.model.run_prediction(unlabeled, output_attributes=True)
 
+    def parser_input(self, bases):
+        f = open(f'csv/bigbase.csv', 'w')
+        for base in bases:
+            separator = ','
+            f.write(f'{separator.join(base.parameters)}\n')
+            for entity in base.entities:
+                f.write(f'{separator.join(entity)}\n')
+
     def align(self):
         unlabeled = dm.data.process_unlabeled(
-            path='bigbase.csv',
+            path='csv/bigbase.csv',
             trained_model=self.model)
         predictions = self.model.run_prediction(
             unlabeled, output_attributes=True)
