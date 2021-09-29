@@ -1,6 +1,7 @@
 from base.get_bases import GetBases
 from base.prepare_align import PrepareAlign
 from base.aligner import Aligner
+from dotenv import load_dotenv
 import nltk
 import sys
 
@@ -32,6 +33,7 @@ class Interface:
         aligner.align_match_entity()
 
 
+load_dotenv()
 interface = Interface()
 aligner = interface.generate_aligner()
 
