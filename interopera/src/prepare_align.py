@@ -1,4 +1,4 @@
-from base.base import Base
+from interopera.src.base import Base
 
 
 class PrepareAlign:
