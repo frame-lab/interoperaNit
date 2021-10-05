@@ -1,6 +1,6 @@
-from base.get_bases import GetBases
-from base.prepare_align import PrepareAlign
-from base.aligner import Aligner
+from src.get_bases import GetBases
+from src.prepare_align import PrepareAlign
+from src.aligner import Aligner
 from dotenv import load_dotenv
 import nltk
 import sys
