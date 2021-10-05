@@ -32,7 +32,8 @@ class Deeplearner:
         f = open(f'csv/bigbase.csv', 'w')
         for base in bases:
             separator = ','
-            f.write(f'{separator.join(base.parameters)}\n')
+            parameters = [param['parameter'] for param in base.parameters]
+            f.write(f'{separator.join(parameters)}\n')
             for entity in base.entities:
                 f.write(f'{separator.join(entity)}\n')
 
