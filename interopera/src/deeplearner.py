@@ -8,20 +8,25 @@ class Deeplearner:
 
     def _make_model(self):
         train, validation, test = dm.data.process(
-            cache='best_model.pth',
             path='train',
-            train='amz_goog_train.csv',
-            validation='amz_goog_validation.csv',
-            test='amz_goog_test.csv')
+            train='train.csv',
+            validation='validation.csv',
+            test='test.csv')
         self.model.run_train(
             train,
             validation,
             best_save_path='best_model.pth')
         self.model.run_eval(test)
+
+    def _test_eval(self):
         unlabeled = dm.data.process_unlabeled(
-            path='train/amz_goog_unlabeled.csv',
+            path='train/unlabeled.csv',
             trained_model=self.model)
         self.model.run_prediction(unlabeled, output_attributes=True)
+
+    def _train(self):
+        self._make_model()
+        self._test_eval()
 
     def parser_input(self, bases):
         f = open(f'csv/bigbase.csv', 'w')
