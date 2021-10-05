@@ -1,7 +1,7 @@
-from interopera.src.synonym import Synonym
-from interopera.src.distancy import Distancy
-from interopera.src.translation import Translation
-from interopera.src.deeplearner import Deeplearner
+from src.synonym import Synonym
+from src.distancy import Distancy
+from src.translation import Translation
+from src.deeplearner import Deeplearner
 
 
 class Aligner:
