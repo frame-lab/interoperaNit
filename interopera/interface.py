@@ -1,5 +1,5 @@
-from src.get_bases import GetBases
-from src.prepare_align import PrepareAlign
+from src.base_files import BaseFiles
+from src.preparer import Preparer
 from src.aligner import Aligner
 from dotenv import load_dotenv
 import nltk
@@ -13,11 +13,9 @@ class Interface:
         help.close()
 
     def generate_aligner(self):
-        get_bases = GetBases()
-        get_bases.samples()
-        prepare = PrepareAlign(get_bases.bases)
-        prepare.prepare_bases()
-        return Aligner(prepare.processed_bases)
+        base_files = BaseFiles()
+        preparer = Preparer(base_files.samples())
+        return Aligner(preparer.prepare_bases())
 
     def align_base_synonym(self, aligner):
         nltk.download('wordnet')

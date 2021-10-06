@@ -1,10 +1,13 @@
 import deepmatcher as dm
-
+import os
 
 class Deeplearner:
     def __init__(self) -> None:
         self.model = dm.MatchingModel()
-        self._make_model()
+        if os.path.exists('./best_model.pth'):
+            self.model.load_state('best_model.pth')
+        else:
+            self._make_model()
 
     def _make_model(self):
         train, validation, test = dm.data.process(

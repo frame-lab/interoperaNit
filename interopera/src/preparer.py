@@ -1,16 +1,19 @@
 from src.base import Base
 
 
-class PrepareAlign:
-    def __init__(self, raw_bases) -> None:
-        self.raw_bases = raw_bases
-        self.processed_bases = []
+class Preparer:
+    def __init__(self, file_objects) -> None:
+        self.bases = []
+        self.file_objects = file_objects
+        self.unique_keys = [
+            line.replace('\n', '') for line in open('unique', 'r')]
 
     def prepare_bases(self):
-        for base in self.raw_bases:
-            self._prepare_file(base)
+        for file_object in self.file_objects:
+            self._prepare_file(file_object)
+        return self.bases
 
-    def _prepare_file(self, base):
+    def _prepare_file(self, file_object):
         new = False
         new_entities = False
         is_entities = False
@@ -19,7 +22,7 @@ class PrepareAlign:
         parameters = []
         entities = []
 
-        for line in base['file']:
+        for line in file_object['file']:
             if 'CREATE TABLE IF NOT EXISTS ' in line:
                 words = line.split(' ')
                 name = words[5].replace('"', '')
@@ -31,10 +34,10 @@ class PrepareAlign:
 
             elif new:
                 words = line.split(' ')
+                parameter = words.pop(0).replace('\t', '').replace('"', '')
                 parameter = {
-                    'parameter': words.pop(0).
-                    replace('\t', '').
-                    replace('"', ''),
+                    'unique': parameter in self.unique_keys,
+                    'parameter':parameter,
                     'type': [word.
                              replace(',', '').
                              replace('\n', '') for word in words]
@@ -47,8 +50,9 @@ class PrepareAlign:
                     name,
                     parameters,
                     entities,
-                    'sql')
-                self.processed_bases.append(base)
+                    file_object['extension'],
+                    file_object['name'])
+                self.bases.append(base)
                 name = ''
                 parameters = []
                 entities = []
