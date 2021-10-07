@@ -32,6 +32,11 @@ class Deeplearner:
         self._test_eval()
 
     def parser_input(self, bases):
+        if os.path.isdir('csv'):
+            pass
+        else:
+            os.mkdir('csv')
+            
         f = open(f'csv/bigbase.csv', 'w')
         for base in bases:
             separator = ','
