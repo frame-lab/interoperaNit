@@ -6,7 +6,7 @@ class Distancy:
     def distance_name(first_base, second_base):
         if textdistance.hamming.normalized_similarity(
                 first_base.name,
-                second_base.name) > 0.75:
+                second_base.name) > 0.85:
             first_base.match_name.append(
                 second_base.name)
 
@@ -17,7 +17,7 @@ class Distancy:
                 if first_parameter['parameter'] != 'id' \
                     and textdistance.hamming.normalized_similarity(
                         first_parameter['parameter'],
-                        second_parameter['parameter']) > 0.75:
+                        second_parameter['parameter']) > 0.85:
                     first_base.match_parameters.append({
                         'name': second_base.name,
                         'parameter': second_parameter,
