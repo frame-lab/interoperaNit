@@ -2,12 +2,13 @@ import deepmatcher as dm
 import os
 
 class Deeplearner:
-    def __init__(self) -> None:
+    def __init__(self, bases) -> None:
+        self.bases = bases
         self.model = dm.MatchingModel()
-        if os.path.exists('./best_model.pth'):
-            self.model.load_state('best_model.pth')
-        else:
-            self._make_model()
+
+    def _initialize_model(self):
+        train, _, _ = dm.data.process(path='train', train='train.csv')
+        self.model.initialize(train)
 
     def _make_model(self):
         train, validation, test = dm.data.process(
@@ -30,20 +31,6 @@ class Deeplearner:
     def _train(self):
         self._make_model()
         self._test_eval()
-
-    def parser_input(self, bases):
-        if os.path.isdir('csv'):
-            pass
-        else:
-            os.mkdir('csv')
-            
-        f = open(f'csv/bigbase.csv', 'w')
-        for base in bases:
-            separator = ','
-            parameters = [param['parameter'] for param in base.parameters]
-            f.write(f'{separator.join(parameters)}\n')
-            for entity in base.entities:
-                f.write(f'{separator.join(entity)}\n')
 
     def align(self):
         unlabeled = dm.data.process_unlabeled(

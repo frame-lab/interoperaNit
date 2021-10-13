@@ -13,7 +13,7 @@ class BaseFiles:
         for (_, _, filenames) in walk(self.path):
             for i in range(0, len(filenames)):
                 extension_index = filenames[i].rindex('.')
-                file = open(self.path + filenames[i], 'r')
+                file = open(self.path + filenames[i], 'r', encoding='utf-8')
                 file_object = {
                     'name': filenames[i][:extension_index],
                     'extension': filenames[i][extension_index:],

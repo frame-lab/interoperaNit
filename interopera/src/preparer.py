@@ -49,7 +49,7 @@ class Preparer:
                 new = False
 
             elif new:
-                words = line.split(' ')
+                words = line.strip().split(' ')
                 parameter = self._sql_strip(words.pop(0))
                 if parameter not in sql_reserved_words:
                     parameter_object = {

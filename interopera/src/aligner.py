@@ -33,5 +33,7 @@ class Aligner:
 
     def align_match_entity(self):
         learner = Deeplearner()
-        learner.parser_input(self.bases)
         learner.align()
+
+    def get_aligned_bases(self):
+        return self.bases
