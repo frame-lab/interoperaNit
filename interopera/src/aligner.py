@@ -32,7 +32,7 @@ class Aligner:
                 Distancy.distance_parameter(self.bases[i], self.bases[j])
 
     def align_match_entity(self):
-        learner = Deeplearner()
+        learner = Deeplearner(self.bases)
         learner.align()
 
     def get_aligned_bases(self):
