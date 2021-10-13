@@ -20,7 +20,8 @@ class Synonym:
                 for lm in syn.lemmas():
                     synonyms.append(lm.name())
             for second_parameter in second_base.parameters:
-                if second_parameter['parameter'] in synonyms and first_parameter['parameter'] != 'id':
+                if second_parameter['parameter'] in synonyms \
+                        and first_parameter['parameter'] != 'id':
                     first_base.match_parameters.append({
                         'name': second_base.name,
                         'parameter': second_parameter,

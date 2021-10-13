@@ -1,5 +1,7 @@
 from src.base import Base
 
+sql_reserved_words = ['PRIMARY', 'KEY', 'UNIQUE']
+
 
 class Preparer:
     def __init__(self, file_objects) -> None:
@@ -10,41 +12,60 @@ class Preparer:
 
     def prepare_bases(self):
         for file_object in self.file_objects:
-            self._prepare_file(file_object)
+            if file_object['extension'] == '.sql':
+                self._prepare_sql_file(file_object)
         return self.bases
 
-    def _prepare_file(self, file_object):
+    def _sql_strip(self, text):
+        return text\
+            .replace('\t', '')\
+            .replace('"', '')\
+            .replace('`', '')\
+            .replace(',', '')\
+            .replace('(', '')\
+            .replace(')', '')\
+            .replace('\n', '')\
+            .replace("'", '')
+
+    def _prepare_sql_file(self, file_object):
         new = False
-        new_entities = False
         is_entities = False
 
         name = ''
         parameters = []
         entities = []
 
-        for line in file_object['file']:
+        lines = file_object['file'].readlines()
+
+        for index in range(0, len(lines)):
+            line = lines[index]
+
             if 'CREATE TABLE IF NOT EXISTS ' in line:
                 words = line.split(' ')
-                name = words[5].replace('"', '')
+                name = self._sql_strip(words[5])
                 new = True
 
             elif ';' in line and new:
                 new = False
-                new_entities = True
 
             elif new:
                 words = line.split(' ')
-                parameter = words.pop(0).replace('\t', '').replace('"', '')
-                parameter = {
-                    'unique': parameter in self.unique_keys,
-                    'parameter':parameter,
-                    'type': [word.
-                             replace(',', '').
-                             replace('\n', '') for word in words]
-                }
-                parameters.append(parameter)
+                parameter = self._sql_strip(words.pop(0))
+                if parameter not in sql_reserved_words:
+                    parameter_object = {
+                        'unique': parameter in self.unique_keys,
+                        'parameter': parameter,
+                        'type': [self._sql_strip(word) for word in words]
+                    }
+                    parameters.append(parameter_object)
+                else:
+                    key = self._sql_strip(words[-1])
+                    for parameter_object in parameters:
+                        if parameter_object['parameter'] == key:
+                            parameter_object['unique'] = True
 
-            elif ';' in line and is_entities:
+            elif ';' in line and is_entities and \
+                    f'INSERT INTO' not in lines[index + 1]:
                 is_entities = False
                 base = Base(
                     name,
@@ -57,15 +78,10 @@ class Preparer:
                 parameters = []
                 entities = []
 
-            elif new_entities and f'INSERT INTO "{name}"' in line:
+            elif f'INSERT INTO' in line:
                 is_entities = True
-                new_entities = False
 
             elif is_entities:
                 words = line.split(', ')
-                entity = [word.
-                          replace('(', '').
-                          replace('\t', '').
-                          replace('),\n', '').
-                          replace("'", '') for word in words]
+                entity = [self._sql_strip(word) for word in words]
                 entities.append(entity)
