@@ -4,7 +4,6 @@ import pandas as pd
 class Consultant:
     def __init__(self) -> None:
         self.bigbase = pd.read_csv('csv/bigbase.csv', encoding='utf8')
-        self.bigbase.head()
 
     def run_queries(self, queries):
         for index in range(0, len(queries)):
@@ -12,4 +11,4 @@ class Consultant:
 
     def run_query(self, query, index):
         query_base = self.bigbase.query(query)
-        query_base.to_csv(f'results/query_{index}.csv',index=False)
+        query_base.to_csv(f'results/query_{index}.csv', index=False)
