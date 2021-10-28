@@ -1,7 +1,8 @@
 from src.synonym import Synonym
 from src.distancy import Distancy
 from src.translation import Translation
-from src.deeplearner import Deeplearner
+from src.deep_matcher import DeepMatcher
+from src.magellan import Magellan
 
 
 class Aligner:
@@ -31,9 +32,31 @@ class Aligner:
                 Distancy.distance_name(self.bases[i], self.bases[j])
                 Distancy.distance_parameter(self.bases[i], self.bases[j])
 
-    def align_match_entity(self):
-        learner = Deeplearner(self.bases)
-        learner.align()
+    def align_distance_entities(self):
+        for base in self.bases:
+            matched_bases = list(set([
+                match_base for match_base in self.bases if match_base.name in [
+                    parameter['name'] for parameter in base.match_parameters]]))
+            for matched_base in matched_bases:
+                Distancy.distance_entity(base, matched_base)
+
+    def align_deep_matcher(self):
+        deep = DeepMatcher()
+        for base in self.bases:
+            matched_bases = list(set([
+                match_base for match_base in self.bases if match_base.name in [
+                    parameter['name'] for parameter in base.match_parameters]]))
+            for matched_base in matched_bases:
+                deep.align(base, matched_base)
+
+    def align_magellan(self):
+        magellan = Magellan()
+        for base in self.bases:
+            matched_bases = list(set([
+                match_base for match_base in self.bases if match_base.name in [
+                    parameter['name'] for parameter in base.match_parameters]]))
+            for matched_base in matched_bases:
+                magellan.align(base, matched_base)
 
     def get_aligned_bases(self):
         return self.bases

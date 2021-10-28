@@ -1,4 +1,6 @@
 best_model.pth
-/csv/
-/samples/
-/results/
+csv/
+samples/
+results/
+train/
+processed/

@@ -3,23 +3,62 @@ import textdistance
 
 class Distancy:
     @staticmethod
-    def distance_name(first_base, second_base):
+    def distance_name(base, base_candidate):
         if textdistance.hamming.normalized_similarity(
-                first_base.name,
-                second_base.name) > 0.85:
-            first_base.match_name.append(
-                second_base.name)
+                base.name, base_candidate.name) > 0.85 and \
+                base_candidate.name not in base.match_name:
+            base.match_name.append(
+                base_candidate.name)
 
     @staticmethod
-    def distance_parameter(first_base, second_base):
-        for first_parameter in first_base.parameters:
-            for second_parameter in second_base.parameters:
-                if first_parameter['parameter'] != 'id' \
+    def distance_parameter(base, base_candidate):
+        for base_parameter in base.parameters:
+            for base_candidate_parameter in base_candidate.parameters:
+                match_parameter = {
+                    'name': base_candidate.name,
+                    'matched_parameter': base_candidate_parameter,
+                    'my_parameter': base_parameter
+                }
+
+                if base_parameter['parameter'] != 'id' \
                     and textdistance.hamming.normalized_similarity(
-                        first_parameter['parameter'],
-                        second_parameter['parameter']) > 0.85:
-                    first_base.match_parameters.append({
-                        'name': second_base.name,
-                        'parameter': second_parameter,
-                        'my_parameter': first_parameter
+                        base_parameter['parameter'],
+                        base_candidate_parameter['parameter']) > 0.85 and \
+                        match_parameter not in base.match_parameters:
+
+                    base.match_parameters.append(match_parameter)
+
+    @staticmethod
+    def distance_entity(base, matched_base):
+        match_params = [parameter for parameter in base.match_parameters
+                        if parameter['name'] == matched_base.name]
+
+        base_param_indexes = []
+        matched_param_indexes = []
+
+        for match_param in match_params:
+            base_parameter = match_param["my_parameter"]
+            matched_base_parameter = match_param["matched_parameter"]
+
+            base_param_indexes.append(
+                base.parameters.index(base_parameter))
+            matched_param_indexes.append(
+                matched_base.parameters.index(matched_base_parameter))
+
+        for base_index in range(0, len(base.entities)):
+            for matched_base_index in range(0, len(matched_base.entities)):
+                is_match = True
+                for param_index in range(0, len(base_param_indexes)):
+                    if textdistance.hamming.normalized_similarity(
+                            base.entities[base_index][base_param_indexes[param_index]],
+                            matched_base.entities[matched_base_index][matched_param_indexes[param_index]]) <= 0.85:
+
+                        is_match = False
+
+                if is_match:
+                    base.match_entities.append({
+                        'matched_name': matched_base.name,
+                        'matched_parameter_index': matched_base_index,
+                        'my_parameter_index': base_index,
+                        'my_name': base.name
                     })

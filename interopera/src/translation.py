@@ -10,28 +10,32 @@ class Translation:
         self.client = translate.TranslationServiceClient()
         self.target_language_code = "pt"
 
-    def translation_name(self, first_base, second_base):
+    def translation_name(self, base, base_candidate):
         response = self.client.translate_text(
-            contents=[first_base.name],
+            contents=[base.name],
             target_language_code=self.target_language_code,
             parent=self.parent,
         )
-        if second_base.name in response.translations:
-            first_base.match_name.append(
-                second_base.name)
+        if base_candidate.name in response.translations and \
+                base_candidate.name not in base.match_name:
+            base.match_name.append(
+                base_candidate.name)
 
-    def translation_parameter(self, first_base, second_base):
-        for first_parameter in first_base.parameters:
+    def translation_parameter(self, base, base_candidate):
+        for base_parameter in base.parameters:
             response = self.client.translate_text(
-                contents=[first_base.name],
+                contents=[base.name],
                 target_language_code=self.target_language_code,
                 parent=self.parent,
             )
-            for second_parameter in second_base.parameters:
-                if second_parameter['parameter'] in response.translations \
-                        and first_parameter['parameter'] != 'id':
-                    first_base.match_parameters.append({
-                        'name': second_base.name,
-                        'parameter': second_parameter,
-                        'my_parameter': first_parameter
-                    })
+            for base_candidate_parameter in base_candidate.parameters:
+                match_parameter = {
+                    'name': base_candidate.name,
+                    'matched_parameter': base_candidate_parameter,
+                    'my_parameter': base_parameter
+                }
+
+                if base_candidate_parameter['parameter'] in response.translations \
+                        and base_parameter['parameter'] != 'id' and \
+                        match_parameter not in base.match_parameters:
+                    base.match_parameters.append(match_parameter)

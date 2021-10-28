@@ -1,9 +1,7 @@
 import deepmatcher as dm
-import os
 
-class Deeplearner:
-    def __init__(self, bases) -> None:
-        self.bases = bases
+class DeepMatcher:
+    def __init__(self) -> None:
         self.model = dm.MatchingModel()
 
     def _initialize_model(self):

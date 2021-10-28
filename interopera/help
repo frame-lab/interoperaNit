@@ -1,7 +1,8 @@
-  
 interface - interface for the base aligner
 Usage: python interface -args
 -h     Prints this help
 -s     Executes the algorithm to make an align of the bases with synonym
 -t     Executes the algorithm to make an align of the bases with translation
--d     Executes the algorithm to make an align of the bases with editing distance
+-e     Executes the algorithm to make an align of the bases with editing distance
+-d    Executes the algorithm to make an align of the entities with deep matcher
+-m     Executes the algorithm to make an align of the entities with editing distance

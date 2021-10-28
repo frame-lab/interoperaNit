@@ -14,6 +14,9 @@ class Preparer:
         for file_object in self.file_objects:
             if file_object['extension'] == '.sql':
                 self._prepare_sql_file(file_object)
+            elif file_object['extension'] == 'csv':
+                self._prepare_csv_file(file_object)
+            file_object['file'].close()
         return self.bases
 
     def _sql_strip(self, text):
@@ -25,7 +28,8 @@ class Preparer:
             .replace('(', '')\
             .replace(')', '')\
             .replace('\n', '')\
-            .replace("'", '')
+            .replace("'", '')\
+            .replace(";", '')
 
     def _prepare_sql_file(self, file_object):
         new = False
@@ -67,6 +71,9 @@ class Preparer:
             elif ';' in line and is_entities and \
                     f'INSERT INTO' not in lines[index + 1]:
                 is_entities = False
+                words = line.split(', ')
+                entity = [self._sql_strip(word) for word in words]
+                entities.append(entity)
                 base = Base(
                     name,
                     parameters,
@@ -85,3 +92,20 @@ class Preparer:
                 words = line.split(', ')
                 entity = [self._sql_strip(word) for word in words]
                 entities.append(entity)
+
+    def _prepare_csv_file(self, file_object):
+        lines = file_object['file'].readlines()
+
+        parameters = lines[0].split(',')
+        entities = []
+
+        for line in lines:
+            entities.append(line.split(','))
+
+        base = Base(
+            file_object['name'],
+            parameters,
+            entities,
+            file_object['extension'],
+            file_object['name'])
+        self.bases.append(base)
