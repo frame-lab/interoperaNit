@@ -33,3 +33,40 @@ class Synonym:
                         match_parameter not in base.match_parameters:
 
                     base.match_parameters.append(match_parameter)
+
+    @staticmethod
+    def synonym_entity(base, matched_base):
+        match_params = [parameter for parameter in base.match_parameters
+                        if parameter['name'] == matched_base.name]
+
+        base_param_indexes = []
+        matched_param_indexes = []
+
+        for match_param in match_params:
+            base_parameter = match_param["my_parameter"]
+            matched_base_parameter = match_param["matched_parameter"]
+
+            base_param_indexes.append(
+                base.parameters.index(base_parameter))
+            matched_param_indexes.append(
+                matched_base.parameters.index(matched_base_parameter))
+
+        for base_index in range(0, len(base.entities)):
+            for matched_base_index in range(0, len(matched_base.entities)):
+                is_match = True
+                for param_index in range(0, len(base_param_indexes)):
+                    synonyms = []
+                    for syn in wordnet.synsets(
+                            base.entities[base_index][base_param_indexes[param_index]]):
+                        for lm in syn.lemmas():
+                            synonyms.append(lm.name())
+                    if matched_base.entities[matched_base_index][matched_param_indexes[param_index]] not in synonyms:
+                        is_match = False
+
+                if is_match:
+                    base.match_entities.append({
+                        'matched_name': matched_base.name,
+                        'matched_parameter_index': matched_base_index,
+                        'my_parameter_index': base_index,
+                        'my_name': base.name
+                    })

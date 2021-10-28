@@ -1,5 +1,5 @@
 import textdistance
-
+import copy
 
 class Distancy:
     @staticmethod
@@ -45,14 +45,16 @@ class Distancy:
             matched_param_indexes.append(
                 matched_base.parameters.index(matched_base_parameter))
 
+        matched_copy = copy.deepcopy(matched_base.entities)
+
         for base_index in range(0, len(base.entities)):
-            for matched_base_index in range(0, len(matched_base.entities)):
+            for matched_base_index in reversed(range(0, len(matched_copy))):
+                print(base_index)
                 is_match = True
                 for param_index in range(0, len(base_param_indexes)):
                     if textdistance.hamming.normalized_similarity(
                             base.entities[base_index][base_param_indexes[param_index]],
-                            matched_base.entities[matched_base_index][matched_param_indexes[param_index]]) <= 0.85:
-
+                            matched_copy[matched_base_index][matched_param_indexes[param_index]]) <= 0.85:
                         is_match = False
 
                 if is_match:
@@ -62,3 +64,4 @@ class Distancy:
                         'my_parameter_index': base_index,
                         'my_name': base.name
                     })
+                    matched_copy.pop(matched_base_index)

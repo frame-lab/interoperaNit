@@ -44,9 +44,32 @@ class Preparer:
         for index in range(0, len(lines)):
             line = lines[index]
 
-            if 'CREATE TABLE IF NOT EXISTS ' in line:
+            if index == len(lines) - 1:
+                is_entities = False
+                words = line.split('	')
+                if len(words) == 1:
+                    words = line.split(', ')
+                entity = [self._sql_strip(word) for word in words]
+                entities.append(entity)
+                base = Base(
+                    name,
+                    parameters,
+                    entities,
+                    file_object['extension'],
+                    file_object['name'])
+                self.bases.append(base)
+                name = ''
+                parameters = []
+                entities = []
+
+            elif 'CREATE TABLE IF NOT EXISTS ' in line:
                 words = line.split(' ')
                 name = self._sql_strip(words[5])
+                new = True
+
+            elif 'CREATE TABLE ' in line:
+                words = line.split(' ')[2].split('.')[1]
+                name = self._sql_strip(words)
                 new = True
 
             elif ';' in line and new:
@@ -68,7 +91,7 @@ class Preparer:
                         if parameter_object['parameter'] == key:
                             parameter_object['unique'] = True
 
-            elif ';' in line and is_entities and \
+            elif is_entities and (';' in line or line == '\\.') and \
                     f'INSERT INTO' not in lines[index + 1]:
                 is_entities = False
                 words = line.split(', ')
@@ -88,8 +111,13 @@ class Preparer:
             elif f'INSERT INTO' in line:
                 is_entities = True
 
+            elif f'COPY ' in line:
+                is_entities = True
+
             elif is_entities:
-                words = line.split(', ')
+                words = line.split('	')
+                if len(words) == 1:
+                    words = line.split(', ')
                 entity = [self._sql_strip(word) for word in words]
                 entities.append(entity)
 
