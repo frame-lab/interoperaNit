@@ -58,6 +58,8 @@ load_dotenv()
 controler = Controler()
 controler.generate_aligner()
 
+arg_len = len(sys.argv)
+
 sys.argv.pop(0)
 
 if '-h' in sys.argv:
@@ -79,7 +81,8 @@ if '-m' in sys.argv:
     controler.align_magellan()
     sys.argv.remove('-m')
 
-controler.generate_csv()
+if arg_len > 1:
+    controler.generate_csv()
 
 queries = [
     line.replace('\n', '') for line in open('queries', 'r')]

@@ -37,3 +37,4 @@ class DeepMatcher:
         predictions = self.model.run_prediction(
             unlabeled, output_attributes=True)
         predictions.head()
+        predictions.to_csv(f'results/matched.csv', index=False)

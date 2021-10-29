@@ -14,12 +14,12 @@ class Preparer:
         for file_object in self.file_objects:
             if file_object['extension'] == '.sql':
                 self._prepare_sql_file(file_object)
-            elif file_object['extension'] == 'csv':
+            elif file_object['extension'] == '.csv':
                 self._prepare_csv_file(file_object)
             file_object['file'].close()
         return self.bases
 
-    def _sql_strip(self, text):
+    def _preparer_strip(self, text):
         return text\
             .replace('\t', '')\
             .replace('"', '')\
@@ -49,7 +49,7 @@ class Preparer:
                 words = line.split('	')
                 if len(words) == 1:
                     words = line.split(', ')
-                entity = [self._sql_strip(word) for word in words]
+                entity = [self._preparer_strip(word) for word in words]
                 entities.append(entity)
                 base = Base(
                     name,
@@ -64,12 +64,12 @@ class Preparer:
 
             elif 'CREATE TABLE IF NOT EXISTS ' in line:
                 words = line.split(' ')
-                name = self._sql_strip(words[5])
+                name = self._preparer_strip(words[5])
                 new = True
 
             elif 'CREATE TABLE ' in line:
                 words = line.split(' ')[2].split('.')[1]
-                name = self._sql_strip(words)
+                name = self._preparer_strip(words)
                 new = True
 
             elif ';' in line and new:
@@ -77,16 +77,16 @@ class Preparer:
 
             elif new:
                 words = line.strip().split(' ')
-                parameter = self._sql_strip(words.pop(0))
+                parameter = self._preparer_strip(words.pop(0))
                 if parameter not in sql_reserved_words:
                     parameter_object = {
                         'unique': parameter in self.unique_keys,
                         'parameter': parameter,
-                        'type': [self._sql_strip(word) for word in words]
+                        'type': [self._preparer_strip(word) for word in words]
                     }
                     parameters.append(parameter_object)
                 else:
-                    key = self._sql_strip(words[-1])
+                    key = self._preparer_strip(words[-1])
                     for parameter_object in parameters:
                         if parameter_object['parameter'] == key:
                             parameter_object['unique'] = True
@@ -95,7 +95,7 @@ class Preparer:
                     f'INSERT INTO' not in lines[index + 1]:
                 is_entities = False
                 words = line.split(', ')
-                entity = [self._sql_strip(word) for word in words]
+                entity = [self._preparer_strip(word) for word in words]
                 entities.append(entity)
                 base = Base(
                     name,
@@ -118,17 +118,36 @@ class Preparer:
                 words = line.split('	')
                 if len(words) == 1:
                     words = line.split(', ')
-                entity = [self._sql_strip(word) for word in words]
+                entity = [self._preparer_strip(word) for word in words]
                 entities.append(entity)
 
     def _prepare_csv_file(self, file_object):
         lines = file_object['file'].readlines()
 
-        parameters = lines[0].split(',')
+        parameters = []
+
+        for parameter in lines[0].split(','):
+            striped_parameter = self._preparer_strip(parameter)
+            parameter_object = {
+                'unique': striped_parameter in self.unique_keys,
+                'parameter': striped_parameter,
+                'type': []
+            }
+
+            parameters.append(parameter_object)
+
         entities = []
 
-        for line in lines:
-            entities.append(line.split(','))
+        for index in range(1, len(lines)):
+            line = lines[index]
+            if "\"" in line:
+                colon_word_index = [pos for pos, char in enumerate(line) if char == "\""]
+                line_copy = line[colon_word_index[1]:] + self._preparer_strip(line[colon_word_index[0]:colon_word_index[1]]) + line[colon_word_index[1]:]
+                words = line.split(',')
+            else:
+                words = line.split(',')
+            entity = [self._preparer_strip(word) for word in words]
+            entities.append(entity)
 
         base = Base(
             file_object['name'],

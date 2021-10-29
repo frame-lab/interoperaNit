@@ -5,7 +5,7 @@ class Distancy:
     @staticmethod
     def distance_name(base, base_candidate):
         if textdistance.hamming.normalized_similarity(
-                base.name, base_candidate.name) > 0.85 and \
+                base.name, base_candidate.name) > 0.75 and \
                 base_candidate.name not in base.match_name:
             base.match_name.append(
                 base_candidate.name)
@@ -23,7 +23,7 @@ class Distancy:
                 if base_parameter['parameter'] != 'id' \
                     and textdistance.hamming.normalized_similarity(
                         base_parameter['parameter'],
-                        base_candidate_parameter['parameter']) > 0.85 and \
+                        base_candidate_parameter['parameter']) > 0.75 and \
                         match_parameter not in base.match_parameters:
 
                     base.match_parameters.append(match_parameter)
@@ -49,12 +49,11 @@ class Distancy:
 
         for base_index in range(0, len(base.entities)):
             for matched_base_index in reversed(range(0, len(matched_copy))):
-                print(base_index)
                 is_match = True
                 for param_index in range(0, len(base_param_indexes)):
                     if textdistance.hamming.normalized_similarity(
                             base.entities[base_index][base_param_indexes[param_index]],
-                            matched_copy[matched_base_index][matched_param_indexes[param_index]]) <= 0.85:
+                            matched_base.entities[matched_base_index][matched_param_indexes[param_index]]) <= 0.75:
                         is_match = False
 
                 if is_match:
