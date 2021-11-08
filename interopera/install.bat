@@ -14,7 +14,7 @@ pip install google-cloud-translate==3.4.0
 pip install pandas==1.3.3
 pip install PyQt5==5.15.5
 pip install py-entitymatching==0.4.0
-pip install tk==0.1.04
+pip install tk==0.1.0
 pip install numpy==1.12.3
 pip install pandasql==0.7.3
 echo Finalizado
