@@ -1,26 +1,18 @@
-from nltk.corpus import wordnet
+import textdistance
+import copy
 
 
-class Synonym:
+class Exact:
     @staticmethod
-    def synonym_name(base, base_candidate):
-        synonyms = []
-        for syn in wordnet.synsets(base.name):
-            for lm in syn.lemmas():
-                synonyms.append(lm.name())
-        if base_candidate.name in synonyms and \
+    def exact_name(base, base_candidate):
+        if base.name == base_candidate.name and \
                 base_candidate.name not in base.match_name:
             base.match_name.append(
                 base_candidate.name)
 
     @staticmethod
-    def synonym_parameter(base, base_candidate):
+    def exact_parameter(base, base_candidate):
         for base_parameter in base.parameters:
-            synonyms = []
-            for syn in wordnet.synsets(base_parameter['parameter']):
-                for lm in syn.lemmas():
-                    synonyms.append(lm.name())
-
             for base_candidate_parameter in base_candidate.parameters:
                 match_parameter = {
                     'name': base_candidate.name,
@@ -28,14 +20,15 @@ class Synonym:
                     'my_parameter': base_parameter
                 }
 
-                if base_parameter['unique'] and base_candidate_parameter['parameter'] in synonyms \
-                        and base_parameter['parameter'] != 'id' and \
+                if base_parameter['unique'] and base_parameter['parameter'] != 'id' \
+                    and base_parameter['parameter'] == \
+                        base_candidate_parameter['parameter'] and \
                         match_parameter not in base.match_parameters:
 
                     base.match_parameters.append(match_parameter)
 
     @staticmethod
-    def synonym_entity(base, matched_base):
+    def exact_entity(base, matched_base):
         match_params = [parameter for parameter in base.match_parameters
                         if parameter['name'] == matched_base.name]
 
@@ -51,16 +44,14 @@ class Synonym:
             matched_param_indexes.append(
                 matched_base.parameters.index(matched_base_parameter))
 
+        matched_copy = copy.deepcopy(matched_base.entities)
+
         for base_index in range(0, len(base.entities)):
-            for matched_base_index in range(0, len(matched_base.entities)):
+            for matched_base_index in reversed(range(0, len(matched_copy))):
                 is_match = True
                 for param_index in range(0, len(base_param_indexes)):
-                    synonyms = []
-                    for syn in wordnet.synsets(
-                            base.entities[base_index][base_param_indexes[param_index]]):
-                        for lm in syn.lemmas():
-                            synonyms.append(lm.name())
-                    if matched_base.entities[matched_base_index][matched_param_indexes[param_index]] not in synonyms:
+                    if base.entities[base_index][base_param_indexes[param_index]] != \
+                            matched_base.entities[matched_base_index][matched_param_indexes[param_index]]:
                         is_match = False
 
                 if is_match:
@@ -70,3 +61,4 @@ class Synonym:
                         'my_parameter_index': base_index,
                         'my_name': base.name
                     })
+                    matched_copy.pop(matched_base_index)

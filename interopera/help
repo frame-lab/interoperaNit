@@ -3,3 +3,4 @@ Usage: python interface -args
 -h     Prints this help
 -e     Executes the algorithm to make an align of the bases with editing distance
 -m     Executes the algorithm to make an align of the entities with editing distance
+-a     Executes the algorithm with approximate matches in the align of the entities

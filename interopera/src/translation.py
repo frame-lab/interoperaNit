@@ -35,7 +35,7 @@ class Translation:
                     'my_parameter': base_parameter
                 }
 
-                if base_candidate_parameter['parameter'][0] in response.translations \
+                if base_parameter['unique'] and base_candidate_parameter['parameter'][0] in response.translations \
                         and base_parameter['parameter'][0] != 'id' and \
                         match_parameter not in base.match_parameters:
                     base.match_parameters.append(match_parameter)
@@ -65,7 +65,8 @@ class Translation:
                         target_language_code=self.target_language_code,
                         parent=self.parent,
                     )
-                    if matched_base.entities[matched_base_index][matched_param_indexes[param_index]] not in response.translations:
+                    if matched_base.entities[matched_base_index][matched_param_indexes[param_index]
+                                                                 ] not in response.translations:
                         is_match = False
 
                 if is_match:

@@ -1,6 +1,7 @@
 import textdistance
 import copy
 
+
 class Distancy:
     @staticmethod
     def distance_name(base, base_candidate):
@@ -20,7 +21,7 @@ class Distancy:
                     'my_parameter': base_parameter
                 }
 
-                if base_parameter['parameter'] != 'id' \
+                if base_parameter['unique'] and base_parameter['parameter'] != 'id' \
                     and textdistance.hamming.normalized_similarity(
                         base_parameter['parameter'],
                         base_candidate_parameter['parameter']) > 0.75 and \
