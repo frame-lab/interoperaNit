@@ -4,11 +4,14 @@ sql_reserved_words = ['PRIMARY', 'KEY', 'UNIQUE']
 
 
 class Preparer:
-    def __init__(self, file_objects) -> None:
+    def __init__(self, file_objects, approximate_all) -> None:
         self.bases = []
         self.file_objects = file_objects
         self.unique_keys = [
             line.replace('\n', '') for line in open('unique', 'r')]
+        self.approximate_keys = [
+            line.replace('\n', '') for line in open('approximate', 'r')]
+        self.approximate_all = approximate_all
 
     def prepare_bases(self):
         for file_object in self.file_objects:
@@ -81,9 +84,10 @@ class Preparer:
                 if parameter not in sql_reserved_words:
                     parameter_object = {
                         'unique': parameter in self.unique_keys,
+                        'approximate': parameter in self.approximate_keys or self.approximate_all,
                         'parameter': parameter,
-                        'type': [self._preparer_strip(word) for word in words]
-                    }
+                        'type': [
+                            self._preparer_strip(word) for word in words]}
                     parameters.append(parameter_object)
                 else:
                     key = self._preparer_strip(words[-1])
@@ -130,6 +134,7 @@ class Preparer:
             striped_parameter = self._preparer_strip(parameter)
             parameter_object = {
                 'unique': striped_parameter in self.unique_keys,
+                'approximate': striped_parameter in self.approximate_keys or self.approximate_all,
                 'parameter': striped_parameter,
                 'type': []
             }
@@ -141,8 +146,10 @@ class Preparer:
         for index in range(1, len(lines)):
             line = lines[index]
             if "\"" in line:
-                colon_word_index = [pos for pos, char in enumerate(line) if char == "\""]
-                line_copy = line[colon_word_index[1]:] + self._preparer_strip(line[colon_word_index[0]:colon_word_index[1]]) + line[colon_word_index[1]:]
+                colon_word_index = [
+                    pos for pos, char in enumerate(line) if char == "\""]
+                line_copy = line[colon_word_index[1]:] + self._preparer_strip(
+                    line[colon_word_index[0]:colon_word_index[1]]) + line[colon_word_index[1]:]
                 words = line.split(',')
             else:
                 words = line.split(',')

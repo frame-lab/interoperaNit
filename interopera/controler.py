@@ -33,7 +33,7 @@ class Controler:
 
     def generate_aligner(self):
         base_files = BaseFiles()
-        preparer = Preparer(base_files.samples())
+        preparer = Preparer(base_files.samples(), options['approximate'])
         self.aligner = Aligner(preparer.prepare_bases())
 
     def align_synonym_base(self):
@@ -76,6 +76,10 @@ class Controler:
         consultant.run_queries(query)
 
 
+if '-a' in sys.argv:
+    options['approximate'] = True
+    sys.argv.remove('-a')
+
 load_dotenv()
 controler = Controler()
 controler.generate_aligner()
@@ -84,22 +88,21 @@ arg_len = len(sys.argv)
 
 sys.argv.pop(0)
 
-if '-a' in sys.argv:
-    options['approximate'] = True
-    sys.argv.remove('-a')
-
 if '-h' in sys.argv:
     controler.print_help()
     sys.argv.remove('-h')
 
 if '-s' in sys.argv:
     controler.align_synonym_base()
+    options['synonym'] = True
     sys.argv.remove('-s')
 if '-t' in sys.argv:
     controler.align_translation_base()
+    options['translation'] = True
     sys.argv.remove('-t')
 if '-e' in sys.argv:
     controler.align_distance_base()
+    options['distance'] = True
     sys.argv.remove('-e')
 
 if arg_len > 1:
@@ -109,15 +112,15 @@ if arg_len > 1:
     if '-m' in sys.argv:
         # controler.align_magellan_entities()
         sys.argv.remove('-m')
-    if not options['approximate']:
-        controler.align_exact_entities()
-    else:
-        if options['synonym']:
-            controler.align_synonym_entities()
-        if options['translation']:
-            controler.align_translation_entities()
-        if options['distance']:
-            controler.align_distance_entities()
+
+    controler.align_exact_entities()
+
+    if options['synonym']:
+        controler.align_synonym_entities()
+    if options['translation']:
+        controler.align_translation_entities()
+    if options['distance']:
+        controler.align_distance_entities()
     controler.generate_csv()
 
 queries = [

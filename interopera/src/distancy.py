@@ -18,7 +18,8 @@ class Distancy:
                 match_parameter = {
                     'name': base_candidate.name,
                     'matched_parameter': base_candidate_parameter,
-                    'my_parameter': base_parameter
+                    'my_parameter': base_parameter,
+                    'approximate': base_parameter['approximate'] and base_candidate_parameter['approximate']
                 }
 
                 if base_parameter['unique'] and base_parameter['parameter'] != 'id' \
@@ -32,7 +33,7 @@ class Distancy:
     @staticmethod
     def distance_entity(base, matched_base):
         match_params = [parameter for parameter in base.match_parameters
-                        if parameter['name'] == matched_base.name]
+                        if parameter['name'] == matched_base.name and parameter['approximate']]
 
         base_param_indexes = []
         matched_param_indexes = []
