@@ -121,6 +121,7 @@ if arg_len > 1:
         controler.align_translation_entities()
     if options['distance']:
         controler.align_distance_entities()
+
     controler.generate_csv()
 
 queries = [

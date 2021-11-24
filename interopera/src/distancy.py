@@ -57,12 +57,11 @@ class Distancy:
                             base.entities[base_index][base_param_indexes[param_index]],
                             matched_base.entities[matched_base_index][matched_param_indexes[param_index]]) <= 0.75:
                         is_match = False
-
-                if is_match:
+                
+                if is_match and len(base_param_indexes):
                     base.match_entities.append({
                         'matched_name': matched_base.name,
                         'matched_parameter_index': matched_base_index,
                         'my_parameter_index': base_index,
                         'my_name': base.name
                     })
-                    matched_copy.pop(matched_base_index)

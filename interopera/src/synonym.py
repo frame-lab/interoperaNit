@@ -64,7 +64,7 @@ class Synonym:
                     if matched_base.entities[matched_base_index][matched_param_indexes[param_index]] not in synonyms:
                         is_match = False
 
-                if is_match:
+                if is_match and len(base_param_indexes):
                     base.match_entities.append({
                         'matched_name': matched_base.name,
                         'matched_parameter_index': matched_base_index,
