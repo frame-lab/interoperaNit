@@ -3,7 +3,7 @@ import pandas as pd
 
 class Consultant:
     def __init__(self) -> None:
-        self.bigbase = pd.read_csv('csv/bigbase.csv', encoding='utf8')
+        self.bigbase = pd.read_csv('csv/bigbase.csv', encoding='utf8', dtype=object)
 
     def run_queries(self, queries):
         for index in range(0, len(queries)):
