@@ -110,7 +110,7 @@ if arg_len > 1:
         # controler.align_deep_matcher_entities()
         sys.argv.remove('-d')
     if '-m' in sys.argv:
-        # controler.align_magellan_entities()
+        controler.align_magellan_entities()
         sys.argv.remove('-m')
 
     controler.align_exact_entities()
