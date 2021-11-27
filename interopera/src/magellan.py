@@ -120,31 +120,24 @@ class Magellan:
             label_table,
             feature_table=feature_table,
             attrs_before=attrs_from_table,
-            attrs_after='gold')
+            attrs_after='gold',
+            n_jobs=-1)
 
         rf = em.RFMatcher()
 
         test_attrs_to_be_excluded = []
         test_attrs_to_be_excluded.extend(
             ['_id', 'ltable_index', 'rtable_index', 'gold'])
-
+        test_attrs_to_be_excluded.extend(attrs_from_table)
+        
         rf.fit(
             table=test_vecs_table,
             exclude_attrs=test_attrs_to_be_excluded,
             target_attr='gold')
 
-        vecs_table = em.extract_feature_vecs(
-            blocked_tables,
-            feature_table=feature_table,
-            attrs_before=attrs_from_table,
-            n_jobs=-1)
-
-        attrs_to_be_excluded = []
-        attrs_to_be_excluded.extend(['_id', 'ltable_index', 'rtable_index'])
-
         predictions = rf.predict(
             table=vecs_table,
-            exclude_attrs=attrs_to_be_excluded,
+            exclude_attrs=test_attrs_to_be_excluded,
             append=True,
             target_attr='predicted',
             inplace=False)
