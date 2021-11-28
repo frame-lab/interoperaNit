@@ -50,7 +50,7 @@ class Exact:
             for matched_base_index in reversed(range(0, len(matched_copy))):
                 is_match = True
                 for param_index in range(0, len(base_param_indexes)):
-                    print('teste')
+                    #print('teste')
                     if base.entities[base_index][base_param_indexes[param_index]] != \
                             matched_base.entities[matched_base_index][matched_param_indexes[param_index]]:
                         is_match = False
