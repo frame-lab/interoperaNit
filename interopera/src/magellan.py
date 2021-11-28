@@ -136,7 +136,7 @@ class Magellan:
             target_attr='gold')
 
         predictions = rf.predict(
-            table=vecs_table,
+            table=test_vecs_table,
             exclude_attrs=test_attrs_to_be_excluded,
             append=True,
             target_attr='predicted',
