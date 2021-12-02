@@ -83,7 +83,7 @@ class Preparer:
                 parameter = self._preparer_strip(words.pop(0))
                 if parameter not in sql_reserved_words:
                     parameter_object = {
-                        'unique': parameter in self.unique_keys,
+                        'unique': parameter in self.unique_keys or not self.unique_keys,
                         'approximate': parameter in self.approximate_keys or self.approximate_all,
                         'parameter': parameter,
                         'type': [
@@ -133,7 +133,7 @@ class Preparer:
         for parameter in lines[0].split(','):
             striped_parameter = self._preparer_strip(parameter)
             parameter_object = {
-                'unique': striped_parameter in self.unique_keys,
+                'unique': striped_parameter in self.unique_keys or not self.unique_keys,
                 'approximate': striped_parameter in self.approximate_keys or self.approximate_all,
                 'parameter': striped_parameter,
                 'type': []
