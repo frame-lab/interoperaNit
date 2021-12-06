@@ -1,4 +1,6 @@
 from src.base import Base
+import re
+import itertools
 
 sql_reserved_words = ['PRIMARY', 'KEY', 'UNIQUE']
 
@@ -11,7 +13,14 @@ class Preparer:
             line.replace('\n', '') for line in open('unique', 'r')]
         self.approximate_keys = [
             line.replace('\n', '') for line in open('approximate', 'r')]
+        self.splitters = self._get_split_keys()
         self.approximate_all = approximate_all
+
+    def _get_split_keys(self):
+        return [{
+                'key': line.split(' ')[0],
+                'splitter': line.replace('\n', '').split(' ', 1)[1]
+                } for line in open('split', 'r')]
 
     def prepare_bases(self):
         for file_object in self.file_objects:
@@ -86,6 +95,8 @@ class Preparer:
                         'unique': parameter in self.unique_keys or not self.unique_keys,
                         'approximate': parameter in self.approximate_keys or self.approximate_all,
                         'parameter': parameter,
+                        'splitters': [
+                            splitter['splitter'] for splitter in self.splitters if splitter['key'] == parameter],
                         'type': [
                             self._preparer_strip(word) for word in words]}
                     parameters.append(parameter_object)
@@ -122,8 +133,27 @@ class Preparer:
                 words = line.split('	')
                 if len(words) == 1:
                     words = line.split(', ')
-                entity = [self._preparer_strip(word) for word in words]
-                entities.append(entity)
+                raw_entity = []
+                for words_index, word in enumerate(words):
+                    if parameters[words_index]['splitters']:
+                        split_entity = ''
+                        for splitter_index, splitter in enumerate(
+                                parameters[words_index]['splitters']):
+                            if splitter_index > 0:
+                                split_entity += '|'
+                            split_entity += f'{splitter}'
+                        raw_entity.append(
+                            re.split(
+                                split_entity,
+                                self._preparer_strip(word)))
+                    else:
+                        raw_entity.append([self._preparer_strip(word)])
+                entities.extend(itertools.product(*raw_entity))
+
+    def _split(self, line, splitter):
+        for splitter in splitter:
+            line = line.split(splitter)
+        return line
 
     def _prepare_csv_file(self, file_object):
         lines = file_object['file'].readlines()
@@ -136,25 +166,32 @@ class Preparer:
                 'unique': striped_parameter in self.unique_keys or not self.unique_keys,
                 'approximate': striped_parameter in self.approximate_keys or self.approximate_all,
                 'parameter': striped_parameter,
-                'type': []
-            }
+                'splitters': [
+                    splitter['splitter'] for splitter in self.splitters if splitter['key'] == striped_parameter],
+                'type': []}
 
             parameters.append(parameter_object)
 
         entities = []
 
-        for index in range(1, len(lines)):
-            line = lines[index]
-            if "\"" in line:
-                colon_word_index = [
-                    pos for pos, char in enumerate(line) if char == "\""]
-                line_copy = line[colon_word_index[1]:] + self._preparer_strip(
-                    line[colon_word_index[0]:colon_word_index[1]]) + line[colon_word_index[1]:]
-                words = line.split(',')
-            else:
-                words = line.split(',')
-            entity = [self._preparer_strip(word) for word in words]
-            entities.append(entity)
+        for line_index in range(1, len(lines)):
+            words = lines[line_index].split(',')
+            raw_entity = []
+            for words_index, word in enumerate(words):
+                if parameters[words_index]['splitters']:
+                    split_entity = ''
+                    for splitter_index, splitter in enumerate(
+                            parameters[words_index]['splitters']):
+                        if splitter_index > 0:
+                            split_entity += '|'
+                        split_entity += f'{splitter}'
+                    raw_entity.append(
+                        re.split(
+                            split_entity,
+                            self._preparer_strip(word)))
+                else:
+                    raw_entity.append(self._preparer_strip(word))
+            entities.extend(itertools.product(*raw_entity))
 
         base = Base(
             file_object['name'],

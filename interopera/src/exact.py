@@ -53,7 +53,7 @@ class Exact:
                     if base.entities[base_index][base_param_indexes[param_index]] != \
                             matched_base.entities[matched_base_index][matched_param_indexes[param_index]]:
                         is_match = False
-                
+
                 if is_match and len(base_param_indexes):
                     base.match_entities.append({
                         'matched_name': matched_base.name,
