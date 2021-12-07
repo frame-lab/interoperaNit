@@ -134,10 +134,20 @@ class Magellan:
             table=test_vecs_table,
             exclude_attrs=test_attrs_to_be_excluded,
             target_attr='gold')
+        
+        vecs_table = em.extract_feature_vecs(
+            blocked_tables,
+            feature_table=feature_table,
+            attrs_before=attrs_from_table,
+            n_jobs=-1)
+
+        attrs_to_be_excluded = []
+        attrs_to_be_excluded.extend(['_id', 'ltable_index', 'rtable_index'])
+        attrs_to_be_excluded.extend(attrs_from_table)
 
         predictions = rf.predict(
-            table=test_vecs_table,
-            exclude_attrs=test_attrs_to_be_excluded,
+            table=vecs_table,
+            exclude_attrs=attrs_to_be_excluded,
             append=True,
             target_attr='predicted',
             inplace=False)
