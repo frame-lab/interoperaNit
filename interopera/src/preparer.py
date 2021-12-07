@@ -135,20 +135,16 @@ class Preparer:
                     words = line.split(', ')
                 raw_entity = []
                 for words_index, word in enumerate(words):
-                    if parameters[words_index]['splitters']:
-                        split_entity = ''
-                        for splitter_index, splitter in enumerate(
-                                parameters[words_index]['splitters']):
-                            if splitter_index > 0:
-                                split_entity += '|'
-                            split_entity += f'{splitter}'
+                    splitters = parameters[words_index]['splitters']
+                    if splitters:
+                        split_entity = "|".join(splitters)
                         raw_entity.append(
                             re.split(
                                 split_entity,
                                 self._preparer_strip(word)))
                     else:
                         raw_entity.append([self._preparer_strip(word)])
-                entities.extend(itertools.product(*raw_entity))
+                entities.extend(list(itertools.product(*raw_entity)))
 
     def _split(self, line, splitter):
         for splitter in splitter:
@@ -174,25 +170,20 @@ class Preparer:
 
         entities = []
 
-        for line_index in range(1, len(lines)):
-            words = lines[line_index].split(',')
+        for line in lines[1:]:
+            words = line.split(',')
             raw_entity = []
             for words_index, word in enumerate(words):
-                if parameters[words_index]['splitters']:
-                    split_entity = ''
-                    for splitter_index, splitter in enumerate(
-                            parameters[words_index]['splitters']):
-                        if splitter_index > 0:
-                            split_entity += '|'
-                        split_entity += f'{splitter}'
+                splitters = parameters[words_index]['splitters']
+                if splitters:
+                    split_entity = "|".join(splitters)
                     raw_entity.append(
                         re.split(
                             split_entity,
                             self._preparer_strip(word)))
                 else:
-                    raw_entity.append(self._preparer_strip(word))
-            entities.extend(itertools.product(*raw_entity))
-
+                    raw_entity.append([self._preparer_strip(word)])
+            entities.extend(list(itertools.product(*raw_entity)))
         base = Base(
             file_object['name'],
             parameters,
