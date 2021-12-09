@@ -136,6 +136,7 @@ class Preparer:
                 raw_entity = []
                 for words_index, word in enumerate(words):
                     splitters = parameters[words_index]['splitters']
+                    splitters = list(map(lambda x: re.escape(x), splitters))
                     if splitters:
                         split_entity = "|".join(splitters)
                         raw_entity.append(
@@ -175,6 +176,7 @@ class Preparer:
             raw_entity = []
             for words_index, word in enumerate(words):
                 splitters = parameters[words_index]['splitters']
+                splitters = list(map(lambda x: re.escape(x), splitters))
                 if splitters:
                     split_entity = "|".join(splitters)
                     raw_entity.append(
