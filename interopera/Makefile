@@ -21,6 +21,7 @@ help:
 
 define UNINSTALL_ALL_PYSCRIPT
 import os
+
 req = 'requirements.txt'
 for package in [x.split('==')[0] for x in open(req).read().split('\n')]:
 	if package.strip():
@@ -47,6 +48,19 @@ clean-pyc: ## remove Python file artifacts
 	find . -name '*~' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -fr {} +
 
+define INSTALL_PYSCRIPT
+import os
+
+req = 'requirements.txt'
+for package in [x.split('==')[0] for x in open(req).read().split('\n')]:
+	if package.strip():
+		os.system('pip install %s' % package)
+endef
+export INSTALL_PYSCRIPT
+
 install: clean uninstall_all ## instala as dependências do projeto
-	pip install --upgrade pip
-	pip install --no-cache-dir --use-deprecated=legacy-resolver -r requirements.txt
+	touch approximate
+	touch queries
+	touch split
+	touch unique
+	@python -c "$$UNINSTALL_ALL_PYSCRIPT"
