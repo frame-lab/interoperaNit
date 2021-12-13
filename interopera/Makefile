@@ -63,4 +63,4 @@ install: clean uninstall_all ## instala as dependências do projeto
 	touch queries
 	touch split
 	touch unique
-	@python -c "$$UNINSTALL_ALL_PYSCRIPT"
+	@python -c "$$INSTALL_ALL_PYSCRIPT"
