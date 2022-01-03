@@ -6,10 +6,14 @@ IF not EXIST %PYTHONPATH% (
   echo definindo PYTHONPATH
   set PYTHONPATH=C:\Users\AP\AppData\Local\Programs\Python\Python310\
 )
-mkdir approximate
-mkdir queries
-mkdir split
-mkdir unique
+mkdir csv
+mkdir processed
+mkdir results
+mkdir samples
+type NUL > approximate
+type NUL > queries
+type NUL > split
+type NUL > unique
 pip install deepmatcher
 pip install textdistance
 pip install nltk
