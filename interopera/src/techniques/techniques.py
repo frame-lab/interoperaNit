@@ -1,33 +1,17 @@
-from os import environ
-from google.cloud import translate
+import copy
 
 
-class Translation:
-    def __init__(self) -> None:
-        project_id = environ.get("PROJECT_ID", "")
-        assert project_id
-        self.parent = f"projects/{project_id}"
-        self.client = translate.TranslationServiceClient()
-        self.target_language_code = "pt"
-
-    def translation_name(self, base, base_candidate):
-        response = self.client.translate_text(
-            contents=[base.name],
-            target_language_code=self.target_language_code,
-            parent=self.parent,
-        )
-        if base_candidate.name in response.translations and \
-                base_candidate.name not in base.match_name:
+class techniques:
+    @staticmethod
+    def techniques_name(base, base_candidate, technique):
+        if technique(base.name, base_candidate.name) and \
+           base_candidate.name not in base.match_name:
             base.match_name.append(
                 base_candidate.name)
 
-    def translation_parameter(self, base, base_candidate):
+    @staticmethod
+    def techniques_parameter(base, base_candidate, technique):
         for base_parameter in base.parameters:
-            response = self.client.translate_text(
-                contents=[base_parameter['parameter'][0]],
-                target_language_code=self.target_language_code,
-                parent=self.parent,
-            )
             for base_candidate_parameter in base_candidate.parameters:
                 match_parameter = {
                     'name': base_candidate.name,
@@ -35,12 +19,17 @@ class Translation:
                     'my_parameter': base_parameter,
                     'approximate': base_parameter['approximate'] and base_candidate_parameter['approximate']}
 
-                if base_parameter['unique'] and base_candidate_parameter['parameter'][0] in response.translations \
-                        and base_parameter['parameter'][0] != 'id' and \
+                if base_parameter['unique'] and \
+                   base_parameter['parameter'] != 'id' and \
+                   technique(
+                        base_parameter['parameter'],
+                        base_candidate_parameter['parameter']) and \
                         match_parameter not in base.match_parameters:
+
                     base.match_parameters.append(match_parameter)
 
-    def translation_entity(self, base, matched_base):
+    @staticmethod
+    def techniques_entity(base, matched_base, technique):
         match_params = [parameter for parameter in base.match_parameters
                         if parameter['name'] == matched_base.name and parameter['approximate']]
 
@@ -56,17 +45,14 @@ class Translation:
             matched_param_indexes.append(
                 matched_base.parameters.index(matched_base_parameter))
 
+        matched_copy = copy.deepcopy(matched_base.entities)
+
         for base_index in range(0, len(base.entities)):
-            for matched_base_index in range(0, len(matched_base.entities)):
+            for matched_base_index in reversed(range(0, len(matched_copy))):
                 is_match = True
                 for param_index in range(0, len(base_param_indexes)):
-                    response = self.client.translate_text(
-                        contents=[base.entities[base_index][base_param_indexes[param_index]]],
-                        target_language_code=self.target_language_code,
-                        parent=self.parent,
-                    )
-                    if matched_base.entities[matched_base_index][matched_param_indexes[param_index]
-                                                                 ] not in response.translations:
+                    if technique(base.entities[base_index][base_param_indexes[param_index]],
+                                 matched_base.entities[matched_base_index][matched_param_indexes[param_index]]):
                         is_match = False
 
                 if is_match and len(base_param_indexes):

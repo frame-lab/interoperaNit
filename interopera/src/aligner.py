@@ -1,94 +1,64 @@
-from src.synonym import Synonym
-from src.distancy import Distancy
-from src.translation import Translation
-from src.exact import Exact
-from src.deep_matcher import DeepMatcher
-from src.magellan import Magellan
+from src.techniques.synonym import Synonym
+from src.techniques.distancy import Distancy
+from src.techniques.translation import Translation
+from src.techniques.exact import Exact
+from src.techniques.deep_matcher import DeepMatcher
+from src.techniques.magellan import Magellan
 
 
 class Aligner:
     def __init__(self, bases):
         self.bases = bases
 
-    def align_synonym_base(self):
+    def align_base(self, name_function, parameter_function):
         for i in range(len(self.bases)):
             for j in range(i + 1, len(self.bases)):
-                Synonym.synonym_name(self.bases[i], self.bases[j])
-                Synonym.synonym_parameter(self.bases[i], self.bases[j])
+                name_function(self.bases[i], self.bases[j])
+                parameter_function(self.bases[i], self.bases[j])
+
+    def align_synonym_base(self):
+        self.align_base(Synonym.synonym_name, Synonym.synonym_parameter)
 
     def align_translation_base(self):
         translation = Translation()
-        for i in range(len(self.bases)):
-            for j in range(i + 1, len(self.bases)):
-                translation.translation_name(
-                    self.bases[i],
-                    self.bases[j])
-                translation.translation_parameter(
-                    self.bases[i],
-                    self.bases[j])
+        self.align_base(
+            translation.translation_name,
+            translation.translation_parameter)
 
     def align_distance_base(self):
-        for i in range(len(self.bases)):
-            for j in range(i + 1, len(self.bases)):
-                Distancy.distance_name(self.bases[i], self.bases[j])
-                Distancy.distance_parameter(self.bases[i], self.bases[j])
+        self.align_base(Distancy.distance_name, Distancy.distance_parameter)
 
     def align_exact_base(self):
-        for i in range(len(self.bases)):
-            for j in range(i + 1, len(self.bases)):
-                Exact.exact_name(self.bases[i], self.bases[j])
-                Exact.exact_parameter(self.bases[i], self.bases[j])
+        self.align_base(Exact.exact_name, Exact.exact_parameter)
 
-    def align_synonym_entities(self):
+    def align_entities(self, entity_function):
         for base in self.bases:
             matched_bases = list(set([
                 match_base for match_base in self.bases if match_base.name in [
                     parameter['name'] for parameter in base.match_parameters]]))
             for matched_base in matched_bases:
-                Synonym.synonym_entity(base, matched_base)
+                entity_function(base, matched_base)
+
+    def align_synonym_entities(self):
+        self.align_entities(Synonym.synonym_entity)
 
     def align_translation_entities(self):
         translation = Translation()
-        for base in self.bases:
-            matched_bases = list(set([
-                match_base for match_base in self.bases if match_base.name in [
-                    parameter['name'] for parameter in base.match_parameters]]))
-            for matched_base in matched_bases:
-                translation.translation_entity(base, matched_base)
+        self.align_entities(translation.translation_entity)
 
     def align_distance_entities(self):
-        for base in self.bases:
-            matched_bases = list(set([
-                match_base for match_base in self.bases if match_base.name in [
-                    parameter['name'] for parameter in base.match_parameters]]))
-            for matched_base in matched_bases:
-                Distancy.distance_entity(base, matched_base)
+        self.align_entities(Distancy.distance_entity)
 
     def align_exact_entities(self):
-        for base in self.bases:
-            matched_bases = list(set([
-                match_base for match_base in self.bases if match_base.name in [
-                    parameter['name'] for parameter in base.match_parameters]]))
-            for matched_base in matched_bases:
-                Exact.exact_entity(base, matched_base)
+        self.align_entities(Exact.exact_entity)
 
     def align_deep_matcher_entities(self):
         deep = DeepMatcher()
-        for base in self.bases:
-            matched_bases = list(set([
-                match_base for match_base in self.bases if match_base.name in [
-                    parameter['name'] for parameter in base.match_parameters]]))
-            for matched_base in matched_bases:
-                deep.align(base, matched_base)
+        self.align_entities(deep.align)
 
     def align_magellan_entities(self):
         magellan = Magellan()
-        for base in self.bases:
-            matched_bases = list(set([
-                match_base for match_base in self.bases if match_base.name in [
-                    parameter['name'] for parameter in base.match_parameters]]))
-            for matched_base in matched_bases:
-                magellan.align(base, matched_base)
+        self.align_entities(magellan.align)
 
     def get_aligned_bases(self):
         return self.bases
