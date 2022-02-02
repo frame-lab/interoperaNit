@@ -10,27 +10,13 @@ class Translation:
         self.client = translate.TranslationServiceClient()
         self.target_language_code = "pt"
 
-    def translation_name(self, base_name, base_candidate_name):
+    def translation_comparison(self, first_sequence, second_sequence, type='in'):
         response = self.client.translate_text(
-            contents=[base_name],
+            contents=[first_sequence],
             target_language_code=self.target_language_code,
             parent=self.parent,
         )
-        return base_candidate_name in response.translations
-
-    def translation_parameter(self, base_parameter, base_candidate_parameter):
-        response = self.client.translate_text(
-            contents=[base_parameter],
-            target_language_code=self.target_language_code,
-            parent=self.parent,
-        )
-        return base_candidate_parameter in response.translations \
-
-
-    def translation_entity(self, base_entity, matched_base_entity):
-        response = self.client.translate_text(
-            contents=[base_entity],
-            target_language_code=self.target_language_code,
-            parent=self.parent,
-        )
-        return matched_base_entity not in response.translations
+        if type == 'in':
+            return second_sequence in response.translations
+        if type == 'not':
+            return second_sequence not in response.translations

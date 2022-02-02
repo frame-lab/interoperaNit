@@ -14,7 +14,9 @@ reserved = {
     '-t',
     '-e',
     '-d',
-    '-m'
+    '-m',
+    '-a',
+    '-max'
 }
 
 options = {
@@ -55,8 +57,8 @@ class Controler:
     def align_translation_entities(self):
         self.aligner.align_translation_entities()
 
-    def align_distance_entities(self):
-        self.aligner.align_distance_entities()
+    def align_distance_entities(self, max):
+        self.aligner.align_distance_entities(max)
 
     def align_exact_entities(self):
         self.aligner.align_exact_entities()
@@ -79,6 +81,9 @@ class Controler:
 if '-a' in sys.argv:
     options['approximate'] = True
     sys.argv.remove('-a')
+if '-max' in sys.argv:
+    options['max'] = True
+    sys.argv.remove('-max')
 
 load_dotenv()
 controler = Controler()
@@ -120,7 +125,7 @@ if arg_len > 1:
     if options['translation']:
         controler.align_translation_entities()
     if options['distance']:
-        controler.align_distance_entities()
+        controler.align_distance_entities(options['max'])
 
     controler.generate_csv()
 
