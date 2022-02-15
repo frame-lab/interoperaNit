@@ -40,6 +40,7 @@ class Controler:
 
     def align_synonym_base(self):
         nltk.download('wordnet')
+        nltk.download('omw-1.4')
         self.aligner.align_synonym_base()
 
     def align_translation_base(self):

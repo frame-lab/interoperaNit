@@ -2,9 +2,9 @@ echo off
 cls
 chcp 65001
 echo Interopera:  instalando dependências
-IF not EXIST %PYTHONPATH% (
+IF "%PYTHONPATH%"=="" (
   echo definindo PYTHONPATH
-  set PYTHONPATH=C:\Users\AP\AppData\Local\Programs\Python\Python310\
+  set PYTHONPATH=C:\Users\AP\AppData\Local\Programs\Python\Python39\
 )
 mkdir csv
 mkdir processed
