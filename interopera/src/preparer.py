@@ -7,7 +7,7 @@ sql_reserved_words = ['PRIMARY', 'KEY', 'UNIQUE']
 
 
 class Preparer:
-    def __init__(self, file_objects, approximate_all) -> None:
+    def __init__(self, file_objects, approximate_all, verbose) -> None:
         self.bases = []
         self.file_objects = file_objects
         self.unique_keys = [
@@ -16,6 +16,7 @@ class Preparer:
             line.replace('\n', '') for line in open('approximate', 'r')]
         self.splitters = self._get_split_keys()
         self.approximate_all = approximate_all
+        self.verbose = verbose
 
     def _get_split_keys(self):
         return [{
@@ -24,7 +25,9 @@ class Preparer:
                 } for line in open('split', 'r')]
 
     def prepare_bases(self):
-        for file_object in self.file_objects:
+        for index, file_object in enumerate(self.file_objects):
+            if self.verbose:
+                print(f'Preparing file {index}')
             if file_object['extension'] == '.sql':
                 self._prepare_sql_file(file_object)
             elif file_object['extension'] == '.csv':
@@ -56,6 +59,9 @@ class Preparer:
 
         for index in range(0, len(lines)):
             line = lines[index]
+
+            if self.verbose:
+                print(f'Reading line {line}')
 
             if index == len(lines) - 1:
                 is_entities = False
@@ -172,9 +178,13 @@ class Preparer:
 
         entities = []
 
-        for line in lines[1:]:
+        for index, line in enumerate(lines[1:]):
             words = line.split(',')
             raw_entity = []
+
+            if self.verbose:
+                print(f'Reading line {index}')
+
             for words_index, word in enumerate(words):
                 splitters = parameters[words_index]['splitters']
                 splitters = list(map(lambda x: re.escape(x), splitters))

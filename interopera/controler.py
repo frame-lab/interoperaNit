@@ -16,6 +16,7 @@ reserved = {
     '-d',
     '-m',
     '-a',
+    '-v',
     '-max'
 }
 
@@ -24,6 +25,8 @@ options = {
     'synonym': False,
     'translation': False,
     'distance': False,
+    'max': False,
+    'verbose': False
 }
 
 
@@ -33,10 +36,12 @@ class Controler:
         print(help.read())
         help.close()
 
-    def generate_aligner(self):
-        base_files = BaseFiles()
-        preparer = Preparer(base_files.samples(), options['approximate'])
-        self.aligner = Aligner(preparer.prepare_bases())
+    def generate_aligner(self, verbose):
+        if verbose:
+            print('Started the process of preparing files')
+        base_files = BaseFiles(verbose)
+        preparer = Preparer(base_files.samples(), options['approximate'], verbose)
+        self.aligner = Aligner(preparer.prepare_bases(), verbose)
 
     def align_synonym_base(self):
         nltk.download('wordnet')
@@ -78,17 +83,22 @@ class Controler:
         consultant = Consultant()
         consultant.run_queries(query)
 
-
 if '-a' in sys.argv:
     options['approximate'] = True
     sys.argv.remove('-a')
 if '-max' in sys.argv:
     options['max'] = True
     sys.argv.remove('-max')
+if '-v' in sys.argv:
+    options['verbose'] = True
+    sys.argv.remove('-v')
+
+if options['verbose']:
+    print('Process has started')
 
 load_dotenv()
 controler = Controler()
-controler.generate_aligner()
+controler.generate_aligner(options['verbose'])
 
 arg_len = len(sys.argv)
 
@@ -97,6 +107,9 @@ sys.argv.pop(0)
 if '-h' in sys.argv:
     controler.print_help()
     sys.argv.remove('-h')
+
+if options['verbose']:
+    print('Starting base alignment')
 
 if '-s' in sys.argv:
     controler.align_synonym_base()
@@ -112,6 +125,9 @@ if '-e' in sys.argv:
     sys.argv.remove('-e')
 
 if arg_len > 1:
+    if options['verbose']:
+        print('Starting entity alignment')
+
     if '-d' in sys.argv:
         # controler.align_deep_matcher_entities()
         sys.argv.remove('-d')
@@ -128,9 +144,18 @@ if arg_len > 1:
     if options['distance']:
         controler.align_distance_entities(options['max'])
 
+    if options['verbose']:
+        print('Generating csv file')
+
     controler.generate_csv()
 
 queries = [
     line.replace('\n', '') for line in open('queries', 'r')]
 
+if options['verbose']:
+    print('Searching for queries')
+
 controler.run_queries(queries)
+
+if options['verbose']:
+    print('Process has ended')

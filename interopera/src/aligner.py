@@ -9,12 +9,15 @@ from src.techniques.techniques import Techniques
 
 
 class Aligner:
-    def __init__(self, bases):
+    def __init__(self, bases, verbose):
         self.bases = bases
+        self.verbose = verbose
 
     def align_base(self, comparison_function):
         for i in range(len(self.bases)):
             for j in range(i + 1, len(self.bases)):
+                if(self.verbose):
+                    print(f'Making alignment of the parameters from bases {self.bases[i].name} and {self.bases[j].name}')
                 Techniques.techniques_name(
                     self.bases[i], self.bases[j], comparison_function)
                 Techniques.techniques_parameter(
@@ -39,7 +42,9 @@ class Aligner:
                 match_base for match_base in self.bases if match_base.name in [
                     parameter['name'] for parameter in base.match_parameters]]))
             for matched_base in matched_bases:
-                    Techniques.techniques_entity(
+                if(self.verbose):
+                    print(f'Making alignment of the entities from bases {base.name} and {matched_base.name}')
+                Techniques.techniques_entity(
                         base, matched_base, comparison_function, comparison_type, should_approximate)
 
     def align_entities_max(self, value_function):
@@ -48,7 +53,9 @@ class Aligner:
                 match_base for match_base in self.bases if match_base.name in [
                     parameter['name'] for parameter in base.match_parameters]]))
             for matched_base in matched_bases:
-                    Techniques.techniques_entity_max(
+                if(self.verbose):
+                    print(f'Making alignment of the entities from bases {base.name} and {matched_base.name}')
+                Techniques.techniques_entity_max(
                         base, matched_base, value_function)
 
     def align_synonym_entities(self):
@@ -73,6 +80,8 @@ class Aligner:
                 match_base for match_base in self.bases if match_base.name in [
                     parameter['name'] for parameter in base.match_parameters]]))
             for matched_base in matched_bases:
+                if(self.verbose):
+                    print(f'Making alignment of the entities from bases {base.name} and {matched_base.name}')
                 ia_function(base, matched_base)
 
     def align_deep_matcher_entities(self):

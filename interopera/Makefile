@@ -63,8 +63,8 @@ install: clean uninstall_all ## instala as dependências do projeto
 	touch queries
 	touch split
 	touch unique
-	mkdir csv
-	mkdir processed
-	mkdir results
-	mkdir samples
+	mkdir -p csv
+	mkdir -p processed
+	mkdir -p results
+	mkdir -p samples
 	@python -c "$$INSTALL_PYSCRIPT"
