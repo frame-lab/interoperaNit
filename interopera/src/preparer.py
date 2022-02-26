@@ -2,6 +2,7 @@ from black import Line
 from src.base import Base
 import re
 import itertools
+from src.verbose import Verbose
 
 sql_reserved_words = ['PRIMARY', 'KEY', 'UNIQUE']
 
@@ -57,11 +58,14 @@ class Preparer:
 
         lines = file_object['file'].readlines()
 
+        if self.verbose:
+            verbose = Verbose("Reading lines", len(lines))
+
         for index in range(0, len(lines)):
             line = lines[index]
 
             if self.verbose:
-                print(f'Reading line {line}')
+                verbose.update()
 
             if index == len(lines) - 1:
                 is_entities = False

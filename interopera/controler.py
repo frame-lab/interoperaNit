@@ -76,7 +76,7 @@ class Controler:
         self.aligner.align_magellan_entities()
 
     def generate_csv(self):
-        output = OutputGenerator(self.aligner.get_aligned_bases())
+        output = OutputGenerator(self.aligner.get_aligned_bases(), options['verbose'])
         output.generate_csv()
 
     def run_queries(self, query):

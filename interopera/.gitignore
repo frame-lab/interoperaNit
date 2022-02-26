@@ -1,3 +1,4 @@
+*.pyc
 best_model.pth
 csv/
 samples/

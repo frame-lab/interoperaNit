@@ -1,9 +1,11 @@
 import os
+from src.verbose import Verbose
 
 
 class OutputGenerator:
-    def __init__(self, bases) -> None:
+    def __init__(self, bases, verbose) -> None:
         self.bases = bases
+        self.verbose = verbose
 
     def generate_csv(self):
         f = open(f'csv/bigbase.csv', 'w', encoding='utf-8')
@@ -14,6 +16,7 @@ class OutputGenerator:
         entity_matches = []
 
         for base in self.bases:
+
             empty_old_params = len(parameters) * 'None,'
 
             actual_entity_matches = [
@@ -25,7 +28,15 @@ class OutputGenerator:
 
             empty_new_params = len(new_parameters) * ',None'
 
+            if self.verbose:
+                print(f"Formatting {base.name}")
+                verbose = Verbose(f"Making entities", len(entities))
+
             for entity in reversed(entities):
+
+                if self.verbose:
+                    verbose.update()
+
                 match = False
                 multiple = False
                 entity_copy = entity.copy()
@@ -42,6 +53,8 @@ class OutputGenerator:
                         entities.insert(entities.index(entity), new_entity)
                 if not match:
                     entity['entity_text'] += empty_new_params
+            if self.verbose:
+                verbose.end()
 
             new_entities = [
                 {

@@ -1,4 +1,5 @@
 import copy
+from src.verbose import Verbose
 
 
 class Techniques:
@@ -10,9 +11,15 @@ class Techniques:
                 base_candidate.name)
 
     @staticmethod
-    def techniques_parameter(base, base_candidate, technique):
+    def techniques_parameter(base, base_candidate, technique, verbose_check):
+        if verbose_check:
+            verbose = Verbose("Matching parameters", len(base.parameters) * len(base_candidate.parameters))
         for base_parameter in base.parameters:
             for base_candidate_parameter in base_candidate.parameters:
+
+                if verbose_check:
+                    verbose.update()
+
                 match_parameter = {
                     'name': base_candidate.name,
                     'matched_parameter': base_candidate_parameter,
@@ -26,9 +33,11 @@ class Techniques:
                         base_candidate_parameter['parameter']) and \
                         match_parameter not in base.match_parameters:
                     base.match_parameters.append(match_parameter)
+        if verbose_check:
+            verbose.end()
 
     @staticmethod
-    def techniques_entity(base, matched_base, technique, comparison_type, should_approximate):
+    def techniques_entity(base, matched_base, technique, comparison_type, should_approximate, verbose_check):
         if should_approximate:
             match_params = [parameter for parameter in base.match_parameters
                             if parameter['name'] == matched_base.name and parameter['approximate']]
@@ -50,8 +59,15 @@ class Techniques:
         
         matched_copy = copy.deepcopy(matched_base.entities)
 
+        if verbose_check:
+            verbose = Verbose("Matching entities", len(base.entities) * len(matched_copy))
+
         for base_index in range(0, len(base.entities)):
             for matched_base_index in reversed(range(0, len(matched_copy))):
+
+                if verbose_check:
+                    verbose.update()
+
                 is_match = True
                 for param_index in range(0, len(base_param_indexes)):
                     if technique(base.entities[base_index][base_param_indexes[param_index]],
@@ -66,9 +82,11 @@ class Techniques:
                         'my_parameter_index': base_index,
                         'my_name': base.name
                     })
+        if verbose_check:
+            verbose.end()
 
     @staticmethod
-    def techniques_entity_max(base, matched_base, technique):
+    def techniques_entity_max(base, matched_base, technique, verbose_check):
         match_params = [parameter for parameter in base.match_parameters
                         if parameter['name'] == matched_base.name and parameter['approximate']]
 
@@ -86,10 +104,18 @@ class Techniques:
 
         matched_copy = copy.deepcopy(matched_base.entities)
 
+        if verbose_check:
+            verbose = Verbose("Matching entities", len(base.entities) * len(matched_copy))
+
         for base_index in range(0, len(base.entities)):
+
             percent = 0
             target_object = {}
             for matched_base_index in reversed(range(0, len(matched_copy))):
+
+                if verbose_check:
+                    verbose.update()
+
                 target_percent = 0
                 for param_index in range(0, len(base_param_indexes)):
                     target_percent += technique(base.entities[base_index][base_param_indexes[param_index]],
@@ -104,3 +130,5 @@ class Techniques:
                     }
             if target_object:
                 base.match_entities.append(target_object)
+        if verbose_check:
+            verbose.end()

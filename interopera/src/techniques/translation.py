@@ -5,6 +5,7 @@ from google.cloud import translate
 class Translation:
     def __init__(self) -> None:
         project_id = environ.get("PROJECT_ID", "")
+        print(project_id)
         assert project_id
         self.parent = f"projects/{project_id}"
         self.client = translate.TranslationServiceClient()
@@ -20,3 +21,13 @@ class Translation:
             return second_sequence in response.translations
         if type == 'not':
             return second_sequence not in response.translations
+
+    def translation_word(self, text, target="pt"):
+
+        response = self.client.translate_text(
+            contents=[text],
+            target_language_code=target,
+            parent=self.parent,
+        )
+        print(response.translations)
+

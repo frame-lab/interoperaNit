@@ -16,12 +16,12 @@ class Aligner:
     def align_base(self, comparison_function):
         for i in range(len(self.bases)):
             for j in range(i + 1, len(self.bases)):
-                if(self.verbose):
+                if self.verbose:
                     print(f'Making alignment of the parameters from bases {self.bases[i].name} and {self.bases[j].name}')
                 Techniques.techniques_name(
                     self.bases[i], self.bases[j], comparison_function)
                 Techniques.techniques_parameter(
-                    self.bases[i], self.bases[j], comparison_function)
+                    self.bases[i], self.bases[j], comparison_function, self.verbose)
 
     def align_synonym_base(self):
         self.align_base(Synonym.synonym_comparison)
@@ -45,7 +45,7 @@ class Aligner:
                 if(self.verbose):
                     print(f'Making alignment of the entities from bases {base.name} and {matched_base.name}')
                 Techniques.techniques_entity(
-                        base, matched_base, comparison_function, comparison_type, should_approximate)
+                        base, matched_base, comparison_function, comparison_type, should_approximate, self.verbose)
 
     def align_entities_max(self, value_function):
         for base in self.bases:
@@ -56,7 +56,7 @@ class Aligner:
                 if(self.verbose):
                     print(f'Making alignment of the entities from bases {base.name} and {matched_base.name}')
                 Techniques.techniques_entity_max(
-                        base, matched_base, value_function)
+                        base, matched_base, value_function, self.verbose)
 
     def align_synonym_entities(self):
         self.align_entities(Synonym.synonym_comparison, 'not', True)
