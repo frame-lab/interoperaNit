@@ -29,5 +29,4 @@ class Translation:
             target_language_code=target,
             parent=self.parent,
         )
-        print(response.translations)
-
+        return response.translations[0]

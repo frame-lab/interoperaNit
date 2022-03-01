@@ -1,5 +1,7 @@
 import os
+from csv import writer
 from src.verbose import Verbose
+from src.wordnet_check import SumoCheck
 
 
 class OutputGenerator:
@@ -78,3 +80,12 @@ class OutputGenerator:
                 'None') for entity in entities)
 
         f.close()
+
+        alignment = open('csv/alignment.csv', 'w', encoding='utf-8', newline='')
+
+        sumo = SumoCheck()
+        sumo.wordnet_search()
+        csvwriter = writer(alignment)
+        csvwriter.writerow(sumo.header)
+        csvwriter.writerows(sumo.data)
+        alignment.close()

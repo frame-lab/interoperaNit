@@ -145,7 +145,7 @@ if arg_len > 1:
         controler.align_distance_entities(options['max'])
 
     if options['verbose']:
-        print('Generating csv file')
+        print('Generating csv files')
 
     controler.generate_csv()
 
