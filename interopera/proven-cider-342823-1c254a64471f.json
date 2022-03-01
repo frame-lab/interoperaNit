@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "proven-cider-342823",
+  "private_key_id": "1c254a64471fc403f5d0f69f910cf1e165d2fa83",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC6VK+qXUrPgCdb\nRTRXcaW29Jqfjj1CbUKmDcVFx8V/BE7Y/0i5ei68tmNlqyDbKA8KCqKLaqXdADMl\nxgsc/Bs08LOWZfoUZlvuxi5bg2TdNFu09VeRkPAR5ShVDPQgD2l10NoMkXoTkeHU\njdhhBfwKMaWD1kR47wOH6CQ+PGRTuRGk6T3f3DmPKHPG1hw81edMUrXhxasqlezA\nJiZbG3mzZ5b2lo429Zufu07I+VKdI13/JxaCwg5Q+PrVaye74gZk4lt6hXbNsI3I\nypuuSMJp7mwN04I3LAuTjlrSWcRgSERZiaVq6+OOFWeQWWt978ZdAfBfnk3VZyZE\noU7CKGVPAgMBAAECggEABDV92Fdjerk5+JXhOBPISR5Ql50UwblRjEMJQltR7l2i\nKFMFQgdQeC2WwN5Wq/A3Gd0+opoiZVkZwHOg9E2aPGUSalR4YPXsEdCKHBczkFmc\nXrV1mm4BbybwLgQXuaCPfx/4yILlahlrjx2JXXSWbfS96o9Mxv5U8iRcVatWyQ0a\nrf+dMEKdHM1HfXYWokpUrGoQn/9U3EVDkxoasN6PZV8+25UAzApfzQKzaZ6M9V7C\nZ2laFFtdIsFcYUSYjgM7qE2LlNmKEMwJ3+Ed/rWe5NENfoE3iCBwTx31z7DCT5qL\n0/GB9GTyaLDazTZJrI9zDRmfdQd2+2LlY9FhzvpcPQKBgQDenI7vqW4ZSRXVJ7gy\nb7qUew3hAIIVr0hV4Gzk8GTCYKQoloazmYiYk2h1MB/Nve5L/0TTbTP2dXndtYdI\nveUsVpH9WaEHZGBjzehilAEi9bIhWe2Yf2HWfopFtB1Y0CR69VDuJiK7cwYME/7j\n24Rt8LJbsh9z/X2RdxMk4GTjgwKBgQDWRxWSqmcWPUM1tYHKkgAc5gboN8OdAWzg\nqQm7Qiq21eAqJY9Dy52rn9cTdAXBfLJvDZPmCrpiFJKkCx06KfA6PF+pt0ohl+2L\n4Xvmh+pAwhw1QmbkMSu/5RP8KWMlZb1WxWqCATeJpE8rPyQbLXD5nxVBgInKn2o/\nzQcnD/kxRQKBgQDPeOpew3IxbsRCXTp3B1rFd8p/oZGb1Dl+kCPtW38NCjT0/xWb\n3cRJL1lznt6FSjcF7WugAW8kjGiAEed8DD/DCwwVK6vAz/RmEEo9VeOZSZQzMTUX\no+DzoAwO2sdfNt5JGsnKqxBD0/gW2av9gWHzdRlGDMTzvZWCNZBKFjjxMQKBgEhg\nCjFXzSn910202PoLBm68Y2jcLP5DFPttHRRa7QKEiwqxVQqZI9BsVMEFV0xbSgmo\nlGQHC51FRaKS/nQ+5h1Fdypj9m4SWvH8X1UmY0EsT0rN+uLomNZgEbgCYrKnAqTk\nWW0/6/pZvUPmN9PWLWqjCRLuz5vY7JJQNjJDeu/hAoGAfsJLmkeIK8N166z/JYBy\nKB3KIi59kLcnYsgr10Bz+FyU0luZBIqhLSpy3i6lx1Tqc6CeDY8sbkil91gymsb3\nSzHlnvErbZQdrs4MYR+HDSnUBahuoi4DiWmKueraey4fgdmtPsvIzGNYkdfHay2/\nwlmk/eJ62O/Xeb1FoVEvgD8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "interopera@proven-cider-342823.iam.gserviceaccount.com",
+  "client_id": "111201557558539378769",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/interopera%40proven-cider-342823.iam.gserviceaccount.com"
+}
