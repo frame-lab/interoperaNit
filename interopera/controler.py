@@ -128,13 +128,6 @@ if arg_len > 1:
     if options['verbose']:
         print('Starting entity alignment')
 
-    if '-d' in sys.argv:
-        # controler.align_deep_matcher_entities()
-        sys.argv.remove('-d')
-    if '-m' in sys.argv:
-        controler.align_magellan_entities()
-        sys.argv.remove('-m')
-
     controler.align_exact_entities()
 
     if options['synonym']:
@@ -143,6 +136,13 @@ if arg_len > 1:
         controler.align_translation_entities()
     if options['distance']:
         controler.align_distance_entities(options['max'])
+
+    if '-d' in sys.argv:
+        controler.align_deep_matcher_entities()
+        sys.argv.remove('-d')
+    if '-m' in sys.argv:
+        controler.align_magellan_entities()
+        sys.argv.remove('-m')
 
     if options['verbose']:
         print('Generating csv files')
