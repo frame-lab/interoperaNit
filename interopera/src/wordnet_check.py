@@ -33,15 +33,15 @@ class Word:
         return meaning.lstrip()
 
 
-class NoneWord:
+class NullWord:
     def __init__(self, word, translation):
         self.word = word
         self.translation = translation
-        self.syn = None
-        self.code = None
-        self.relation = None
-        self.type = None
-        self.meaning = None
+        self.syn = "null"
+        self.code = "null"
+        self.relation = "null"
+        self.type = "null"
+        self.meaning = "null"
 
 
 class SumoCheck:
@@ -62,7 +62,7 @@ class SumoCheck:
         wl = open("csv/bigbase.csv", 'r').readlines()[0]
         wl = wl.split(",")
         for i in range(len(wl)):
-            wl[i] = wl[i].split("_", maxsplit=1)[1]
+            wl[i] = wl[i].split("_", maxsplit=1)[1].replace("\n", "")
         wl = sorted(list(set(wl)))
 
         return wl
@@ -74,8 +74,8 @@ class SumoCheck:
     def distance_select(self, word, match_list):
         selected_match = 0
         selected_similarity = 0
-        for match, i in zip(match_list, range(match_list)):
-            similarity = hamming.normalized_similarity(match, word)
+        for match, i in zip(match_list, range(len(match_list))):
+            similarity = hamming.normalized_similarity(match.syn, word)
             if similarity > selected_similarity:
                 selected_match = i
                 selected_similarity = similarity
@@ -84,20 +84,21 @@ class SumoCheck:
 
     def wordnet_search(self):
         for word in self.input_list:
-            translated_word = self.get_translation(word)  # traduzir palavra
+            # translated_word = self.get_translation(word)
+            translated_word = word
             match_list = []
             match = False
             for word_type, file in self.wordnet.items():
                 for line in file:
                     phrase = str(line).split()
-                    lower_phrase = str(line).lower().split()
+                    lower_phrase = str(line).lower().split()[:phrase.index("|")]
                     if word.lower() in lower_phrase:
                         match_list.append(Word(word, translated_word, phrase, word_type))
                         match = True
             if match:
-                self.distance_select(word, match_list)
+                self.distance_select(translated_word, match_list)
             else:
-                self.selected_words.append(NoneWord(word, translated_word))
+                self.selected_words.append(NullWord(word, translated_word))
 
         self.data = zip(list(w.word for w in self.selected_words),
                         list(w.translation for w in self.selected_words),
