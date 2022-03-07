@@ -71,11 +71,11 @@ class SumoCheck:
         translation = Translation()
         return translation.translation_word(word, self.target)
 
-    def distance_select(self, word, match_list):
+    def distance_select(self, t_word, match_list):
         selected_match = 0
         selected_similarity = 0
         for match, i in zip(match_list, range(len(match_list))):
-            similarity = hamming.normalized_similarity(match.syn, word)
+            similarity = hamming.normalized_similarity(match.syn, t_word)
             if similarity > selected_similarity:
                 selected_match = i
                 selected_similarity = similarity
@@ -91,7 +91,7 @@ class SumoCheck:
                 for line in file:
                     phrase = str(line).split()
                     lower_phrase = str(line).lower().split()[:phrase.index("|")]
-                    if word.lower() in lower_phrase:
+                    if translated_word.lower() in lower_phrase:
                         match_list.append(Word(word, translated_word, phrase, word_type))
                         match = True
             if match:

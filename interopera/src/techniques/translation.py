@@ -31,4 +31,4 @@ class Translation:
             'parent': self.parent
         }
         response = self.translate(data)
-        return response.translations[0]
+        return response.translations[0].translated_text
