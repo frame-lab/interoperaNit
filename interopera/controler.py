@@ -137,17 +137,17 @@ if arg_len > 1:
     if options['distance']:
         controler.align_distance_entities(options['max'])
 
+    if options['verbose']:
+        print('Generating csv files')
+
+    controler.generate_csv()
+
     if '-d' in sys.argv:
         controler.align_deep_matcher_entities()
         sys.argv.remove('-d')
     if '-m' in sys.argv:
         controler.align_magellan_entities()
         sys.argv.remove('-m')
-
-    if options['verbose']:
-        print('Generating csv files')
-
-    controler.generate_csv()
 
 queries = [
     line.replace('\n', '') for line in open('queries', 'r')]

@@ -84,8 +84,7 @@ class SumoCheck:
 
     def wordnet_search(self):
         for word in self.input_list:
-            # translated_word = self.get_translation(word)
-            translated_word = word
+            translated_word = self.get_translation(word)
             match_list = []
             match = False
             for word_type, file in self.wordnet.items():
