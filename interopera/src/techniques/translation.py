@@ -18,11 +18,14 @@ class Translation:
             'target_language_code': self.target_language_code,
             'parent': self.parent
         }
+
         response = self.translate(data)
+        translations = [translation.translated_text for translation in response.translations]
+        
         if type == 'in':
-            return second_sequence in response.translations
+            return second_sequence in translations
         if type == 'not':
-            return second_sequence not in response.translations
+            return second_sequence not in translations
 
     def translation_word(self, text, target="pt"):
         data = {
