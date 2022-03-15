@@ -3,6 +3,7 @@ from src.preparer import Preparer
 from src.aligner import Aligner
 from src.output_generator import OutputGenerator
 from src.consultant import Consultant
+from src.validate import Validate
 from dotenv import load_dotenv
 import nltk
 import sys
@@ -17,6 +18,7 @@ reserved = {
     '-m',
     '-a',
     '-v',
+    '-val',
     '-max'
 }
 
@@ -26,7 +28,8 @@ options = {
     'translation': False,
     'distance': False,
     'max': False,
-    'verbose': False
+    'verbose': False,
+    'validate': False
 }
 
 
@@ -36,10 +39,14 @@ class Controler:
         print(help.read())
         help.close()
 
-    def generate_aligner(self, verbose):
+    def generate_aligner(self, verbose, validate):
         if verbose:
             print('Started the process of preparing files')
         base_files = BaseFiles(verbose)
+
+        if validate:
+            Validate.validate_csv(base_files)
+
         preparer = Preparer(base_files.samples(), options['approximate'], verbose)
         self.aligner = Aligner(preparer.prepare_bases(), verbose)
 
@@ -92,13 +99,16 @@ if '-max' in sys.argv:
 if '-v' in sys.argv:
     options['verbose'] = True
     sys.argv.remove('-v')
+if '-val' in sys.argv:
+    options['validate'] = True
+    sys.argv.remove('-v')
 
 if options['verbose']:
     print('Process has started')
 
 load_dotenv()
 controler = Controler()
-controler.generate_aligner(options['verbose'])
+controler.generate_aligner(options['verbose'], options['validate'])
 
 arg_len = len(sys.argv)
 
