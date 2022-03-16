@@ -47,7 +47,8 @@ class Controler:
         if validate:
             Validate.validate_csv(base_files)
 
-        preparer = Preparer(base_files.samples(), options['approximate'], verbose)
+        preparer = Preparer(base_files.samples(),
+                            options['approximate'], verbose)
         self.aligner = Aligner(preparer.prepare_bases(), verbose)
 
     def align_synonym_base(self):
@@ -83,12 +84,14 @@ class Controler:
         self.aligner.align_magellan_entities()
 
     def generate_csv(self):
-        output = OutputGenerator(self.aligner.get_aligned_bases(), options['verbose'])
+        output = OutputGenerator(
+            self.aligner.get_aligned_bases(), options['verbose'])
         output.generate_csv()
 
     def run_queries(self, query):
         consultant = Consultant()
         consultant.run_queries(query)
+
 
 if '-a' in sys.argv:
     options['approximate'] = True

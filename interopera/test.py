@@ -1,4 +1,8 @@
-import re
-xx = 'b4b,8"ab,,,",8b3,683,8b3,1,42f,0,5,627,42e,627,443,071,1,443,731,RUA,,ZAO,5da,OSA,3ea,855,185,85"5'
-r1 = re.findall(r'(?:(?<=^)|(?<=,))(?:"(?:[^"]|"")*"|[^,])*(?:(?=$)|(?=,))',xx)
-print(r1)
+import pandas as pd
+
+bigbase = pd.read_csv('samples/familia_logradouro.csv',
+                      encoding='utf8',
+                      quotechar='"',
+                      sep=',',
+                      dtype=object)
+print(bigbase.loc[:, "nome"][0])
