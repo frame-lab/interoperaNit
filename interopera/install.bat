@@ -25,4 +25,5 @@ pip install py-entitymatching
 pip install tk
 pip install numpy
 pip install pandasql
+pip install tqdm
 echo Finalizado

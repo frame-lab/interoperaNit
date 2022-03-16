@@ -9,3 +9,4 @@ py-entitymatching
 tk
 numpy
 pandasql
+tqdm

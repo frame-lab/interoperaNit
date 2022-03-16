@@ -1,4 +1,3 @@
-from black import Line
 from src.base import Base
 import re
 import itertools
@@ -184,7 +183,7 @@ class Preparer:
 
         for index, line in enumerate(lines[1:]):
             words = re.findall(
-                r'(?:(?<=^)|(?<=,))(?:"(?:[^"]|"")*"|[^,])*(?:(?=$)|(?=,))', line)
+                r'(?:(?<=^)|(?<=,))(?:(?:"(?:[^"]*|[^"]*"+[^"]+"*|[^"]*"{2,})")|(?:"[^,]*"[^,]*[^",])|[^",][^,]*)(?:(?=$)|(?=,))', line)
             raw_entity = []
 
             if self.verbose:

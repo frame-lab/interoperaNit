@@ -1,4 +1,3 @@
-from sqlalchemy import false
 from src.techniques.synonym import Synonym
 from src.techniques.distancy import Distancy
 from src.techniques.translation import Translation

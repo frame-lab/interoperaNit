@@ -1,4 +1,3 @@
-import os
 from csv import writer
 from src.verbose import Verbose
 from src.wordnet_check import SumoCheck

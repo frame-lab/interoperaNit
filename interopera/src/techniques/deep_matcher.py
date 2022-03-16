@@ -15,9 +15,9 @@ class DeepMatcher:
         test = open('train/test.csv', 'w', encoding='utf-8')
 
         parameters = ["left_" + item['my_parameter']['parameter']
-                      for item in base.match_parameters]
+                      for item in base.match_parameters if item['name'] == matched_base.name]
         parameters += ["right_" + item['matched_parameter']
-                       ['parameter'] for item in base.match_parameters]
+                       ['parameter'] for item in base.match_parameters if item['name'] == matched_base.name]
         parameters.insert(0, 'id')
 
         unlabeled.write(f'{",".join(parameters)}\n')
@@ -135,7 +135,7 @@ class DeepMatcher:
         self._create_test_files(base, matched_base)
         self._make_model()
         unlabeled = dm.data.process_unlabeled(
-            path='csv/bigbase.csv',
+            path='train/unlabeled.csv',
             trained_model=self.model)
         predictions = self.model.run_prediction(
             unlabeled, output_attributes=True)

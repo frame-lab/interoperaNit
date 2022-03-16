@@ -1,7 +1,6 @@
 from src.techniques.translation import Translation
 
 from textdistance import hamming
-from csv import writer
 
 
 class Word:

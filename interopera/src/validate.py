@@ -1,30 +1,37 @@
-from re import match, findall
-
-
-class FormatCsvException(Exception):
-    pass
+from re import fullmatch, findall
+import sys
 
 
 class Validate:
     @staticmethod
     def validate_csv(base_file):
+        errors = []
         for sample in base_file.samples():
             name = sample['name']
             file = sample['file']
-            columns = len(findall(
-                r'(?:(?<=^)|(?<=,))(?:"(?:[^"]|"")*"|[^,])*(?:(?=$)|(?=,))', file.readline()))
+            parameters = file.readline()
 
-            for index, line in enumerate(file.readlines()[1:]):
-                if not match(r'(("([^"]|"")"|[^,])*,*)*', line):
-                    line_columns = len(
-                        findall(r'(?:(?<=^)|(?<=,))(?:"(?:[^"]|"")*"|[^,])*(?:(?=$)|(?=,))', line))
+            parameter_columns = findall(
+                r'(?:(?<=^)|(?<=,))(?:(?:"(?:[^"]*|[^"]*"+[^"]+"*|[^"]*"{2,})")|(?:"[^,]*"[^,]*[^",])|[^",][^,]*)(?:(?=$)|(?=,))', parameters)
+            parameter_column_text = ''.join(parameter_columns)
+            parameter_column_count = 1 + parameters.count(',') - parameter_column_text.count(',') 
+
+            for index, line in enumerate(file.readlines()):
+                match = fullmatch(r'((("([^"]*|[^"]*"+[^"]+"*|[^"]*"{2,})")|("[^,]*"[^,]*[^",])|[^",][^,]*),*)*', line)
+                if not match:
                     line_quotes = line.count('"')
-                    if line_columns != columns:
-                        error = f'An error of column was found in the line {index} of the file {name}:\n' \
-                                f'Number of columns is {line_columns} when it should be {columns}.'
-                    elif line_quotes % 2 == 1:
-                        error = f'An error of quote was found in the line {index} of the file {name}:\n' \
-                                f'Number of quotes is odd ({line_quotes}).'
-                    else:
-                        error = 'Unknown error.'
-                    raise FormatCsvException(error)
+                    if line_quotes > 0:
+                        error = f'\nAn error of quotes was found in the line {index} of the file {name}'
+                        errors.append(error)
+
+                line_columns = findall(r'(?:(?<=^)|(?<=,))(?:(?:"(?:[^"]*|[^"]*"+[^"]+"*|[^"]*"{2,})")|(?:"[^,]*"[^,]*[^",])|[^",][^,]*)(?:(?=$)|(?=,))', line)
+                line_columns_text = ''.join(line_columns)
+                line_column_count = 1 + line.count(',') - line_columns_text.count(',') 
+
+                if line_column_count != parameter_column_count and match:
+                    error = f'\nAn error of column was found in the line {index} of the file {name}: ' \
+                            f'Number of columns is {line_column_count} when it should be {parameter_column_count}.'
+                    errors.append(error)
+        if errors:
+            error_text = ' '.join(errors)
+            sys.exit(error_text)
