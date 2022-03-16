@@ -101,7 +101,7 @@ if '-v' in sys.argv:
     sys.argv.remove('-v')
 if '-val' in sys.argv:
     options['validate'] = True
-    sys.argv.remove('-v')
+    sys.argv.remove('-val')
 
 if options['verbose']:
     print('Process has started')
