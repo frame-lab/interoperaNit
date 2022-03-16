@@ -129,12 +129,12 @@ class Magellan:
         test_attrs_to_be_excluded.extend(
             ['_id', 'ltable_index', 'rtable_index', 'gold'])
         test_attrs_to_be_excluded.extend(attrs_from_table)
-        
+
         rf.fit(
             table=test_vecs_table,
             exclude_attrs=test_attrs_to_be_excluded,
             target_attr='gold')
-        
+
         vecs_table = em.extract_feature_vecs(
             blocked_tables,
             feature_table=feature_table,
@@ -151,7 +151,7 @@ class Magellan:
             append=True,
             target_attr='predicted',
             inplace=False)
-            
+
         predictions.head()
 
     def align(self, base, matched_base):

@@ -13,7 +13,8 @@ class Techniques:
     @staticmethod
     def techniques_parameter(base, base_candidate, technique, verbose_check):
         if verbose_check:
-            verbose = Verbose("Matching parameters", len(base.parameters) * len(base_candidate.parameters))
+            verbose = Verbose("Matching parameters", len(
+                base.parameters) * len(base_candidate.parameters))
         for base_parameter in base.parameters:
             for base_candidate_parameter in base_candidate.parameters:
 
@@ -43,7 +44,7 @@ class Techniques:
                             if parameter['name'] == matched_base.name and parameter['approximate']]
         else:
             match_params = [parameter for parameter in base.match_parameters
-                if parameter['name'] == matched_base.name and not parameter['approximate']]
+                            if parameter['name'] == matched_base.name and not parameter['approximate']]
 
         base_param_indexes = []
         matched_param_indexes = []
@@ -56,11 +57,12 @@ class Techniques:
                 base.parameters.index(base_parameter))
             matched_param_indexes.append(
                 matched_base.parameters.index(matched_base_parameter))
-        
+
         matched_copy = copy.deepcopy(matched_base.entities)
 
         if verbose_check:
-            verbose = Verbose("Matching entities", len(base.entities) * len(matched_copy))
+            verbose = Verbose("Matching entities", len(
+                base.entities) * len(matched_copy))
 
         for base_index in range(0, len(base.entities)):
             for matched_base_index in reversed(range(0, len(matched_copy))):
@@ -105,7 +107,8 @@ class Techniques:
         matched_copy = copy.deepcopy(matched_base.entities)
 
         if verbose_check:
-            verbose = Verbose("Matching entities", len(base.entities) * len(matched_copy))
+            verbose = Verbose("Matching entities", len(
+                base.entities) * len(matched_copy))
 
         for base_index in range(0, len(base.entities)):
 

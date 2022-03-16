@@ -20,8 +20,9 @@ class Translation:
         }
 
         response = self.translate(data)
-        translations = [translation.translated_text for translation in response.translations]
-        
+        translations = [
+            translation.translated_text for translation in response.translations]
+
         if type == 'in':
             return second_sequence in translations
         if type == 'not':

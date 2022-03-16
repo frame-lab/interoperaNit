@@ -48,14 +48,20 @@ class SumoCheck:
     def __init__(self) -> None:
         self.input_list = self.wl_create()
         self.target = "en"
-        self.adj = open("wordnet/WordNetMappings30-adj.txt", 'r').readlines()[70:-1]
-        self.adv = open("wordnet/WordNetMappings30-adv.txt", 'r').readlines()[70:-1]
-        self.noun = open("wordnet/WordNetMappings30-noun.txt", 'r').readlines()[70:-1]
-        self.verb = open("wordnet/WordNetMappings30-verb.txt", 'r').readlines()[70:-1]
-        self.wordnet = {"adj": self.adj, "adv": self.adv, "noun": self.noun, "verb": self.verb}
+        self.adj = open("wordnet/WordNetMappings30-adj.txt",
+                        'r').readlines()[70:-1]
+        self.adv = open("wordnet/WordNetMappings30-adv.txt",
+                        'r').readlines()[70:-1]
+        self.noun = open("wordnet/WordNetMappings30-noun.txt",
+                         'r').readlines()[70:-1]
+        self.verb = open("wordnet/WordNetMappings30-verb.txt",
+                         'r').readlines()[70:-1]
+        self.wordnet = {"adj": self.adj, "adv": self.adv,
+                        "noun": self.noun, "verb": self.verb}
         self.selected_words = []
-        self.header = ["word", "translated_word", "code", "wordnet synonym", "relation", "file", "meaning"]
-        self.data = [] 
+        self.header = ["word", "translated_word", "code",
+                       "wordnet synonym", "relation", "file", "meaning"]
+        self.data = []
 
     @staticmethod
     def wl_create() -> list:
@@ -90,9 +96,11 @@ class SumoCheck:
             for word_type, file in self.wordnet.items():
                 for line in file:
                     phrase = str(line).split()
-                    lower_phrase = str(line).lower().split()[:phrase.index("|")]
+                    lower_phrase = str(line).lower().split()[
+                        :phrase.index("|")]
                     if translated_word.lower() in lower_phrase:
-                        match_list.append(Word(word, translated_word, phrase, word_type))
+                        match_list.append(
+                            Word(word, translated_word, phrase, word_type))
                         match = True
             if match:
                 self.distance_select(translated_word, match_list)

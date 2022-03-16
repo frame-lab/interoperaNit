@@ -183,7 +183,8 @@ class Preparer:
         entities = []
 
         for index, line in enumerate(lines[1:]):
-            words = re.findall(r'(?:(?<=^)|(?<=,))(?:"(?:[^"]|"")*"|[^,])*(?:(?=$)|(?=,))', line)
+            words = re.findall(
+                r'(?:(?<=^)|(?<=,))(?:"(?:[^"]|"")*"|[^,])*(?:(?=$)|(?=,))', line)
             raw_entity = []
 
             if self.verbose:

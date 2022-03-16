@@ -11,11 +11,13 @@ class Validate:
         for sample in base_file.samples():
             name = sample['name']
             file = sample['file']
-            columns = len(findall(r'(?:(?<=^)|(?<=,))(?:"(?:[^"]|"")*"|[^,])*(?:(?=$)|(?=,))', file.readline()))
+            columns = len(findall(
+                r'(?:(?<=^)|(?<=,))(?:"(?:[^"]|"")*"|[^,])*(?:(?=$)|(?=,))', file.readline()))
 
             for index, line in enumerate(file.readlines()[1:]):
                 if not match(r'(("([^"]|"")"|[^,])*,*)*', line):
-                    line_columns = len(findall(r'(?:(?<=^)|(?<=,))(?:"(?:[^"]|"")*"|[^,])*(?:(?=$)|(?=,))', line))
+                    line_columns = len(
+                        findall(r'(?:(?<=^)|(?<=,))(?:"(?:[^"]|"")*"|[^,])*(?:(?=$)|(?=,))', line))
                     line_quotes = line.count('"')
                     if line_columns != columns:
                         error = f'An error of column was found in the line {index} of the file {name}:\n' \
@@ -26,4 +28,3 @@ class Validate:
                     else:
                         error = 'Unknown error.'
                     raise FormatCsvException(error)
-

@@ -11,4 +11,3 @@ model.run_train(
     validation,
     best_save_path='best_model.pth')
 model.run_eval(test)
-

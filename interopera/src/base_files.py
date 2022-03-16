@@ -4,6 +4,7 @@ from os import walk
 class MultipleExtensionsException(BaseException):
     pass
 
+
 class BaseFiles:
     def __init__(self, verbose) -> None:
         self.path = './samples/'

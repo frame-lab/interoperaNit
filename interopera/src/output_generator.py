@@ -81,7 +81,8 @@ class OutputGenerator:
 
         f.close()
 
-        alignment = open('csv/alignment.csv', 'w', encoding='utf-8', newline='')
+        alignment = open('csv/alignment.csv', 'w',
+                         encoding='utf-8', newline='')
 
         sumo = SumoCheck()
         sumo.wordnet_search()
