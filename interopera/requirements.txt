@@ -1,4 +1,6 @@
 deepmatcher
+torchtext==0.9.0
+torch
 textdistance
 nltk
 python-dotenv
