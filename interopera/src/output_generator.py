@@ -80,6 +80,8 @@ class OutputGenerator:
 
         f.close()
 
+
+"""
         alignment = open('csv/alignment.csv', 'w',
                          encoding='utf-8', newline='')
 
@@ -89,3 +91,4 @@ class OutputGenerator:
         csvwriter.writerow(sumo.header)
         csvwriter.writerows(sumo.data)
         alignment.close()
+"""
