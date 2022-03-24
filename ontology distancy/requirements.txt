@@ -1,2 +1,0 @@
-Owlready2==0.32
-textdistance==4.2.1

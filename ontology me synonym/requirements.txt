@@ -1,3 +1,0 @@
-Owlready2==0.32
-deepmatcher==0.1.2
-textdistance==4.2.1
