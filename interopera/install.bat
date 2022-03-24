@@ -15,6 +15,8 @@ type NUL > queries
 type NUL > split
 type NUL > unique
 pip install deepmatcher
+pip install torchtext==0.9.0
+pip install torch
 pip install textdistance
 pip install nltk
 pip install python-dotenv
