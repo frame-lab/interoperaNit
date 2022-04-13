@@ -6,6 +6,7 @@ import * as Styles from "./styles";
 import Typography from "../../elements/typography";
 import FileItem from "../fileItem";
 import Image from "../../elements/image";
+import { Remove } from "../../../utils/arr";
 
 function Files({ files, setFiles }) {
   const { getRootProps, acceptedFiles } = useDropzone();
@@ -45,12 +46,7 @@ function Files({ files, setFiles }) {
           </Typography>
           <Styles.Scroll>
             {files.map((file, index) => {
-              const removeFile = () => {
-                const arrCopy = [...files];
-                arrCopy.splice(index, index + 1);
-                setter(arrCopy);
-              };
-
+              const removeFile = () => Remove(files, setFiles, index);
               return (
                 <FileItem file={file} removeFile={removeFile} key={index} />
               );

@@ -4,10 +4,11 @@ import Typography from "../../elements/typography";
 import Definitions from "../../modules/definitions";
 import Files from "../../modules/files";
 import Queries from "../../modules/queries";
+import Processing from "../../modules/processing";
 import Button from "../../elements/button";
 import * as Styles from "./styles";
 
-function Body() {
+function Alignment() {
   const [step, setStep] = useState(1);
   const [files, setFiles] = useState([]);
   const [unique, setUnique] = useState([""]);
@@ -53,6 +54,8 @@ function Body() {
         return <Files files={files} setFiles={setFiles} />;
       case 3:
         return <Queries queries={queries} setQueries={setQueries} />;
+      case 4:
+        return <Processing />;
       default:
         break;
     }
@@ -61,7 +64,7 @@ function Body() {
   return (
     <Styles.Body>
       <Typography fontSize="35px" variant="h1">
-        Step {step}/3
+        Step {step}/4
       </Typography>
       {shouldShow()}
       <Button onClick={nextStep} size="large" variant="default" width="200px">
@@ -73,4 +76,4 @@ function Body() {
   );
 }
 
-export default Body;
+export default Alignment;

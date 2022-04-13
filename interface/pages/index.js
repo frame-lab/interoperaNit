@@ -1,13 +1,9 @@
-import Header from "../components/features/header";
-import Body from "../components/features/body";
+import Alignment from "../components/features/alignment";
 
 export default function Home() {
-  const headerTitle = 'Interopera';
-
   return (
     <>
-      <Header headerTitle={headerTitle} />
-      <Body />
+      <Alignment />
     </>
   );
 }
