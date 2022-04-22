@@ -1,9 +1,9 @@
-import Matcher from "../components/features/matcher";
+import Dm from "../components/features/dm";
 
 export default function DeepMatcher() {
   return (
     <>
-      <Matcher />
+      <Dm />
     </>
   );
 }

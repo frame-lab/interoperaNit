@@ -6,12 +6,22 @@ import Files from "../../modules/files";
 import Button from "../../elements/button";
 import * as Styles from "./styles";
 
-function Matcher() {
+function Dm() {
   const router = useRouter();
   const [files, setFiles] = useState([]);
 
   const nextStep = () => {
-    if (files.length) router.push("processing");
+    if (files.length)
+      router.push(
+        {
+          pathname: "processing",
+          query: {
+            files: files,
+            process: "dm",
+          },
+        },
+        "processing"
+      );
   };
 
   const shouldShow = () => {
@@ -40,4 +50,4 @@ function Matcher() {
   );
 }
 
-export default Matcher;
+export default Dm;

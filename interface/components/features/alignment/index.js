@@ -24,7 +24,7 @@ function Alignment() {
     { title: "Max", value: false, code: "-max" },
     { title: "Verbose", value: false, code: "-v" },
     { title: "Validate", value: false, code: "-val" },
-    { title: "Deep matcher", value: false, code: "-d" },
+    { title: "Deep matcher", value: false, code: "-dm" },
   ]);
   const optionSelected = options.some((element) => element.value);
 
@@ -37,7 +37,21 @@ function Alignment() {
         if (files.length) setStep(3);
         break;
       case 3:
-        router.push("processing", "processing");
+        router.push(
+          {
+            pathname: "processing",
+            query: {
+              files: files,
+              unique: unique,
+              split: split,
+              approximate: approximate,
+              queries: queries,
+              options: options,
+              process: "alignment",
+            },
+          },
+          "processing"
+        );
         break;
       default:
         break;

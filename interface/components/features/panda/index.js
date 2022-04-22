@@ -7,7 +7,7 @@ import Button from "../../elements/button";
 import Queries from "../../modules/queries";
 import * as Styles from "./styles";
 
-function Matcher() {
+function Panda() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [files, setFiles] = useState([]);
@@ -19,7 +19,17 @@ function Matcher() {
         if (files.length) setStep(2);
         break;
       case 2:
-        router.push("processing");
+        router.push(
+          {
+            pathname: "processing",
+            query: {
+              files: files,
+              queries: queries,
+              process: "pandas",
+            },
+          },
+          "processing"
+        );
         break;
       default:
         break;
@@ -61,4 +71,4 @@ function Matcher() {
   );
 }
 
-export default Matcher;
+export default Panda;

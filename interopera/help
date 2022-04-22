@@ -4,6 +4,6 @@ Usage: python interface -args
 -e     Executes the algorithm to make an align of the bases with editing distance
 -t     Executes the algorithm to make an align of the bases with translation
 -s     Executes the algorithm to make an align of the bases with synonyms
--d     Executes the algorithm to make an align of the entities with Deep matcher
+-dm     Executes the algorithm to make an align of the entities with Deep matcher
 -a     Executes the algorithm with approximate matches in the align of the entities
 -v     Executes the algorithm with the verbose option active

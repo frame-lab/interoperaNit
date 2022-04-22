@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Typography from "../../elements/typography";
 import * as Styles from "./styles";

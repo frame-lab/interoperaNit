@@ -8,7 +8,7 @@ import Image from "../../elements/image";
 import Typography from "../../elements/typography";
 import { Add, Remove, Change } from "../../../utils/arr";
 
-function Query({ definition }) {
+function DefinitionItem({ definition }) {
   const { getter, setter, title } = definition;
   const lastIndex = getter.length - 1;
 
@@ -56,8 +56,8 @@ function Query({ definition }) {
   );
 }
 
-Query.propTypes = {
+DefinitionItem.propTypes = {
   definition: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-export default Query;
+export default DefinitionItem;
