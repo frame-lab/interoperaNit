@@ -8,12 +8,3 @@ export const Container = styled.div`
   align-items: center;
   margin-top: 30px;
 `;
-
-export const HorizontalContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-top: 20px;
-  justify-content: space-around;
-  width: ${(props) => props.width};
-  flex-wrap: wrap
-`;

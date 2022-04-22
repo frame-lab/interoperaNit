@@ -77,7 +77,7 @@ Typography.defaultProps = {
   color: "#ffffff",
   FontFamily: "sans-serif",
   lineHeight: "",
-  tAlign: "",
+  tAlign: "left",
   weight: "regular",
   position: "relative",
   mediaQuery: "",

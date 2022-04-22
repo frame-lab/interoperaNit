@@ -57,7 +57,7 @@ function Query({ definition }) {
 }
 
 Query.propTypes = {
-  definition: PropTypes.objectOf(PropTypes.any),
+  definition: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default Query;

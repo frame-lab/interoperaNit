@@ -8,8 +8,11 @@ import FileItem from "../fileItem";
 import Image from "../../elements/image";
 import { Remove } from "../../../utils/arr";
 
-function Files({ files, setFiles }) {
-  const { getRootProps, acceptedFiles } = useDropzone();
+function Files({ files, setFiles, text, maxFiles }) {
+  const { getRootProps, acceptedFiles } = useDropzone({
+    accept: ".csv",
+    maxFiles: maxFiles,
+  });
   const download = "download.svg";
 
   useEffect(() => {
@@ -31,7 +34,7 @@ function Files({ files, setFiles }) {
             tAlign="center"
             variant="h1"
           >
-            Drag 'n' drop some files here, or click to select files
+            {text}
           </Typography>
         </Styles.DragArea>
         <Styles.VerticalContainer>
@@ -42,7 +45,7 @@ function Files({ files, setFiles }) {
             tAlign="center"
             variant="h1"
           >
-            Files input
+            File input
           </Typography>
           <Styles.Scroll>
             {files.map((file, index) => {
@@ -59,8 +62,14 @@ function Files({ files, setFiles }) {
 }
 
 Files.propTypes = {
-  files: PropTypes.arrayOf(PropTypes.any),
-  setFiles: PropTypes.func,
+  files: PropTypes.arrayOf(PropTypes.any).isRequired,
+  setFiles: PropTypes.func.isRequired,
+  text: PropTypes.string.isRequired,
+  maxFiles: PropTypes.number,
+};
+
+Files.defaultProps = {
+  maxFiles: 0,
 };
 
 export default Files;

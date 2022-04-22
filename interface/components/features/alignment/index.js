@@ -1,14 +1,15 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 
 import Typography from "../../elements/typography";
 import Definitions from "../../modules/definitions";
 import Files from "../../modules/files";
 import Queries from "../../modules/queries";
-import Processing from "../../modules/processing";
 import Button from "../../elements/button";
 import * as Styles from "./styles";
 
 function Alignment() {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [files, setFiles] = useState([]);
   const [unique, setUnique] = useState([""]);
@@ -16,18 +17,31 @@ function Alignment() {
   const [approximate, setApproximate] = useState([""]);
   const [queries, setQueries] = useState([""]);
   const [options, setOptions] = useState([
-    { title: "Approximate", value: false },
-    { title: "Synonym", value: false },
-    { title: "Translation", value: false },
-    { title: "Distance", value: false },
-    { title: "Max", value: false },
-    { title: "Verbose", value: false },
-    { title: "Validate", value: false },
-    { title: "Deep matcher", value: false },
+    { title: "Approximate", value: false, code: "-a" },
+    { title: "Synonym", value: false, code: "-s" },
+    { title: "Translation", value: false, code: "-t" },
+    { title: "Distance", value: false, code: "-e" },
+    { title: "Max", value: false, code: "-max" },
+    { title: "Verbose", value: false, code: "-v" },
+    { title: "Validate", value: false, code: "-val" },
+    { title: "Deep matcher", value: false, code: "-d" },
   ]);
+  const optionSelected = options.some((element) => element.value);
 
   const nextStep = () => {
-    setStep(step + 1);
+    switch (step) {
+      case 1:
+        if (optionSelected) setStep(2);
+        break;
+      case 2:
+        if (files.length) setStep(3);
+        break;
+      case 3:
+        router.push("processing", "processing");
+        break;
+      default:
+        break;
+    }
   };
 
   const definitionList = [
@@ -51,11 +65,11 @@ function Alignment() {
           />
         );
       case 2:
-        return <Files files={files} setFiles={setFiles} />;
+        const filesText =
+          "Drag 'n' drop some files here, or click to select files\n(Only *.csv files will be accepted)";
+        return <Files files={files} setFiles={setFiles} text={filesText} />;
       case 3:
         return <Queries queries={queries} setQueries={setQueries} />;
-      case 4:
-        return <Processing />;
       default:
         break;
     }
@@ -68,7 +82,7 @@ function Alignment() {
       </Typography>
       {shouldShow()}
       <Button onClick={nextStep} size="large" variant="default" width="200px">
-        <Typography fontSize="20px" width="auto" variant="h1">
+        <Typography fontSize="20px" width="auto" variant="h1" tAlign="center">
           CONFIRM
         </Typography>
       </Button>

@@ -40,7 +40,8 @@ function FileItem({ file, removeFile }) {
 }
 
 FileItem.propTypes = {
-  file: PropTypes.objectOf(PropTypes.any),
+  file: PropTypes.objectOf(PropTypes.any).isRequired,
+  removeFile: PropTypes.func.isRequired,
 };
 
 export default FileItem;

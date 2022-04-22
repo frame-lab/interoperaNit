@@ -10,14 +10,19 @@ function OptionItem({ option, onChange }) {
   const { title, value } = option;
 
   const changeValue = () => {
-    onChange(!value);
+    onChange({ title, value: !value });
   };
 
   return (
     <Button onClick={changeValue} size="large" variant="image">
       <Styles.HorizontalContainer>
         <Radio value={value} onChange={onChange} />
-        <Typography margin="0 0 0 10px" fontSize="20px" width="auto" variant="h1">
+        <Typography
+          margin="0 0 0 10px"
+          fontSize="20px"
+          width="150px"
+          variant="h1"
+        >
           {title}
         </Typography>
       </Styles.HorizontalContainer>
@@ -26,8 +31,8 @@ function OptionItem({ option, onChange }) {
 }
 
 OptionItem.propTypes = {
-  option: PropTypes.objectOf(PropTypes.any),
-  onChange: PropTypes.func,
+  option: PropTypes.objectOf(PropTypes.any).isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default OptionItem;

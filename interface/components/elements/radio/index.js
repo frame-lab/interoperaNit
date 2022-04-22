@@ -17,7 +17,7 @@ function Radio({ value }) {
 }
 
 Radio.propTypes = {
-  option: PropTypes.objectOf(PropTypes.any),
+  value: PropTypes.bool.isRequired,
 };
 
 export default Radio;

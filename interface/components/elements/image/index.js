@@ -12,7 +12,7 @@ const Image = ({
   color,
   position,
   size,
-  filter
+  filter,
 }) => {
   return (
     <S.Image
@@ -38,7 +38,7 @@ Image.propTypes = {
   color: PropTypes.string,
   position: PropTypes.string,
   size: PropTypes.string,
-  filter: PropTypes.string
+  filter: PropTypes.string,
 };
 
 Image.defaultProps = {
@@ -49,6 +49,7 @@ Image.defaultProps = {
   position: "center",
   size: "auto",
   filter: "",
+  maxHeight: "none",
 };
 
 export default Image;

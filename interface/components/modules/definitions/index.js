@@ -26,9 +26,9 @@ function Definitions({ definitionList, options, setOptions }) {
 }
 
 Definitions.propTypes = {
-  definitionList: PropTypes.arrayOf(PropTypes.any),
-  options: PropTypes.arrayOf(PropTypes.any),
-  setOptions: PropTypes.func,
+  definitionList: PropTypes.arrayOf(PropTypes.any).isRequired,
+  options: PropTypes.arrayOf(PropTypes.any).isRequired,
+  setOptions: PropTypes.func.isRequired,
 };
 
 export default Definitions;

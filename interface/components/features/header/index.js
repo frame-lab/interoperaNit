@@ -12,7 +12,7 @@ function Header() {
         </Typography>
         <Styles.MenuItemsContainer>
           <Styles.MenuItem href="\">ALIGNMENT</Styles.MenuItem>
-          <Styles.MenuItem href="options">OPTIONS</Styles.MenuItem>
+          <Styles.MenuItem href="postProcessing">POST PROCESSING</Styles.MenuItem>
         </Styles.MenuItemsContainer>
       </Styles.Header>
     </Styles.Container>

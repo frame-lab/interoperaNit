@@ -56,8 +56,8 @@ function Queries({ queries, setQueries }) {
 }
 
 Queries.propTypes = {
-  queries: PropTypes.arrayOf(PropTypes.any),
-  setQueries: PropTypes.func,
+  queries: PropTypes.arrayOf(PropTypes.any).isRequired,
+  setQueries: PropTypes.func.isRequired,
 };
 
 export default Queries;
