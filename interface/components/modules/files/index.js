@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useDropzone } from "react-dropzone";
 
@@ -9,15 +9,40 @@ import Image from "../../elements/image";
 import { Remove } from "../../../utils/arr";
 
 function Files({ files, setFiles, text, maxFiles }) {
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      const readFile = (file) => {
+        const reader = new FileReader();
+
+        return new Promise((resolve, reject) => {
+          reader.onerror = () => {
+            reader.abort();
+            reject("Problem parsing input file.");
+          };
+
+          reader.onload = () => {
+            resolve({ text: reader.result, name: file.name });
+          };
+
+          reader.readAsBinaryString(file);
+        });
+      };
+
+      const promises = acceptedFiles.map((file) => readFile(file));
+
+      Promise.all(promises).then(function (results) {
+        setFiles([...files, ...results]);
+      });
+    },
+    [acceptedFiles]
+  );
+
   const { getRootProps, acceptedFiles } = useDropzone({
     accept: ".csv",
+    onDrop: onDrop,
     maxFiles: maxFiles,
   });
   const download = "download.svg";
-
-  useEffect(() => {
-    setFiles([...files, ...acceptedFiles]);
-  }, [acceptedFiles]);
 
   return (
     <Styles.Container>

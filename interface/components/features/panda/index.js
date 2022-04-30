@@ -5,6 +5,7 @@ import Typography from "../../elements/typography";
 import Files from "../../modules/files";
 import Button from "../../elements/button";
 import Queries from "../../modules/queries";
+import { formatRouterPushObject } from "../../../utils/formatter";
 import * as Styles from "./styles";
 
 function Panda() {
@@ -19,15 +20,14 @@ function Panda() {
         if (files.length) setStep(2);
         break;
       case 2:
+        const stringfiedQuery = formatRouterPushObject({
+          files: files,
+          queries: queries,
+          process: "pandas",
+        });
+
         router.push(
-          {
-            pathname: "processing",
-            query: {
-              files: files,
-              queries: queries,
-              process: "pandas",
-            },
-          },
+          { pathname: "processing", query: { ...stringfiedQuery } },
           "processing"
         );
         break;
@@ -59,7 +59,7 @@ function Panda() {
   return (
     <Styles.Body>
       <Typography fontSize="35px" variant="h1">
-        Step {step}/3
+        Step {step}/2
       </Typography>
       {shouldShow()}
       <Button onClick={nextStep} size="large" variant="default" width="200px">

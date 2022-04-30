@@ -6,6 +6,7 @@ import Definitions from "../../modules/definitions";
 import Files from "../../modules/files";
 import Queries from "../../modules/queries";
 import Button from "../../elements/button";
+import { formatRouterPushObject } from "../../../utils/formatter";
 import * as Styles from "./styles";
 
 function Alignment() {
@@ -37,19 +38,18 @@ function Alignment() {
         if (files.length) setStep(3);
         break;
       case 3:
+        const stringfiedQuery = formatRouterPushObject({
+          approximate: approximate,
+          files: files,
+          options: options,
+          queries: queries,
+          split: split,
+          unique: unique,
+          process: "alignment",
+        });
+
         router.push(
-          {
-            pathname: "processing",
-            query: {
-              files: files,
-              unique: unique,
-              split: split,
-              approximate: approximate,
-              queries: queries,
-              options: options,
-              process: "alignment",
-            },
-          },
+          { pathname: "processing", query: { ...stringfiedQuery } },
           "processing"
         );
         break;
@@ -92,7 +92,7 @@ function Alignment() {
   return (
     <Styles.Body>
       <Typography fontSize="35px" variant="h1">
-        Step {step}/4
+        Step {step}/3
       </Typography>
       {shouldShow()}
       <Button onClick={nextStep} size="large" variant="default" width="200px">

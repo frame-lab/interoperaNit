@@ -23,7 +23,7 @@ function FileItem({ file, removeFile }) {
           overflow="hidden"
           margin="10px 100px 0 0"
         >
-          {file.path}
+          {file.name}
         </Typography>
       </Styles.VerticalContainer>
       <Button size="small" variant="image" onClick={removeFile}>

@@ -7,7 +7,6 @@ IF "%PYTHONPATH%"=="" (
   set PYTHONPATH=C:\Users\AP\AppData\Local\Programs\Python\Python39\
 )
 mkdir csv
-mkdir processed
 mkdir results
 mkdir samples
 type NUL > approximate
