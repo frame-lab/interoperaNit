@@ -26,7 +26,7 @@ const setCommandAndOptions = (process_type, options) => {
 export const runProcess = (dirPath, options, process_type) => {
   const command = setCommandAndOptions(process_type, options);
 
-  return exec(command, { cwd: dirPath }, (error, stdout, stderr) => {
+  exec(command, { cwd: dirPath }, (error, stdout, stderr) => {
     if (error) {
       console.error(`exec error: ${error}`);
       return;
@@ -37,5 +37,4 @@ export const runProcess = (dirPath, options, process_type) => {
     }
     console.log(`stdout: ${stdout}`);
   });
-  console.log(potato);
 };

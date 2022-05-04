@@ -40,7 +40,7 @@ export async function getServerSideProps(context) {
       break;
   }
   
-  const runningProcess = runProcess(dirPath, options, process_type);
+  runProcess(dirPath, options, process_type);
 
-  return { props: { process_type: process_type, runningProcess: runningProcess } };
+  return { props: { process_type: process_type} };
 }
