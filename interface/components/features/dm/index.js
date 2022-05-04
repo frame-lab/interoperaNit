@@ -15,7 +15,7 @@ function Dm() {
     if (files.length) {
       const stringfiedQuery = formatRouterPushObject({
         files: files,
-        process: "dm",
+        process_type: "dm",
       });
 
       router.push(

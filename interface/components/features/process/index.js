@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import Typography from "../../elements/typography";
 import * as Styles from "./styles";
 
-function Process({ process }) {
+function Process({ process_type }) {
   const processText = () => {
-    switch (process) {
+    switch (process_type) {
       case "alignment":
         return "alignment";
       case "dm":
@@ -26,7 +26,7 @@ function Process({ process }) {
 }
 
 Process.propTypes = {
-  process: PropTypes.string.isRequired,
+  process_type: PropTypes.string.isRequired,
 };
 
 export default Process;

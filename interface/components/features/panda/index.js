@@ -23,7 +23,7 @@ function Panda() {
         const stringfiedQuery = formatRouterPushObject({
           files: files,
           queries: queries,
-          process: "pandas",
+          process_type: "pandas",
         });
 
         router.push(

@@ -3,23 +3,23 @@ import PropTypes from "prop-types";
 import Process from "../components/features/process";
 import { unformatRouterPushObject } from "../utils/formatter";
 import { fillFile, makeFolderAndFiles } from "../utils/file";
-import { runCode } from "../utils/processes";
+import { runProcess } from "../utils/processes";
 
-export default function Processing({ process }) {
+export default function Processing({ process_type }) {
   return (
     <>
-      <Process process={process} />
+      <Process process_type={process_type} />
     </>
   );
 }
 
 Processing.propTypes = {
-  process: PropTypes.string.isRequired,
+  process_type: PropTypes.string.isRequired,
 };
 
 export async function getServerSideProps(context) {
   const unformatedQuery = unformatRouterPushObject(context.query);
-  const { files, unique, split, approximate, queries, options, process } =
+  const { files, unique, split, approximate, queries, options, process_type } =
     unformatedQuery;
   const dirPath = "../interopera";
 
@@ -28,7 +28,7 @@ export async function getServerSideProps(context) {
   fillFile(approximate, "approximate", dirPath);
   fillFile(queries, "queries", dirPath);
 
-  switch (process) {
+  switch (process_type) {
     case "alignment":
       makeFolderAndFiles(`${dirPath}/samples`, files);
       break;
@@ -39,8 +39,8 @@ export async function getServerSideProps(context) {
       makeFolderAndFiles(`${dirPath}/csv`, files);
       break;
   }
+  
+  const runningProcess = runProcess(dirPath, options, process_type);
 
-  const activeProcess = runCode(dirPath, options, process);
-
-  return { props: { process: process } };
+  return { props: { process_type: process_type, runningProcess: runningProcess } };
 }

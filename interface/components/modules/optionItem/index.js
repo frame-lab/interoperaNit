@@ -7,10 +7,10 @@ import Radio from "../../elements/radio";
 import Button from "../../elements/button";
 
 function OptionItem({ option, onChange }) {
-  const { title, value } = option;
+  const { title, value, code } = option;
 
   const changeValue = () => {
-    onChange({ title, value: !value });
+    onChange({ title, value: !value, code });
   };
 
   return (

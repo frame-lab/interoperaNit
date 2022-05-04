@@ -11,7 +11,7 @@ export const fillFile = (textArray, path, dirPath) => {
 export const cleanFolder = (folderPath) => {
   const foundFiles = fs.readdirSync(folderPath);
 
-  for (var file of foundFiles) {
+  for (let file of foundFiles) {
     fs.unlinkSync(`${folderPath}/${file}`);
   }
 };
@@ -20,7 +20,7 @@ export const makeFolderAndFiles = (folderPath, files) => {
   fs.mkdirSync(folderPath, { recursive: true });
   cleanFolder(folderPath);
 
-  for (var file of files) {
+  for (let file of files) {
     const filePath = `${folderPath}/${file.name}`;
     fs.writeFileSync(filePath, file.text);
   }

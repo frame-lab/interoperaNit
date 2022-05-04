@@ -45,7 +45,7 @@ function Alignment() {
           queries: queries,
           split: split,
           unique: unique,
-          process: "alignment",
+          process_type: "alignment",
         });
 
         router.push(

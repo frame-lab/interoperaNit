@@ -1,35 +1,41 @@
 import { exec } from "child_process";
 
-export const runCode = (dirPath, options, process) => {
-  const command = `cd ${dirPath}`;
+const setCommandAndOptions = (process_type, options) => {
+  let command = "";
 
-  switch (process) {
+  switch (process_type) {
     case "alignment":
-      command.concat(" \n python controler.py");
+      command = command.concat("python controler.py");
       break;
     case "dm":
-      command.concat(" \n python deep.py");
+      command = command.concat("python deep.py");
       break;
     case "pandas":
-      command.concat(" \n python loading.py");
+      command = command.concat("python loading.py");
       break;
   }
 
-  for (var option in options) {
+  for (let option of options) {
     if (option.value) {
-      command.concat(` ${option.code}`);
+      command = command.concat(` ${option.code}`);
     }
   }
+  return command;
+};
 
-  exec(command, (error, _, stderr) => {
+export const runProcess = (dirPath, options, process_type) => {
+  const command = setCommandAndOptions(process_type, options);
+
+  return exec(command, { cwd: dirPath }, (error, stdout, stderr) => {
     if (error) {
-      console.log(`error: ${error.message}`);
+      console.error(`exec error: ${error}`);
       return;
     }
     if (stderr) {
-      console.log(`stderr: ${stderr}`);
+      console.error(`stderr: ${stderr}`);
       return;
     }
-    return 0;
+    console.log(`stdout: ${stdout}`);
   });
+  console.log(potato);
 };
