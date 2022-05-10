@@ -1,9 +1,10 @@
 import { exec } from "child_process";
+import util from "util";
 
-const setCommandAndOptions = (process_type, options) => {
+const setCommandAndOptions = (processType, options, queries) => {
   let command = "";
 
-  switch (process_type) {
+  switch (processType) {
     case "alignment":
       command = command.concat("python controler.py");
       break;
@@ -12,6 +13,18 @@ const setCommandAndOptions = (process_type, options) => {
       break;
     case "pandas":
       command = command.concat("python loading.py");
+      for (let index = 0; index < queries.length; index++) {
+        if (query[index]) {
+          const splittedQuery = query.split(" ");
+          if (splittedQuery[0].toUpperCase() === "SELECT") {
+            command = command.concat(`\npandaSQL("${query}")`);
+            command = command.concat(`\nexport2CSV("/results/query${index}")`);
+          } else {
+            command = command.concat(`\npandaBoolean("${query}")`);
+            command = command.concat(`\nexport2CSV("/results/query${index}")`);
+          }
+        }
+      }
       break;
   }
 
@@ -23,18 +36,12 @@ const setCommandAndOptions = (process_type, options) => {
   return command;
 };
 
-export const runProcess = (dirPath, options, process_type) => {
-  const command = setCommandAndOptions(process_type, options);
-
-  exec(command, { cwd: dirPath }, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`exec error: ${error}`);
-      return;
-    }
-    if (stderr) {
-      console.error(`stderr: ${stderr}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
-  });
+export const runProcess = (dirPath, options, processType, queries) => {
+  const execPromise = util.promisify(exec);
+  const command = setCommandAndOptions(processType, options, queries);
+  try {
+    return execPromise(command, { cwd: dirPath });
+  } catch (e) {
+    console.error(e);
+  }
 };

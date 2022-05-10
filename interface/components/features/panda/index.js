@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Typography from "../../elements/typography";
 import Files from "../../modules/files";
 import Button from "../../elements/button";
+import Process from "../../modules/process";
 import Queries from "../../modules/queries";
 import { formatRouterPushObject } from "../../../utils/formatter";
 import * as Styles from "./styles";
@@ -13,6 +14,7 @@ function Panda() {
   const [step, setStep] = useState(1);
   const [files, setFiles] = useState([]);
   const [queries, setQueries] = useState([""]);
+  const processType = "pandas";
 
   const nextStep = () => {
     switch (step) {
@@ -20,15 +22,16 @@ function Panda() {
         if (files.length) setStep(2);
         break;
       case 2:
+        setStep(3);
         const stringfiedQuery = formatRouterPushObject({
           files: files,
           queries: queries,
-          process_type: "pandas",
+          processType: processType,
         });
 
         router.push(
-          { pathname: "processing", query: { ...stringfiedQuery } },
-          "processing"
+          { pathname: "finished", query: { ...stringfiedQuery } },
+          "finished"
         );
         break;
       default:
@@ -51,22 +54,30 @@ function Panda() {
         );
       case 2:
         return <Queries queries={queries} setQueries={setQueries} />;
+      case 3:
+        return <Process processType={processType} />;
       default:
         break;
     }
   };
 
-  return (
-    <Styles.Body>
-      <Typography fontSize="35px" variant="h1">
-        Step {step}/2
-      </Typography>
-      {shouldShow()}
+  const showButton = () => {
+    return step !== 3 ? (
       <Button onClick={nextStep} size="large" variant="default" width="200px">
         <Typography fontSize="20px" width="auto" variant="h1" tAlign="center">
           CONFIRM
         </Typography>
       </Button>
+    ) : null;
+  };
+
+  return (
+    <Styles.Body>
+      <Typography fontSize="35px" variant="h1">
+        Step {step}/3
+      </Typography>
+      {shouldShow()}
+      {showButton()}
     </Styles.Body>
   );
 }

@@ -1,12 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { parseCookies } from "nookies";
 
 import Typography from "../../elements/typography";
 import * as Styles from "./styles";
 
-function Process({ process_type }) {
+function Process({ processType }) {
   const processText = () => {
-    switch (process_type) {
+    switch (processType) {
       case "alignment":
         return "alignment";
       case "dm":
@@ -26,7 +27,7 @@ function Process({ process_type }) {
 }
 
 Process.propTypes = {
-  process_type: PropTypes.string.isRequired,
+  processType: PropTypes.string.isRequired,
 };
 
 export default Process;

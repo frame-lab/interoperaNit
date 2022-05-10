@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 
 import Typography from "../../elements/typography";
 import Definitions from "../../modules/definitions";
+import Process from "../../modules/process";
 import Files from "../../modules/files";
 import Queries from "../../modules/queries";
 import Button from "../../elements/button";
@@ -28,6 +29,7 @@ function Alignment() {
     { title: "Deep matcher", value: false, code: "-dm" },
   ]);
   const optionSelected = options.some((element) => element.value);
+  const processType = "alignment";
 
   const nextStep = () => {
     switch (step) {
@@ -38,6 +40,7 @@ function Alignment() {
         if (files.length) setStep(3);
         break;
       case 3:
+        setStep(4);
         const stringfiedQuery = formatRouterPushObject({
           approximate: approximate,
           files: files,
@@ -45,12 +48,12 @@ function Alignment() {
           queries: queries,
           split: split,
           unique: unique,
-          process_type: "alignment",
+          processType: processType,
         });
 
         router.push(
-          { pathname: "processing", query: { ...stringfiedQuery } },
-          "processing"
+          { pathname: "finished", query: { ...stringfiedQuery } },
+          "finished"
         );
         break;
       default:
@@ -84,22 +87,30 @@ function Alignment() {
         return <Files files={files} setFiles={setFiles} text={filesText} />;
       case 3:
         return <Queries queries={queries} setQueries={setQueries} />;
+      case 4:
+        return <Process processType={processType} />;
       default:
         break;
     }
   };
 
-  return (
-    <Styles.Body>
-      <Typography fontSize="35px" variant="h1">
-        Step {step}/3
-      </Typography>
-      {shouldShow()}
+  const showButton = () => {
+    return step !== 4 ? (
       <Button onClick={nextStep} size="large" variant="default" width="200px">
         <Typography fontSize="20px" width="auto" variant="h1" tAlign="center">
           CONFIRM
         </Typography>
       </Button>
+    ) : null;
+  };
+
+  return (
+    <Styles.Body>
+      <Typography fontSize="35px" variant="h1">
+        Step {step}/4
+      </Typography>
+      {shouldShow()}
+      {showButton()}
     </Styles.Body>
   );
 }
