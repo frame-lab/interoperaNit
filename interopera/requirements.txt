@@ -12,3 +12,4 @@ tk
 numpy
 pandasql
 tqdm
+py4j
