@@ -27,4 +27,5 @@ pip install tk
 pip install numpy
 pip install pandasql
 pip install tqdm
+pip install py4j
 echo Finalizado

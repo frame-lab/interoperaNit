@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { parseCookies } from "nookies";
 
 import Typography from "../../elements/typography";
 import * as Styles from "./styles";
