@@ -6,8 +6,9 @@ import Input from "../../elements/input";
 import Button from "../../elements/button";
 import Image from "../../elements/image";
 import Typography from "../../elements/typography";
+import { Add, Remove, Change } from "../../../utils/arr";
 
-function Query({ definition }) {
+function DefinitionItem({ definition }) {
   const { getter, setter, title } = definition;
   const lastIndex = getter.length - 1;
 
@@ -18,27 +19,17 @@ function Query({ definition }) {
       </Typography>
       <Styles.Scroll>
         {getter.map((text, index) => {
-          const onChange = (event) => {
-            const arrCopy = [...getter];
-            arrCopy[index] = event.target.value;
-            setter(arrCopy);
-          };
+          const onChange = (event) =>
+            Change(getter, setter, event.target.value, index);
 
-          const pop = () => {
-            const arrCopy = [...getter];
-            arrCopy.splice(index, index + 1);
-            setter(arrCopy);
-          };
+          const remove = () => Remove(getter, setter, index);
 
-          const add = () => {
-            const arrCopy = [...getter, ""];
-            setter(arrCopy);
-          };
+          const add = () => Add(getter, setter, "");
 
           const isLastIndex = lastIndex === index;
           const buttonType = isLastIndex ? "add.svg" : "remove.svg";
 
-          const operation = isLastIndex ? add : pop;
+          const operation = isLastIndex ? add : remove;
 
           return (
             <Styles.HorizontalContainer key={index}>
@@ -65,8 +56,8 @@ function Query({ definition }) {
   );
 }
 
-Query.propTypes = {
-  definition: PropTypes.objectOf(PropTypes.any),
+DefinitionItem.propTypes = {
+  definition: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-export default Query;
+export default DefinitionItem;

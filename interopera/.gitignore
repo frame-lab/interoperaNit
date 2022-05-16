@@ -4,7 +4,6 @@ csv/
 samples/
 results/
 train/
-processed/
 queries
 split
 unique

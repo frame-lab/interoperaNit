@@ -155,7 +155,7 @@ if arg_len > 1:
 
     controler.generate_csv()
 
-    if '-d' in sys.argv:
+    if '-dm' in sys.argv:
         controler.align_deep_matcher_entities()
         sys.argv.remove('-d')
     if '-m' in sys.argv:

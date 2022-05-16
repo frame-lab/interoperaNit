@@ -6,6 +6,7 @@ import Input from "../../elements/input";
 import Button from "../../elements/button";
 import Image from "../../elements/image";
 import Typography from "../../elements/typography";
+import { Add, Remove, Change } from "../../../utils/arr";
 
 function Queries({ queries, setQueries }) {
   const lastIndex = queries.length - 1;
@@ -17,27 +18,17 @@ function Queries({ queries, setQueries }) {
       </Typography>
       <Styles.Scroll>
         {queries.map((text, index) => {
-          const onChange = (event) => {
-            const arrCopy = [...queries];
-            arrCopy[index] = event.target.value;
-            setQueries(arrCopy);
-          };
+          const onChange = (event) =>
+            Change(queries, setQueries, event.target.value, index);
 
-          const pop = () => {
-            const arrCopy = [...queries];
-            arrCopy.splice(index, index + 1);
-            setQueries(arrCopy);
-          };
+          const remove = () => Remove(queries, setQueries, index);
 
-          const add = () => {
-            const arrCopy = [...queries, ""];
-            setQueries(arrCopy);
-          };
+          const add = () => Add(queries, setQueries, "");
 
           const isLastIndex = lastIndex === index;
           const buttonType = isLastIndex ? "add.svg" : "remove.svg";
 
-          const operation = isLastIndex ? add : pop;
+          const operation = isLastIndex ? add : remove;
 
           return (
             <Styles.HorizontalContainer key={index}>
@@ -65,8 +56,8 @@ function Queries({ queries, setQueries }) {
 }
 
 Queries.propTypes = {
-  queries: PropTypes.arrayOf(PropTypes.any),
-  setQueries: PropTypes.func,
+  queries: PropTypes.arrayOf(PropTypes.any).isRequired,
+  setQueries: PropTypes.func.isRequired,
 };
 
 export default Queries;

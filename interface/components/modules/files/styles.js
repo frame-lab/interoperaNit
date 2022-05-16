@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 450px;
+  height: 480px;
   width: 70%;
   margin-top: 30px;
   align-items: center;
@@ -40,7 +40,15 @@ export const Scroll = styled.div`
   height: 300px;
   overflow-y: scroll;
   ::-webkit-scrollbar {
-    display: none;
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: grey;
+    border-radius: 10px;
   }
   border: 5px solid white;
   border-radius: 20px;

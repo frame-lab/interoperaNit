@@ -13,7 +13,15 @@ export const Scroll = styled.div`
   flex-direction: column;
   overflow-y: scroll;
   ::-webkit-scrollbar {
-    display: none;
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: grey;
+    border-radius: 10px;
   }
 `;
 

@@ -23,7 +23,7 @@ function FileItem({ file, removeFile }) {
           overflow="hidden"
           margin="10px 100px 0 0"
         >
-          {file.path}
+          {file.name}
         </Typography>
       </Styles.VerticalContainer>
       <Button size="small" variant="image" onClick={removeFile}>
@@ -40,7 +40,8 @@ function FileItem({ file, removeFile }) {
 }
 
 FileItem.propTypes = {
-  file: PropTypes.objectOf(PropTypes.any),
+  file: PropTypes.objectOf(PropTypes.any).isRequired,
+  removeFile: PropTypes.func.isRequired,
 };
 
 export default FileItem;

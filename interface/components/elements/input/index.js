@@ -35,14 +35,14 @@ function Input(
 
 Input.propTypes = {
   type: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.string.isRequired,
   color: PropTypes.string,
   background: PropTypes.string,
   border: PropTypes.string,
   borderRadius: PropTypes.string,
   width: PropTypes.string,
   height: PropTypes.string,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
   props: PropTypes.any,
 };
 

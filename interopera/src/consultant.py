@@ -1,4 +1,5 @@
 import pandas as pd
+import pandasql as psql
 
 
 class Consultant:
@@ -13,5 +14,11 @@ class Consultant:
             self.run_query(queries[index], index)
 
     def run_query(self, query, index):
-        query_base = self.bigbase.query(query)
-        query_base.to_csv(f'results/query_{index}.csv', index=False)
+        splitted_query = query.split(" ")
+        if splitted_query[0].upper() == "SELECT":
+            query_base = psql.sqldf(query)
+            query_base.to_csv(f'results/query_{index}.csv', index=False)
+        else:
+            query_base = self.bigbase.query(query)
+            query_base.to_csv(f'results/query_{index}.csv', index=False)
+
