@@ -37,11 +37,13 @@ const setCommandAndOptions = (processType, options, queries) => {
 };
 
 export const runProcess = (dirPath, options, processType, queries) => {
-  const execPromise = util.promisify(exec);
   const command = setCommandAndOptions(processType, options, queries);
-  try {
-    return execPromise(command, { cwd: dirPath });
-  } catch (e) {
-    console.error(e);
-  }
+  return new Promise((resolve, reject) => {
+    exec(command, { cwd: dirPath }, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(stdout ? stdout : stderr);
+    });
+   });
 };
