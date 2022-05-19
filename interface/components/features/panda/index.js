@@ -43,7 +43,7 @@ function Panda() {
     switch (step) {
       case 1:
         const filesText =
-          "Drag 'n' drop one file here, or click to select a file\n(Only *.csv files will be accepted)";
+          "Drag 'n' drop one file here, or click to select a file\n(Only one *.csv file will be accepted)";
         return (
           <Files
             files={files}
