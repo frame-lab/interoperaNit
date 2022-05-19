@@ -30,8 +30,9 @@ class Aligner:
         translation = Translation()
         self.align_base(translation.translation_comparison)
 
-    def align_distance_base(self):
-        self.align_base(Distancy.distancy_comparison)
+    def align_distance_base(self, percent):
+        distancy = Distancy(percent)
+        self.align_base(distancy.distancy_comparison)
 
     def align_exact_base(self):
         self.align_base(Exact.exact_comparison)
@@ -67,11 +68,12 @@ class Aligner:
         translation = Translation()
         self.align_entities(translation.translation_comparison, 'not', True)
 
-    def align_distance_entities(self, max):
+    def align_distance_entities(self, max, percent):
+        distancy = Distancy(percent)
         if max:
-            self.align_entities_max(Distancy.distancy_value)
+            self.align_entities_max(distancy.distancy_value)
         else:
-            self.align_entities(Distancy.distancy_comparison, 'le', True)
+            self.align_entities(distancy.distancy_comparison, 'le', True)
 
     def align_exact_entities(self):
         self.align_entities(Exact.exact_comparison, 'ne', False)

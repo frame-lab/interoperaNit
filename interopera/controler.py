@@ -29,7 +29,8 @@ options = {
     'distance': False,
     'max': False,
     'verbose': False,
-    'validate': False
+    'validate': False,
+    'percent': 0.75,
 }
 
 
@@ -59,8 +60,8 @@ class Controler:
     def align_translation_base(self):
         self.aligner.align_translation_base()
 
-    def align_distance_base(self):
-        self.aligner.align_distance_base()
+    def align_distance_base(self, percent):
+        self.aligner.align_distance_base(percent)
 
     def align_exact_base(self):
         self.aligner.align_exact_base()
@@ -71,8 +72,8 @@ class Controler:
     def align_translation_entities(self):
         self.aligner.align_translation_entities()
 
-    def align_distance_entities(self, max):
-        self.aligner.align_distance_entities(max)
+    def align_distance_entities(self, max, percent):
+        self.aligner.align_distance_entities(max, percent)
 
     def align_exact_entities(self):
         self.aligner.align_exact_entities()
@@ -133,7 +134,10 @@ if '-t' in sys.argv:
     options['translation'] = True
     sys.argv.remove('-t')
 if '-e' in sys.argv:
-    controler.align_distance_base()
+    actual_index = sys.argv.index("-e")
+    if len(sys.argv) > actual_index + 1 and sys.argv[actual_index+1].isdigit():
+        options['percent'] = float(sys.argv[actual_index+1]) / 100
+    controler.align_distance_base(options['percent'])
     options['distance'] = True
     sys.argv.remove('-e')
 
@@ -148,7 +152,7 @@ if arg_len > 1:
     if options['translation']:
         controler.align_translation_entities()
     if options['distance']:
-        controler.align_distance_entities(options['max'])
+        controler.align_distance_entities(options['max'], options['percent'])
 
     if options['verbose']:
         print('Generating csv files')
