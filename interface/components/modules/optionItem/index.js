@@ -15,12 +15,20 @@ function OptionItem({ option, onChange }) {
   };
 
   const changePercent = (event) => {
-    onChange({ ...option, percent: event.target.value });
+    if (!isNaN(event.target.value) && !isNaN(parseFloat(event.target.value))) {
+      if (event.target.value > 100) {
+        onChange({ ...option, percent: "100" });
+      } else if (event.target.value < 0) {
+        onChange({ ...option, percent: "0" });
+      } else {
+        onChange({ ...option, percent: event.target.value });
+      }
+    }
   };
 
   const havePercent = () => {
     if (percent !== undefined) {
-      return <Input value={percent} onChange={changePercent} width='50px'/>;
+      return <Input value={percent} onChange={changePercent} width="50px" />;
     }
     return null;
   };

@@ -31,6 +31,9 @@ const setCommandAndOptions = (processType, options, queries) => {
   for (let option of options) {
     if (option.value) {
       command = command.concat(` ${option.code}`);
+      if (!isNaN(options.percent) && !isNaN(parseFloat(options.percent))) {
+        command = command.concat(` ${option.percent}`);
+      }
     }
   }
   return command;
@@ -45,5 +48,5 @@ export const runProcess = (dirPath, options, processType, queries) => {
       }
       resolve(stdout ? stdout : stderr);
     });
-   });
+  });
 };
