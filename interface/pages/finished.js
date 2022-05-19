@@ -58,7 +58,6 @@ export async function getServerSideProps(context) {
     await runProcess(dirPath, options, processType, queries);
   } catch (error) {
     const errorText = verifyToolErrors(error);
-
     return {
       props: {
         error: errorText,

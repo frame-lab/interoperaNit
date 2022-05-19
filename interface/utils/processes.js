@@ -31,7 +31,7 @@ const setCommandAndOptions = (processType, options, queries) => {
   for (let option of options) {
     if (option.value) {
       command = command.concat(` ${option.code}`);
-      if (!isNaN(options.percent) && !isNaN(parseFloat(options.percent))) {
+      if (!isNaN(option.percent) && !isNaN(parseFloat(option.percent))) {
         command = command.concat(` ${option.percent}`);
       }
     }
