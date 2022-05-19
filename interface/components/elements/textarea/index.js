@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import * as Styles from "./styles";
 
-function Input(
+function Textarea(
   {
     type,
     value,
@@ -18,7 +18,7 @@ function Input(
   props
 ) {
   return (
-    <Styles.Input
+    <Styles.Textarea
       type={type}
       value={value}
       color={color}
@@ -33,7 +33,7 @@ function Input(
   );
 }
 
-Input.propTypes = {
+Textarea.propTypes = {
   type: PropTypes.string,
   value: PropTypes.string.isRequired,
   color: PropTypes.string,
@@ -46,15 +46,15 @@ Input.propTypes = {
   props: PropTypes.any,
 };
 
-Input.defaultProps = {
+Textarea.defaultProps = {
   type: "text",
   color: "black",
   background: "white",
   border: "transparent",
-  borderRadius: "10px",
+  borderRadius: "5px",
   width: "80%",
-  height: "30px",
+  height: "100px",
   props: {},
 };
 
-export default Input;
+export default Textarea;

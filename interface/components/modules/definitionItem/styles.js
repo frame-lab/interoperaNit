@@ -11,7 +11,7 @@ export const Scroll = styled.div`
   margin-top: 15px;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: auto;
   ::-webkit-scrollbar {
     width: 10px;
   }
@@ -30,4 +30,5 @@ export const HorizontalContainer = styled.div`
   flex-direction: row;
   margin-top: 20px;
   justify-content: space-around;
+  width: 240px;
 `;

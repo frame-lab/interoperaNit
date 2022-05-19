@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import * as Styles from "./styles";
-import Input from "../../elements/input";
+import Textarea from "../../elements/textarea";
 import Button from "../../elements/button";
 import Image from "../../elements/image";
 import Typography from "../../elements/typography";
@@ -32,11 +32,9 @@ function Queries({ queries, setQueries }) {
 
           return (
             <Styles.HorizontalContainer key={index}>
-              <Input
+              <Textarea
                 value={text}
                 onChange={onChange}
-                border="transparent"
-                borderRadius="10px"
               />
               <Button size="small" variant="image" onClick={operation}>
                 <Image

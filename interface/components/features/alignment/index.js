@@ -22,7 +22,7 @@ function Alignment() {
     { title: "Approximate", value: false, code: "-a" },
     { title: "Synonym", value: false, code: "-s" },
     { title: "Translation", value: false, code: "-t" },
-    { title: "Distance", value: false, code: "-e" },
+    { title: "Distance", value: false, code: "-e", percent: "75" },
     { title: "Max", value: false, code: "-max" },
     { title: "Verbose", value: false, code: "-v" },
     { title: "Validate", value: false, code: "-val" },
