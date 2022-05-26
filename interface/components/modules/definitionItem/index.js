@@ -36,8 +36,6 @@ function DefinitionItem({ definition }) {
               <Input
                 value={text}
                 onChange={onChange}
-                border="transparent"
-                borderRadius="10px"
               />
               <Button size="small" variant="image" onClick={operation}>
                 <Image

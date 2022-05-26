@@ -7,6 +7,7 @@ export const Container = styled.div`
   width: 100%;
   align-items: center;
   margin-top: 30px;
+  margin-bottom: 30px;
 `;
 
 export const HorizontalContainer = styled.div`

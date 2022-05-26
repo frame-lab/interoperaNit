@@ -1,9 +1,11 @@
-interface - interface for the base aligner
-Usage: python interface -args
--h     Prints this help
--e     Executes the algorithm to make an align of the bases with editing distance
--t     Executes the algorithm to make an align of the bases with translation
--s     Executes the algorithm to make an align of the bases with synonyms
--dm     Executes the algorithm to make an align of the entities with Deep matcher
--a     Executes the algorithm with approximate matches in the align of the entities
--v     Executes the algorithm with the verbose option active
+Interopera - Makes an alingment between files in the CSV format
+Usage: python controler -args
+-h              Prints this help
+-e <percent>    Executes the algorithm to make an align of the bases with editing distance
+-t              Executes the algorithm to make an align of the bases with translation
+-s              Executes the algorithm to make an align of the bases with synonyms
+-dm             Executes the algorithm to make an align of the entities with Deep matcher
+-a              Executes the algorithm with approximate matches in the align of the entities
+-v              Executes the algorithm with the verbose option active
+-val            Executes the algorithm with a validation of the files in the beginning
+-max            Executes the algorithm with the maximum approximation of the results

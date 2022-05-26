@@ -14,7 +14,7 @@ function Definitions({ definitionList, options, setOptions }) {
           <DefinitionItem definition={definition} key={index} />
         ))}
       </Styles.HorizontalContainer>
-      <Styles.HorizontalContainer width="30%">
+      <Styles.HorizontalContainer width="50%">
         {options.map((option, index) => {
           const onChange = (value) => Change(options, setOptions, value, index);
 

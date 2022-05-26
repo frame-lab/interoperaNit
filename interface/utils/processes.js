@@ -31,17 +31,22 @@ const setCommandAndOptions = (processType, options, queries) => {
   for (let option of options) {
     if (option.value) {
       command = command.concat(` ${option.code}`);
+      if (!isNaN(option.percent) && !isNaN(parseFloat(option.percent))) {
+        command = command.concat(` ${option.percent}`);
+      }
     }
   }
   return command;
 };
 
 export const runProcess = (dirPath, options, processType, queries) => {
-  const execPromise = util.promisify(exec);
   const command = setCommandAndOptions(processType, options, queries);
-  try {
-    return execPromise(command, { cwd: dirPath });
-  } catch (e) {
-    console.error(e);
-  }
+  return new Promise((resolve, reject) => {
+    exec(command, { cwd: dirPath }, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(stdout ? stdout : stderr);
+    });
+  });
 };

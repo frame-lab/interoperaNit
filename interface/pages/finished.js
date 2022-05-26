@@ -5,18 +5,30 @@ import Finish from "../components/features/finish";
 import { unformatRouterPushObject } from "../utils/formatter";
 import { fillFile, makeFolderAndFiles } from "../utils/file";
 import { runProcess } from "../utils/processes";
+import { verifyToolErrors } from "../utils/errors";
 
-export default function Finished({ processType, haveQueries }) {
+export default function Finished({ processType, haveQueries, error }) {
   return (
     <>
-      <Finish processType={processType} haveQueries={haveQueries} />
+      <Finish
+        processType={processType}
+        haveQueries={haveQueries}
+        error={error}
+      />
     </>
   );
 }
 
 Finished.propTypes = {
-  processType: PropTypes.string.isRequired,
-  haveQueries: PropTypes.bool.isRequired,
+  processType: PropTypes.string,
+  haveQueries: PropTypes.bool,
+  error: PropTypes.string,
+};
+
+Finished.defaultProps = {
+  processType: null,
+  haveQueries: null,
+  error: null,
 };
 
 export async function getServerSideProps(context) {
@@ -42,10 +54,20 @@ export async function getServerSideProps(context) {
       break;
   }
 
-  await runProcess(dirPath, options, processType, queries);
+  try {
+    await runProcess(dirPath, options, processType, queries);
+  } catch (error) {
+    const errorText = verifyToolErrors(error);
+    return {
+      props: {
+        error: errorText,
+      },
+    };
+  }
 
   const haveQueries =
-    Array.isArray(queries) && queries.filter((query) => query !== "").length > 0;
+    Array.isArray(queries) &&
+    queries.filter((query) => query !== "").length > 0;
 
   return {
     props: {
