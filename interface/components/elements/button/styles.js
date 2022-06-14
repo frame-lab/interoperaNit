@@ -41,6 +41,7 @@ const Button = styled.button`
   color: ${(props) => props.color || props.theme.palette.primary.white};
   text-decoration: ${(props) =>
     props.textDecoration || props.theme.typography.button.textDecoration};
+  margin: ${(props) => props.margin};
 `;
 
 export { Button };
