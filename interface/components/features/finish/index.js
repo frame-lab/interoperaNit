@@ -2,32 +2,39 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import Typography from "../../elements/typography";
+import Button from "../../elements/button";
 import * as Styles from "./styles";
 
 function Finish({ processType, haveQueries, error }) {
   const processText = () => {
     if (error) return error;
 
-    const textToShow = `Your files are ready in `;
-
-    switch (processType) {
-      case "alignment":
-        const QueryText = haveQueries
-          ? " and your queries can be found in /interopera/result"
-          : "";
-        return textToShow + "/interopera/csv" + QueryText;
-      case "dm":
-        return textToShow + "/interopera/csv";
-      case "pandas":
-        return textToShow + "/interopera/result";
+    if (processType === "alignment" && haveQueries) {
+      return `Click in the button to download the files.`;
     }
+    return `Click in the button to download the file`;
   };
+
+  const downloadFiles = () => {};
 
   return (
     <Styles.Body>
       <Typography fontSize="35px" variant="h1">
         {processText()}
       </Typography>
+      {!error && (
+        <Button
+          onClick={downloadFiles}
+          size="large"
+          variant="default"
+          width="200px"
+          margin="20px 0"
+        >
+          <Typography fontSize="20px" width="auto" variant="h1" tAlign="center">
+            DOWNLOAD
+          </Typography>
+        </Button>
+      )}
     </Styles.Body>
   );
 }
