@@ -8,3 +8,5 @@ queries
 split
 unique
 approximate
+__pycache__/
+.idea/

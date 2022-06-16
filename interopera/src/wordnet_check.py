@@ -4,17 +4,16 @@ from textdistance import hamming
 
 
 class Word:
-    def __init__(self, word, translation, phrase, word_type):
+    def __init__(self, word, translation, phrase, file_number):
         self.word = word
         self.translation = translation
         self.syn = phrase[-1][2:-1]
-        self.code = phrase[0]
+        self.code = file_number + phrase[0]
         self.relation = self.get_relation(phrase)
-        self.type = word_type
         self.meaning = self.get_meaning(phrase)
 
     @staticmethod
-    def get_relation(phrase):
+    def get_relation(phrase: str) -> str:
         relation = phrase[-1][-1]
         if relation == "=":
             return "equivalent"
@@ -24,7 +23,7 @@ class Word:
             return "instance"
 
     @staticmethod
-    def get_meaning(phrase):
+    def get_meaning(phrase: str) -> str:
         start = phrase.index("|")
         meaning = ""
         for word in phrase[start+1:-1]:
@@ -39,27 +38,26 @@ class NullWord:
         self.syn = "null"
         self.code = "null"
         self.relation = "null"
-        self.type = "null"
         self.meaning = "null"
 
 
 class SumoCheck:
-    def __init__(self) -> None:
+    def __init__(self):
         self.input_list = self.wl_create()
         self.target = "en"
-        self.adj = open("wordnet/WordNetMappings30-adj.txt",
-                        'r').readlines()[70:-1]
-        self.adv = open("wordnet/WordNetMappings30-adv.txt",
-                        'r').readlines()[70:-1]
         self.noun = open("wordnet/WordNetMappings30-noun.txt",
                          'r').readlines()[70:-1]
         self.verb = open("wordnet/WordNetMappings30-verb.txt",
                          'r').readlines()[70:-1]
-        self.wordnet = {"adj": self.adj, "adv": self.adv,
-                        "noun": self.noun, "verb": self.verb}
+        self.adj = open("wordnet/WordNetMappings30-adj.txt",
+                        'r').readlines()[70:-1]
+        self.adv = open("wordnet/WordNetMappings30-adv.txt",
+                        'r').readlines()[70:-1]
+        self.wordnet = {"1": self.noun, "2": self.verb,
+                        "3": self.adj, "4": self.adv}
         self.selected_words = []
-        self.header = ["word", "translated_word", "code",
-                       "wordnet synonym", "relation", "file", "meaning"]
+        self.header = ["word", "translation", "code",
+                       "synonym", "relation", "meaning"]
         self.data = []
 
     @staticmethod
@@ -67,16 +65,17 @@ class SumoCheck:
         wl = open("csv/bigbase.csv", 'r').readlines()[0]
         wl = wl.split(",")
         for i in range(len(wl)):
-            wl[i] = wl[i].split("_", maxsplit=1)[1].replace("\n", "")
+            wl[i] = wl[i].split("_")[-1].replace("\n", "")
         wl = sorted(list(set(wl)))
+        wl.append("Código")
 
         return wl
 
-    def get_translation(self, word) -> str:
+    def get_translation(self, word: str) -> str:
         translation = Translation()
         return translation.translation_word(word, self.target)
 
-    def distance_select(self, t_word, match_list):
+    def distance_select(self, t_word: str, match_list: list) -> None:
         selected_match = 0
         selected_similarity = 0
         for match, i in zip(match_list, range(len(match_list))):
@@ -87,19 +86,19 @@ class SumoCheck:
 
         self.selected_words.append(match_list[selected_match])
 
-    def wordnet_search(self):
+    def wordnet_search(self) -> None:
         for word in self.input_list:
             translated_word = self.get_translation(word)
             match_list = []
             match = False
-            for word_type, file in self.wordnet.items():
+            for file_number, file in self.wordnet.items():
                 for line in file:
                     phrase = str(line).split()
                     lower_phrase = str(line).lower().split()[
                         :phrase.index("|")]
                     if translated_word.lower() in lower_phrase:
                         match_list.append(
-                            Word(word, translated_word, phrase, word_type))
+                            Word(word, translated_word, phrase, file_number))
                         match = True
             if match:
                 self.distance_select(translated_word, match_list)
@@ -111,5 +110,4 @@ class SumoCheck:
                         list(w.code for w in self.selected_words),
                         list(w.syn for w in self.selected_words),
                         list(w.relation for w in self.selected_words),
-                        list(w.type for w in self.selected_words),
                         list(w.meaning for w in self.selected_words))
