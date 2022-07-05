@@ -2,7 +2,7 @@ echo off
 cls
 chcp 65001
 echo Interopera:  instalando dependências
-IF "%PYTHONPATH%"=="" (
+if "%PYTHONPATH%"=="" (
   echo definindo PYTHONPATH
   set PYTHONPATH=C:\Users\AP\AppData\Local\Programs\Python\Python39\
 )
