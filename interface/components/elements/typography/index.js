@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import * as S from "./styles";
 
-const Typography = ({
+function Typography({
   children,
   variant,
   fontSize,
@@ -20,7 +20,7 @@ const Typography = ({
   textOverflow,
   whiteSpace,
   overflow,
-}) => {
+}) {
   const Element = S.Typographies[variant];
   return (
     <Element
@@ -42,7 +42,7 @@ const Typography = ({
       {children}
     </Element>
   );
-};
+}
 
 Typography.propTypes = {
   children: PropTypes.node,
@@ -60,7 +60,7 @@ Typography.propTypes = {
   lineHeight: PropTypes.string,
   tAlign: PropTypes.string,
   weight: PropTypes.oneOf(["light", "regular", "medium", "bold", "black"]),
-  position: PropTypes.oneOf(["relative", "absolute", "sticky"]),
+  margin: PropTypes.string,
   mediaQuery: PropTypes.string,
   colorMedia: PropTypes.string,
   width: PropTypes.string,
@@ -79,7 +79,6 @@ Typography.defaultProps = {
   lineHeight: "",
   tAlign: "left",
   weight: "regular",
-  position: "relative",
   mediaQuery: "",
   colorMedia: "",
   margin: "0",

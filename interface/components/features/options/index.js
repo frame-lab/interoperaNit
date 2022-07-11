@@ -12,17 +12,18 @@ function Options() {
   const optionsList = ["Deep matcher", "Pandas"];
 
   const showOptions = () => {
-    {
-      return optionsList.map((optTitle, index) => {
-        const onChange = (obj) => {
-          if (obj.value) setselectedOption(optTitle);
-          else setselectedOption("");
-        };
-        const opt = { title: optTitle, value: optTitle == selectedOption };
+    return optionsList.map((optTitle, index) => {
+      const onChange = (obj) => {
+        if (obj.value) setselectedOption(optTitle);
+        else setselectedOption("");
+      };
+      const opt = { title: optTitle, value: optTitle === selectedOption };
+      const optionItemKey = `optionItem_${index}`;
 
-        return <OptionItem option={opt} onChange={onChange} key={index} />;
-      });
-    }
+      return (
+        <OptionItem option={opt} onChange={onChange} key={optionItemKey} />
+      );
+    });
   };
 
   const goToOption = () => {

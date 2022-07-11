@@ -21,12 +21,12 @@ function Panda() {
       case 1:
         if (files.length) setStep(2);
         break;
-      case 2:
+      case 2: {
         setStep(3);
         const stringfiedQuery = formatRouterPushObject({
-          files: files,
-          queries: queries,
-          processType: processType,
+          files,
+          queries,
+          processType,
         });
 
         router.push(
@@ -34,6 +34,7 @@ function Panda() {
           "finished"
         );
         break;
+      }
       default:
         break;
     }
@@ -41,7 +42,7 @@ function Panda() {
 
   const shouldShow = () => {
     switch (step) {
-      case 1:
+      case 1: {
         const filesText =
           "Drag 'n' drop one file here, or click to select a file\n(Only one *.csv file will be accepted)";
         return (
@@ -52,12 +53,13 @@ function Panda() {
             maxFiles={1}
           />
         );
+      }
       case 2:
         return <Queries queries={queries} setQueries={setQueries} />;
       case 3:
         return <Process processType={processType} />;
       default:
-        break;
+        return null;
     }
   };
 

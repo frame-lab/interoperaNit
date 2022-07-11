@@ -18,8 +18,8 @@ function Dm() {
     if (files.length) {
       setStep(2);
       const stringfiedQuery = formatRouterPushObject({
-        files: files,
-        processType: processType,
+        files,
+        processType,
       });
 
       router.push(
@@ -31,14 +31,15 @@ function Dm() {
 
   const shouldShow = () => {
     switch (step) {
-      case 1:
+      case 1: {
         const filesText =
           "Drag 'n' drop some files here, or click to select files\n(Only *.csv files will be accepted)";
         return <Files files={files} setFiles={setFiles} text={filesText} />;
+      }
       case 2:
         return <Process processType={processType} />;
       default:
-        break;
+        return null;
     }
   };
 

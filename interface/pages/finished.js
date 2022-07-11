@@ -9,13 +9,7 @@ import { verifyToolErrors } from "../utils/errors";
 
 export default function Finished({ processType, haveQueries, error }) {
   return (
-    <>
-      <Finish
-        processType={processType}
-        haveQueries={haveQueries}
-        error={error}
-      />
-    </>
+    <Finish processType={processType} haveQueries={haveQueries} error={error} />
   );
 }
 
@@ -52,6 +46,8 @@ export async function getServerSideProps(context) {
     case "pandas":
       makeFolderAndFiles(`${dirPath}/csv`, files);
       break;
+    default:
+      break;
   }
 
   try {
@@ -71,8 +67,8 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      processType: processType,
-      haveQueries: haveQueries,
+      processType,
+      haveQueries,
     },
   };
 }

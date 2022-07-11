@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import * as S from "./styles";
 
-const Image = ({
+function Image({
   image,
   width,
   height,
@@ -13,7 +13,8 @@ const Image = ({
   position,
   size,
   filter,
-}) => {
+  alt,
+}) {
   return (
     <S.Image
       image={image}
@@ -25,9 +26,10 @@ const Image = ({
       position={position}
       size={size}
       filter={filter}
+      alt={alt}
     />
   );
-};
+}
 
 Image.propTypes = {
   image: PropTypes.string.isRequired,
@@ -39,6 +41,7 @@ Image.propTypes = {
   position: PropTypes.string,
   size: PropTypes.string,
   filter: PropTypes.string,
+  alt: PropTypes.string.isRequired,
 };
 
 Image.defaultProps = {

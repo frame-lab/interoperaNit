@@ -30,14 +30,14 @@ function Queries({ queries, setQueries }) {
 
           const operation = isLastIndex ? add : remove;
 
+          const key = `query_${index}`;
+
           return (
-            <Styles.HorizontalContainer key={index}>
-              <Textarea
-                value={text}
-                onChange={onChange}
-              />
+            <Styles.HorizontalContainer key={key}>
+              <Textarea value={text} onChange={onChange} />
               <Button size="small" variant="image" onClick={operation}>
                 <Image
+                  alt="button"
                   image={buttonType}
                   filter="brightness(0) invert(1)"
                   width="30px"
@@ -54,7 +54,7 @@ function Queries({ queries, setQueries }) {
 }
 
 Queries.propTypes = {
-  queries: PropTypes.arrayOf(PropTypes.any).isRequired,
+  queries: PropTypes.arrayOf(PropTypes.string).isRequired,
   setQueries: PropTypes.func.isRequired,
 };
 

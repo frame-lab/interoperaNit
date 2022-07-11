@@ -17,7 +17,7 @@ function Files({ files, setFiles, text, maxFiles }) {
         return new Promise((resolve, reject) => {
           reader.onerror = () => {
             reader.abort();
-            reject("Problem parsing input file.");
+            reject(new Error("Problem parsing input file."));
           };
 
           reader.onload = () => {
@@ -34,14 +34,16 @@ function Files({ files, setFiles, text, maxFiles }) {
         setFiles([...files, ...results]);
       });
     },
-    [acceptedFiles]
+
+    [files, setFiles]
   );
 
-  const { getRootProps, acceptedFiles } = useDropzone({
+  const { getRootProps } = useDropzone({
     accept: ".csv",
-    onDrop: onDrop,
-    maxFiles: maxFiles,
+    onDrop,
+    maxFiles,
   });
+
   const download = "download.svg";
 
   return (
@@ -51,7 +53,13 @@ function Files({ files, setFiles, text, maxFiles }) {
       </Typography>
       <Styles.HorizontalContainer>
         <Styles.DragArea {...getRootProps({ refKey: "innerRef" })}>
-          <Image image={download} width="150px" height="150px" size="cover" />
+          <Image
+            image={download}
+            width="150px"
+            height="150px"
+            size="cover"
+            alt="download"
+          />
           <Typography
             lineHeight="120%"
             fontSize="30px"
@@ -75,8 +83,14 @@ function Files({ files, setFiles, text, maxFiles }) {
           <Styles.Scroll>
             {files.map((file, index) => {
               const removeFile = () => Remove(files, setFiles, index);
+              const fileItemKey = `fileItem_${index}`;
+
               return (
-                <FileItem file={file} removeFile={removeFile} key={index} />
+                <FileItem
+                  file={file}
+                  removeFile={removeFile}
+                  key={fileItemKey}
+                />
               );
             })}
           </Styles.Scroll>
@@ -87,7 +101,7 @@ function Files({ files, setFiles, text, maxFiles }) {
 }
 
 Files.propTypes = {
-  files: PropTypes.arrayOf(PropTypes.any).isRequired,
+  files: PropTypes.shape([]).isRequired,
   setFiles: PropTypes.func.isRequired,
   text: PropTypes.string.isRequired,
   maxFiles: PropTypes.number,

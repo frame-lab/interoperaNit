@@ -10,15 +10,21 @@ function Definitions({ definitionList, options, setOptions }) {
   return (
     <Styles.Container>
       <Styles.HorizontalContainer width="80%">
-        {definitionList.map((definition, index) => (
-          <DefinitionItem definition={definition} key={index} />
-        ))}
+        {definitionList.map((definition, index) => {
+          const definitionKey = `definition_${index}`;
+
+          return <DefinitionItem definition={definition} key={definitionKey} />;
+        })}
       </Styles.HorizontalContainer>
       <Styles.HorizontalContainer width="50%">
         {options.map((option, index) => {
           const onChange = (value) => Change(options, setOptions, value, index);
 
-          return <OptionItem option={option} onChange={onChange} key={index} />;
+          const optionKey = `option_${index}`;
+
+          return (
+            <OptionItem option={option} onChange={onChange} key={optionKey} />
+          );
         })}
       </Styles.HorizontalContainer>
     </Styles.Container>
@@ -26,8 +32,8 @@ function Definitions({ definitionList, options, setOptions }) {
 }
 
 Definitions.propTypes = {
-  definitionList: PropTypes.arrayOf(PropTypes.any).isRequired,
-  options: PropTypes.arrayOf(PropTypes.any).isRequired,
+  definitionList: PropTypes.shape([]).isRequired,
+  options: PropTypes.shape([]).isRequired,
   setOptions: PropTypes.func.isRequired,
 };
 

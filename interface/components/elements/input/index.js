@@ -43,7 +43,7 @@ Input.propTypes = {
   width: PropTypes.string,
   height: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  props: PropTypes.any,
+  props: PropTypes.oneOf([PropTypes.string]),
 };
 
 Input.defaultProps = {

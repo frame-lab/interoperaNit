@@ -39,16 +39,16 @@ function Alignment() {
       case 2:
         if (files.length) setStep(3);
         break;
-      case 3:
+      case 3: {
         setStep(4);
         const stringfiedQuery = formatRouterPushObject({
-          approximate: approximate,
-          files: files,
-          options: options,
-          queries: queries,
-          split: split,
-          unique: unique,
-          processType: processType,
+          approximate,
+          files,
+          options,
+          queries,
+          split,
+          unique,
+          processType,
         });
 
         router.push(
@@ -56,6 +56,7 @@ function Alignment() {
           "finished"
         );
         break;
+      }
       default:
         break;
     }
@@ -81,16 +82,17 @@ function Alignment() {
             setOptions={setOptions}
           />
         );
-      case 2:
+      case 2: {
         const filesText =
           "Drag 'n' drop some files here, or click to select files\n(Only *.csv files will be accepted)";
         return <Files files={files} setFiles={setFiles} text={filesText} />;
+      }
       case 3:
         return <Queries queries={queries} setQueries={setQueries} />;
       case 4:
         return <Process processType={processType} />;
       default:
-        break;
+        return <> </>;
     }
   };
 

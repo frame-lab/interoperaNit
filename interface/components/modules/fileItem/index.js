@@ -13,7 +13,13 @@ function FileItem({ file, removeFile }) {
   return (
     <Styles.Container>
       <Styles.VerticalContainer>
-        <Image image={fileImage} width="50px" height="50px" size="cover" />
+        <Image
+          image={fileImage}
+          width="50px"
+          height="50px"
+          size="cover"
+          alt="file"
+        />
         <Typography
           fontSize="20px"
           width="110px"
@@ -28,6 +34,7 @@ function FileItem({ file, removeFile }) {
       </Styles.VerticalContainer>
       <Button size="small" variant="image" onClick={removeFile}>
         <Image
+          alt="remove"
           image={remove}
           filter="brightness(0) invert(1)"
           width="30px"
@@ -40,7 +47,7 @@ function FileItem({ file, removeFile }) {
 }
 
 FileItem.propTypes = {
-  file: PropTypes.objectOf(PropTypes.any).isRequired,
+  file: PropTypes.shape({}).isRequired,
   removeFile: PropTypes.func.isRequired,
 };
 

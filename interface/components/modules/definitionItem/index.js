@@ -31,14 +31,14 @@ function DefinitionItem({ definition }) {
 
           const operation = isLastIndex ? add : remove;
 
+          const definitionItemKey = `definitionItem_${index}`;
+
           return (
-            <Styles.HorizontalContainer key={index}>
-              <Input
-                value={text}
-                onChange={onChange}
-              />
+            <Styles.HorizontalContainer key={definitionItemKey}>
+              <Input value={text} onChange={onChange} />
               <Button size="small" variant="image" onClick={operation}>
                 <Image
+                  alt="button"
                   image={buttonType}
                   filter="brightness(0) invert(1)"
                   width="30px"
@@ -55,7 +55,7 @@ function DefinitionItem({ definition }) {
 }
 
 DefinitionItem.propTypes = {
-  definition: PropTypes.objectOf(PropTypes.any).isRequired,
+  definition: PropTypes.shape({}).isRequired,
 };
 
 export default DefinitionItem;
