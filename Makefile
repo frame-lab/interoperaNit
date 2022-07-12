@@ -1,8 +1,8 @@
 APIDOC_TITLE = "Base aligner"
 APIDOC_DESCRIPTION = "Documentation of the aligner"
-APIDOC_VERSION = "0.1.0"
+APIDOC_VERSION = "1.0"
 
-.PHONY: clean clean-pyc clean-build help uninstall_all
+.PHONY: clean help uninstall
 .DEFAULT_GOAL := help
 
 define PRINT_HELP_PYSCRIPT
@@ -16,10 +16,7 @@ for line in sys.stdin:
 endef
 export PRINT_HELP_PYSCRIPT
 
-help:
-	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
-
-define UNINSTALL_ALL_PYSCRIPT
+define UNINSTALL_PYSCRIPT
 import os
 
 req = 'requirements.txt'
@@ -28,7 +25,20 @@ for package in [x.split('==')[0] for x in open(req).read().split('\n')]:
 		os.system('pip uninstall --yes %s' % package)
 
 endef
-export UNINSTALL_ALL_PYSCRIPT
+export UNINSTALL_PYSCRIPT
+
+define INSTALL_PYSCRIPT
+import os
+
+req = 'requirements.txt'
+for package in [x.split('==')[0] for x in open(req).read().split('\n')]:
+	if package.strip():
+		os.system('pip install %s' % package)
+endef
+export INSTALL_PYSCRIPT
+
+help:
+	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 install_sigma:
     interopera=$(pwd)
@@ -73,37 +83,14 @@ install_sigma:
     sudo apt-get install ant
     ant
 
-uninstall_all:
+uninstall:
     cd interopera
-	@python -c "$$UNINSTALL_ALL_PYSCRIPT"
+	@python -c "$$UNINSTALL_PYSCRIPT"
 	cd ..
 
-clean: clean-build clean-pyc ## remove all build, test, coverage and Python artifacts
+clean: find . -name '*.pyc' -exec rm -f {}
 
-clean-build: ## remove build artifacts
-	rm -fr build/
-	rm -fr dist/
-	rm -fr .eggs/
-	find . -name '*.egg-info' -exec rm -fr {} +
-	find . -name '*.egg' -exec rm -f {} +
-
-clean-pyc: ## remove Python file artifacts
-	find . -name '*.pyc' -exec rm -f {} +
-	find . -name '*.pyo' -exec rm -f {} +
-	find . -name '*~' -exec rm -f {} +
-	find . -name '__pycache__' -exec rm -fr {} +
-
-define INSTALL_PYSCRIPT
-import os
-
-req = 'requirements.txt'
-for package in [x.split('==')[0] for x in open(req).read().split('\n')]:
-	if package.strip():
-		os.system('pip install %s' % package)
-endef
-export INSTALL_PYSCRIPT
-
-install: clean uninstall_all ## instala as dependências do projeto
+install: clean uninstall ## instala as dependências do projeto
     cd interopera
 	touch approximate
 	touch queries
