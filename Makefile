@@ -30,8 +30,53 @@ for package in [x.split('==')[0] for x in open(req).read().split('\n')]:
 endef
 export UNINSTALL_ALL_PYSCRIPT
 
+install_sigma:
+    interopera=$(pwd)
+    cd ~
+    sudo apt-get install unzip
+    sudo apt-get update
+    touch .bashrc
+    echo "alias dir='ls --color=auto --format=vertical -la'" >> .bashrc
+    echo "export HISTSIZE=10000 HISTFILESIZE=100000" >> .bashrc
+    source .bashrc
+    echo "export PATH=$PATH:$JAVA_HOME/bin" >> .bashrc
+    source .bashrc
+    mkdir programs
+    cd programs
+    wget 'https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.23/bin/apache-tomcat-8.5.23.zip'
+    wget 'http://wwwlehre.dhbw-stuttgart.de/~sschulz/WORK/E_DOWNLOAD/V_2.0/E.tgz'
+    tar -xvzf E.tgz
+    unzip apache-tomcat-8.5.23.zip
+    rm apache-tomcat-8.5.23.zip
+    cd apache-tomcat-8.5.23/bin
+    chmod 777 *
+    cd ../webapps
+    chmod 777 *
+    cd $interopera/.sigmakee
+    me="$(whoami)"
+    sed -i "s/theuser/$me/g" KBs/config.xml
+    cd ~/programs/E
+    sudo apt-get install gcc
+    ./configure
+    make
+    make install
+    cd ~
+    sudo apt-get install graphviz
+    echo "export SIGMA_HOME=$interopera/interopera/.sigmakee" >> .bashrc
+    echo "export SIGMA_SRC=$interopera/interopera/workspace/sigmakee" >> .bashrc
+    echo "export ONTOLOGYPORTAL_GIT=$interopera/interopera/workspace" >> .bashrc
+    echo "export CATALINA_OPTS="$CATALINA_OPTS -Xmx10g"" >> .bashrc
+    echo "export CATALINA_HOME=~/programs/apache-tomcat-8.5.23" >> .bashrc
+    source .bashrc
+    cd $interopera/interopera/workspace/sigmakee
+    sudo apt-get update
+    sudo apt-get install ant
+    ant
+
 uninstall_all:
+    cd interopera
 	@python -c "$$UNINSTALL_ALL_PYSCRIPT"
+	cd ..
 
 clean: clean-build clean-pyc ## remove all build, test, coverage and Python artifacts
 
@@ -59,6 +104,7 @@ endef
 export INSTALL_PYSCRIPT
 
 install: clean uninstall_all ## instala as dependências do projeto
+    cd interopera
 	touch approximate
 	touch queries
 	touch split
@@ -67,3 +113,4 @@ install: clean uninstall_all ## instala as dependências do projeto
 	mkdir -p results
 	mkdir -p samples
 	@python -c "$$INSTALL_PYSCRIPT"
+	cd..
