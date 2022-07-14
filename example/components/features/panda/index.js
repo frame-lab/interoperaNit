@@ -73,7 +73,7 @@ function Panda() {
   const showButton = () => {
     return step !== 3 ? (
       <Button onClick={nextStep} size="large" variant="default" width="200px">
-        <Typography fontSize="20px" width="auto" variant="h1" tAlign="center">
+        <Typography fontSize={20} width="auto" variant="h1" tAlign="center">
           CONFIRM
         </Typography>
       </Button>
@@ -82,7 +82,7 @@ function Panda() {
 
   return (
     <Styles.Body>
-      <Typography fontSize="35px" variant="h1">
+      <Typography fontSize={35} variant="h1">
         Step {step}/3
       </Typography>
       {shouldShow()}

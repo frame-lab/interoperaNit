@@ -53,7 +53,7 @@ function Dm() {
   const showButton = () => {
     return step !== 2 ? (
       <Button onClick={nextPage} size="large" variant="default" width="200px">
-        <Typography fontSize="20px" width="auto" variant="h1" tAlign="center">
+        <Typography fontSize={20} width="auto" variant="h1" tAlign="center">
           CONFIRM
         </Typography>
       </Button>
@@ -62,7 +62,7 @@ function Dm() {
 
   return (
     <Styles.Body>
-      <Typography fontSize="35px" variant="h1">
+      <Typography fontSize={35} variant="h1">
         Step {step}/2
       </Typography>
       {shouldShow()}

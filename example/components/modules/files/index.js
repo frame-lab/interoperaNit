@@ -20,7 +20,7 @@ function Files({ files, setFiles, text, maxFiles }) {
 
   return (
     <Styles.Container>
-      <Typography fontSize="30px" width="auto" tAlign="center" variant="h1">
+      <Typography fontSize={30} width="auto" tAlign="center" variant="h1">
         Files
       </Typography>
       <Styles.HorizontalContainer>
@@ -34,7 +34,7 @@ function Files({ files, setFiles, text, maxFiles }) {
           />
           <Typography
             lineHeight="120%"
-            fontSize="30px"
+            fontSize={30}
             width="65%"
             tAlign="center"
             variant="h1"
@@ -45,7 +45,7 @@ function Files({ files, setFiles, text, maxFiles }) {
         <Styles.VerticalContainer>
           <Typography
             margin="0 0 20px 0"
-            fontSize="20px"
+            fontSize={20}
             width="150px"
             tAlign="center"
             variant="h1"

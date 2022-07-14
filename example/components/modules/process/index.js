@@ -20,7 +20,7 @@ function Process({ processType }) {
 
   return (
     <Styles.Body>
-      <Typography fontSize="35px" variant="h1">
+      <Typography fontSize={35} variant="h1">
         Realizing the {processText()} process
       </Typography>
     </Styles.Body>

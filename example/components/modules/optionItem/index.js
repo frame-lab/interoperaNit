@@ -43,7 +43,7 @@ function OptionItem({ option, onChange }) {
           <Radio value={value} onChange={onChange} />
           <Typography
             margin="0 0 0 10px"
-            fontSize="20px"
+            fontSize={20}
             width="150px"
             variant="h1"
           >

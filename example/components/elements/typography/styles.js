@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const h1 = styled.h1`
-  font-size: ${(props) => props.fontSize || props.theme.typography.h1.fontSize};
+  font-size: ${(props) => props.fontSize}px;
   color: ${(props) => props.color || props.theme.palette.text.default};
   font-family: ${(props) => props.FontFamily};
   font-weight: ${(props) =>
@@ -23,7 +23,7 @@ const h1 = styled.h1`
 `;
 
 const h2 = styled.h2`
-  font-size: ${(props) => props.fontSize || props.theme.typography.h2.fontSize};
+  font-size: ${(props) => props.fontSize}px;
   color: ${(props) => props.color || props.theme.palette.text.default};
   font-family: ${(props) => props.FontFamily};
   font-weight: ${(props) =>
@@ -45,8 +45,7 @@ const h2 = styled.h2`
 `;
 
 const body1 = styled.p`
-  font-size: ${(props) =>
-    props.fontSize || props.theme.typography.body1.fontSize};
+  font-size: ${(props) => props.fontSize}px;
   color: ${(props) => props.color || props.theme.palette.text.default};
   font-family: ${(props) => props.FontFamily};
   font-weight: ${(props) =>
@@ -68,8 +67,7 @@ const body1 = styled.p`
 `;
 
 const body2 = styled.p`
-  font-size: ${(props) =>
-    props.fontSize || props.theme.typography.body2.fontSize};
+  font-size: ${(props) => props.fontSize}px;
   color: ${(props) => props.color || props.theme.palette.text.default};
   font-family: ${(props) => props.FontFamily};
   font-weight: ${(props) =>
@@ -91,8 +89,7 @@ const body2 = styled.p`
 `;
 
 const subtitle1 = styled.p`
-  font-size: ${(props) =>
-    props.fontSize || props.theme.typography.subtitle1.fontSize};
+  font-size: ${(props) => props.fontSize}px;
   color: ${(props) => props.color || props.theme.palette.text.default};
   font-family: ${(props) => props.FontFamily};
   font-weight: ${(props) =>
@@ -115,8 +112,7 @@ const subtitle1 = styled.p`
 `;
 
 const subtitle2 = styled.p`
-  font-size: ${(props) =>
-    props.fontSize || props.theme.typography.subtitle2.fontSize};
+  font-size: ${(props) => props.fontSize}px;
   color: ${(props) => props.color || props.theme.palette.text.default};
   font-family: ${(props) => props.FontFamily};
   font-weight: ${(props) =>

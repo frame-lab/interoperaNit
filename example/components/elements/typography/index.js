@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import * as S from "./styles";
 import { fontScale } from "../../../utils/scale";
+import { useWindowDimensions } from "../../../utils/window";
 
 function Typography({
   children,
@@ -23,9 +24,12 @@ function Typography({
   overflow,
 }) {
   const Element = S.Typographies[variant];
+  const { width: dimensionWidth, height: dimensionHeight } =
+    useWindowDimensions();
+
   return (
     <Element
-      fontSize={fontScale(fontSize)}
+      fontSize={fontScale(dimensionWidth, dimensionHeight, fontSize)}
       color={color}
       FontFamily={FontFamily}
       lineHeight={lineHeight}

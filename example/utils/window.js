@@ -1,13 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
-export default function useWindowDimensions() {
+const WindowDimensionsContext = createContext({
+  width: 0,
+  height: 0,
+});
+
+export function WindowDimensionsContextProvider({ children }) {
   const hasWindow = typeof window !== "undefined";
 
   const getWindowDimensions = () => {
     const width = hasWindow ? window.innerWidth : null;
     const height = hasWindow ? window.innerHeight : null;
-    console.log(width)
+
     return { width, height };
   };
 
@@ -27,5 +32,11 @@ export default function useWindowDimensions() {
     return null;
   }, [getWindowDimensions, hasWindow]);
 
-  return windowDimensions;
+  return (
+    <WindowDimensionsContext.Provider value={windowDimensions}>
+      {children}
+    </WindowDimensionsContext.Provider>
+  );
 }
+
+export const useWindowDimensions = () => useContext(WindowDimensionsContext);

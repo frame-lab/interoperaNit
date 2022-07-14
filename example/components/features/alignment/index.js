@@ -106,7 +106,7 @@ function Alignment() {
   const showButton = () => {
     return step !== 4 ? (
       <Button onClick={nextStep} size="large" variant="default" width="200px">
-        <Typography fontSize="20px" width="auto" variant="h1" tAlign="center">
+        <Typography fontSize={20} width="auto" variant="h1" tAlign="center">
           CONFIRM
         </Typography>
       </Button>
@@ -115,7 +115,7 @@ function Alignment() {
 
   return (
     <Styles.Body>
-      <Typography fontSize="35px" variant="h1">
+      <Typography fontSize={35} variant="h1">
         Step {step}/4
       </Typography>
       {shouldShow()}

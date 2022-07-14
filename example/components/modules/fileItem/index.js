@@ -27,7 +27,7 @@ function FileItem({ file, removeFile }) {
           alt="file"
         />
         <Typography
-          fontSize="20px"
+          fontSize={20}
           width="110px"
           variant="body1"
           whiteSpace="nowrap"

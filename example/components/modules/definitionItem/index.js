@@ -14,7 +14,7 @@ function DefinitionItem({ definition }) {
 
   return (
     <Styles.Container>
-      <Typography fontSize="30px" width="auto" tAlign="center" variant="h1">
+      <Typography fontSize={30} width="auto" tAlign="center" variant="h1">
         {title}
       </Typography>
       <Styles.Scroll>

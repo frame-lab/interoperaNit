@@ -29,7 +29,7 @@ export const MenuItemsContainer = styled.div`
 `;
 
 export const MenuItem = styled.a`
-  font-size: 25px;
+  font-size: ${(props) => props.fontSize};
   color: white;
   text-decoration: none;
   background-color: transparent;

@@ -9,4 +9,5 @@ export const Body = styled.div`
   align-items: center;
   margin-bottom: 20px;
   margin-top: 20px;
+  min-width: 320px;
 `;

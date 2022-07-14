@@ -19,7 +19,7 @@ function Finish({ processType, haveQueries, error }) {
 
   return (
     <Styles.Body>
-      <Typography fontSize="35px" variant="h1">
+      <Typography fontSize={35} variant="h1">
         {processText()}
       </Typography>
       {!error && (
@@ -30,7 +30,7 @@ function Finish({ processType, haveQueries, error }) {
           width="200px"
           margin="20px 0"
         >
-          <Typography fontSize="20px" width="auto" variant="h1" tAlign="center">
+          <Typography fontSize={20} width="auto" variant="h1" tAlign="center">
             DOWNLOAD
           </Typography>
         </Button>

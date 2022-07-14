@@ -13,7 +13,7 @@ function Queries({ queries, setQueries }) {
 
   return (
     <Styles.Container>
-      <Typography fontSize="30px" width="auto" tAlign="center" variant="h1">
+      <Typography fontSize={30} width="auto" tAlign="center" variant="h1">
         Queries
       </Typography>
       <Styles.Scroll>
