@@ -116,3 +116,10 @@ install: clean uninstall ## Instala as dependências do projeto
 	mkdir -p results;	\
 	mkdir -p samples;	\
 	python -c "$$INSTALL_PYSCRIPT"
+
+install_python: sudo apt-get install python3 ## Instala o python e seta o path dele
+	sudo apt-get install python-is-python3
+
+install_java: sudo apt-get install openjdk-18-jdk ## Instala o java e seta o path dele
+
+install_node: sudo apt-get install nodejs ## Instala o node
