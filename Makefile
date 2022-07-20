@@ -51,7 +51,6 @@ install_programs: ## Instala as dependências de programas
 	sudo apt-get update
 	sudo apt-get install unzip
 	sudo apt-get install git
-	sudo apt-get install make
 	sudo apt-get install gcc
 	sudo apt-get install graphviz
 	sudo apt-get install ant
@@ -120,6 +119,10 @@ install: clean uninstall ## Instala as dependências do projeto
 install_python: sudo apt-get install python3 ## Instala o python e seta o path dele
 	sudo apt-get install python-is-python3
 
-install_java: sudo apt-get install openjdk-18-jdk ## Instala o java e seta o path dele
+install_java: sudo apt-get install openjdk-18-jre-headless ## Instala o java e seta o path dele
+	cd ~;	\
+	echo "export JAVA_HOME=/usr/lib/jvm/java-1.18.0-openjdk-amd64" >> .bashrc	\
+	source .bashrc
 
 install_node: sudo apt-get install nodejs ## Instala o node
+	sudo apt-get install npm 
