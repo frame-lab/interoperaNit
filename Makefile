@@ -2,7 +2,7 @@ APIDOC_TITLE = "Base aligner"
 APIDOC_DESCRIPTION = "Documentation of the aligner"
 APIDOC_VERSION = "1.0"
 
-.PHONY: clean help uninstall
+.PHONY: clean help uninstall install_programs install_sigma
 .DEFAULT_GOAL := help
 
 define PRINT_HELP_PYSCRIPT
@@ -37,68 +37,76 @@ for package in [x.split('==')[0] for x in open(req).read().split('\n')]:
 endef
 export INSTALL_PYSCRIPT
 
-help:
+clean: ## Remove os arquivos residuais do python
+	find . -name '*.pyc' -exec rm -f {} +
+
+help: ## Mostra os comandos no terminal
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-install_sigma:
-	interopera=$(pwd)
-	sudo apt-get install unzip
+uninstall: ## Remove as dependendias do projeto
+	cd interopera;	\
+	python -c "$$UNINSTALL_PYSCRIPT"
+
+install_programs: ## Instala as dependências de programas
 	sudo apt-get update
+	sudo apt-get install unzip
+	sudo apt-get install git
+	sudo apt-get install make
+	sudo apt-get install gcc
+	sudo apt-get install graphviz
+	sudo apt-get install ant
+
+install_sigma: ## Instala as dependências do sigma
 	cd ~;	\
 	touch .bashrc;	\
 	echo "alias dir='ls --color=auto --format=vertical -la'" >> .bashrc;	\
 	echo "export HISTSIZE=10000 HISTFILESIZE=100000" >> .bashrc;	\
 	source .bashrc;	\
-	echo "export PATH=$PATH:$JAVA_HOME/bin" >> .bashrc;	\
-	source .bashrc;	\
+	mkdir workspace;	\
 	mkdir programs;	\
 	cd programs;	\
 	wget 'https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.23/bin/apache-tomcat-8.5.23.zip';	\
+	wget 'http://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.gz';	\
 	wget 'http://wwwlehre.dhbw-stuttgart.de/~sschulz/WORK/E_DOWNLOAD/V_2.0/E.tgz';	\
 	tar -xvzf E.tgz;	\
 	unzip apache-tomcat-8.5.23.zip;	\
 	rm apache-tomcat-8.5.23.zip;	\
-	cd apache-tomcat-8.5.23/bin;	\
+	cd ~/Programs/apache-tomcat-8.5.23/bin;	\
 	chmod 777 *;	\
 	cd ../webapps;	\
 	chmod 777 *;	\
-	mkdir .sigmakee
-	cd .sigmakee
-	mkdir KBs
-	cp -R ~/workspace/sumo/* KBs
-	me="$(whoami)"
-	cp $interopera/workspace/sigmakee/config.xml ~/.sigmakee/KBs
-	sed -i "s/theuser/$me/g" KBs/config.xml
-	cd ~/Programs
-	gunzip WordNet-3.0.tar.gz
-	tar -xvf WordNet-3.0.tar
-	cp WordNet-3.0/dict/* ~/.sigmakee/KBs/WordNetMappings/
-	cd ~/programs/E
-	sudo apt-get install gcc
-	./configure
-	make
-	make install
-	cd ~
-	sudo apt-get install graphviz
-	echo "export SIGMA_HOME=$interopera/interopera/.sigmakee" >> .bashrc
-	echo "export SIGMA_SRC=$interopera/interopera/workspace/sigmakee" >> .bashrc
-	echo "export ONTOLOGYPORTAL_GIT=$interopera/interopera/workspace" >> .bashrc
-	echo "export CATALINA_OPTS="$CATALINA_OPTS -Xmx10g"" >> .bashrc
-	echo "export CATALINA_HOME=~/programs/apache-tomcat-8.5.23" >> .bashrc
-	source .bashrc
-	cd $interopera/interopera/workspace/sigmakee
-	sudo apt-get update
-	sudo apt-get install ant
+	cd ~/workspace/;	\
+	git clone https://github.com/ontologyportal/sigmakee;	\
+	git clone https://github.com/ontologyportal/sumo;	\
+	git clone https://github.com/ontologyportal/TPTP-ANTLR;	\
+	git clone https://github.com/ontologyportal/SigmaUtils;	\
+	cd ~;	\
+	mkdir .sigmakee;	\
+	cd .sigmakee;	\
+	mkdir KBs;	\
+	cp -R ~/workspace/sumo/* KBs;	\
+	me="$(whoami)";	\
+	cp ~/workspace/sigmakee/config.xml ~/.sigmakee/KBs;	\
+	sed -i "s/$me/g" KBs/config.xml;	\
+	cd ~/Programs;	\
+	gunzip WordNet-3.0.tar.gz;	\
+	tar -xvf WordNet-3.0.tar;	\
+	cp WordNet-3.0/dict/* ~/.sigmakee/KBs/WordNetMappings/;	\
+	cd ~;	\
+	echo "export SIGMA_HOME=~/.sigmakee" >> .bashrc;	\
+	echo "export SIGMA_SRC=~/workspace/sigmakee" >> .bashrc;	\
+	echo "export ONTOLOGYPORTAL_GIT=~/workspace" >> .bashrc;	\
+	echo "export CATALINA_OPTS=\"$CATALINA_OPTS -Xmx10g\"" >> .bashrc;	\
+	echo "export CATALINA_HOME=~/Programs/apache-tomcat-8.5.23" >> .bashrc;	\
+	source .bashrc;	\
+	cd ~/programs/E;	\
+	./configure;	\
+	make;	\
+	make install;	\
+	cd ~/workspace/sigmakee;	\
 	ant
 
-uninstall:
-	cd interopera;	\
-	python -c "$$UNINSTALL_PYSCRIPT"
-
-clean:
-	find . -name '*.pyc' -exec rm -f {} +
-
-install: clean uninstall ## instala as dependências do projeto
+install: clean uninstall ## Instala as dependências do projeto
 	cd interopera;	\
 	touch approximate;	\
 	touch queries;	\
