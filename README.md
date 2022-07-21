@@ -16,7 +16,8 @@ Note that this project is only compatible with the linux environment.
 
 ## How to run the project
 + To run this project go to the interopera folder;
-+ Run the command 'python controler -args';
++ Run the command 'java -Xmx7g -cp $SIGMA_SRC/build/classes:$SIGMA_SRC/build/lib/* com.articulate.sigma.KBmanager -p';
++ Open another terminal and Run the command 'python controler -args';
 + The args to run this project can be found in the help file;
 
 ## How to run the interface
@@ -32,3 +33,4 @@ Note that this project is only compatible with the linux environment.
 # Common issues
 
 + If you have problems running the make command you need to install it with the command 'sudo apt-get install make';
++ If you are having problems running the Java command go to the root folder and run the command 'make install_vampire' and try again;
