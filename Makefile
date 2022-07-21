@@ -54,6 +54,7 @@ install_programs: ## Install all programs dependencies
 	sudo apt-get install gcc
 	sudo apt-get install graphviz
 	sudo apt-get install ant
+	sudo apt-get install pip
 
 install_sigma: ## Instala as dependências do sigma Install all Sigma dependencies
 	cd ~;	\
@@ -86,7 +87,7 @@ install_sigma: ## Instala as dependências do sigma Install all Sigma dependenci
 	cp -R ~/workspace/sumo/* KBs;	\
 	me="$(whoami)";	\
 	cp ~/workspace/sigmakee/config.xml ~/.sigmakee/KBs;	\
-	sed -i "s/$me/$me/g" KBs/config.xml;	\
+	sed -i "s/theuser/$me/g" KBs/config.xml;	\
 	cd ~/programs;	\
 	gunzip WordNet-3.0.tar.gz;	\
 	tar -xvf WordNet-3.0.tar;	\
@@ -106,8 +107,7 @@ install_sigma: ## Instala as dependências do sigma Install all Sigma dependenci
 	cd ~/workspace/sigmakee;	\
 	ant
 
-install: ## Install all dependencies of the project
-	clean uninstall
+install: clean uninstall ## Install all dependencies of the project
 	cd interopera;	\
 	touch approximate;	\
 	touch queries;	\
