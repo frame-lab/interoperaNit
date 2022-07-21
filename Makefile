@@ -86,7 +86,7 @@ install_sigma: ## Instala as dependências do sigma Install all Sigma dependenci
 	cd .sigmakee;	\
 	mkdir KBs;	\
 	cp -R ~/workspace/sumo/* KBs;	\
-	me="$(whoami)";	\
+	me="$$(whoami)";	\
 	cp ~/workspace/sigmakee/config.xml ~/.sigmakee/KBs;	\
 	sed -i "s/theuser/$$me/g" KBs/config.xml;	\
 	cd ~/programs;	\
