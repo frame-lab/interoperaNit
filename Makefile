@@ -2,7 +2,7 @@ APIDOC_TITLE = "Base aligner"
 APIDOC_DESCRIPTION = "Documentation of the aligner"
 APIDOC_VERSION = "1.0"
 
-.PHONY: clean help uninstall install_programs install_sigma
+.PHONY: clean help uninstall install_programs install_sigma install install_python install_java install_node
 .DEFAULT_GOAL := help
 
 define PRINT_HELP_PYSCRIPT
@@ -37,17 +37,17 @@ for package in [x.split('==')[0] for x in open(req).read().split('\n')]:
 endef
 export INSTALL_PYSCRIPT
 
-clean: ## Remove os arquivos residuais do python
+clean: ## Remove all residual Python files
 	find . -name '*.pyc' -exec rm -f {} +
 
-help: ## Mostra os comandos no terminal
+help: ## Show all commands
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-uninstall: ## Remove as dependendias do projeto
+uninstall: ## Remove all project dependencies
 	cd interopera;	\
 	python -c "$$UNINSTALL_PYSCRIPT"
 
-install_programs: ## Instala as dependências de programas
+install_programs: ## Install all programs dependencies
 	sudo apt-get update
 	sudo apt-get install unzip
 	sudo apt-get install git
@@ -55,7 +55,7 @@ install_programs: ## Instala as dependências de programas
 	sudo apt-get install graphviz
 	sudo apt-get install ant
 
-install_sigma: ## Instala as dependências do sigma
+install_sigma: ## Instala as dependências do sigma Install all Sigma dependencies
 	cd ~;	\
 	touch .bashrc;	\
 	echo "alias dir='ls --color=auto --format=vertical -la'" >> .bashrc;	\
@@ -105,7 +105,8 @@ install_sigma: ## Instala as dependências do sigma
 	cd ~/workspace/sigmakee;	\
 	ant
 
-install: clean uninstall ## Instala as dependências do projeto
+install: ## Install all dependencies of the project
+	clean uninstall
 	cd interopera;	\
 	touch approximate;	\
 	touch queries;	\
@@ -116,13 +117,16 @@ install: clean uninstall ## Instala as dependências do projeto
 	mkdir -p samples;	\
 	python -c "$$INSTALL_PYSCRIPT"
 
-install_python: sudo apt-get install python3 ## Instala o python e seta o path dele
+install_python: ## Install python and set its path
+	sudo apt-get install python3
 	sudo apt-get install python-is-python3
 
-install_java: sudo apt-get install openjdk-18-jre-headless ## Instala o java e seta o path dele
+install_java: ## Install java and set its path
+	sudo apt-get install openjdk-18-jre-headless
 	cd ~;	\
 	echo "export JAVA_HOME=/usr/lib/jvm/java-1.18.0-openjdk-amd64" >> .bashrc	\
 	source .bashrc
 
-install_node: sudo apt-get install nodejs ## Instala o node
+install_node: ## Install node
+	sudo apt-get install nodejs
 	sudo apt-get install npm 
