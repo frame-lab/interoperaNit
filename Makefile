@@ -70,7 +70,7 @@ install_sigma: ## Instala as dependências do sigma Install all Sigma dependenci
 	tar -xvzf E.tgz;	\
 	unzip apache-tomcat-8.5.23.zip;	\
 	rm apache-tomcat-8.5.23.zip;	\
-	cd ~/Programs/apache-tomcat-8.5.23/bin;	\
+	cd ~/programs/apache-tomcat-8.5.23/bin;	\
 	chmod 777 *;	\
 	cd ../webapps;	\
 	chmod 777 *;	\
@@ -86,8 +86,8 @@ install_sigma: ## Instala as dependências do sigma Install all Sigma dependenci
 	cp -R ~/workspace/sumo/* KBs;	\
 	me="$(whoami)";	\
 	cp ~/workspace/sigmakee/config.xml ~/.sigmakee/KBs;	\
-	sed -i "s/$me/g" KBs/config.xml;	\
-	cd ~/Programs;	\
+	sed -i "s/$me/$me/g" KBs/config.xml;	\
+	cd ~/programs;	\
 	gunzip WordNet-3.0.tar.gz;	\
 	tar -xvf WordNet-3.0.tar;	\
 	cp WordNet-3.0/dict/* ~/.sigmakee/KBs/WordNetMappings/;	\
@@ -96,7 +96,8 @@ install_sigma: ## Instala as dependências do sigma Install all Sigma dependenci
 	echo "export SIGMA_SRC=~/workspace/sigmakee" >> .bashrc;	\
 	echo "export ONTOLOGYPORTAL_GIT=~/workspace" >> .bashrc;	\
 	echo "export CATALINA_OPTS=\"$CATALINA_OPTS -Xmx10g\"" >> .bashrc;	\
-	echo "export CATALINA_HOME=~/Programs/apache-tomcat-8.5.23" >> .bashrc;	\
+	echo "export CATALINA_HOME=~/programs/apache-tomcat-8.5.23" >> .bashrc;	\
+	echo $ONTOLOGYPORTAL_GIT
 	source .bashrc;	\
 	cd ~/programs/E;	\
 	./configure;	\
@@ -124,7 +125,7 @@ install_python: ## Install python and set its path
 install_java: ## Install java and set its path
 	sudo apt-get install openjdk-18-jre-headless
 	cd ~;	\
-	echo "export JAVA_HOME=/usr/lib/jvm/java-1.18.0-openjdk-amd64" >> .bashrc	\
+	echo "export JAVA_HOME=/usr/lib/jvm/java-1.18.0-openjdk-amd64" >> .bashrc;	\
 	source .bashrc
 
 install_node: ## Install node
