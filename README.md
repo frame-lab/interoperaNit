@@ -6,9 +6,11 @@ Note that this project is only compatible with the linux environment.
 ## Software requirements
 
 + Run the command 'make install_python' in the terminal to install python and setting its path;
-+ Run the command 'make install_java ' in the terminal to install java and setting its path;
++ Run the command 'make install_java' in the terminal to install java and setting its path;
 + Run the command 'make install_programs'  in the terminal to install all the programs that this project will use;
 + Run the command 'make install_sigma'  in the terminal to install all the sigma dependencies;
++ Re-open the terminal to ensure that the paths have been set;
++ Run the command 'make configure_sigma'  in the terminal to make tha last configurations on sigma;
 + Run the command 'make install'  in the terminal to install all of this project dependencies;
 + If you want to run the interface or the example you will need to run the 'make install_node' as well to install node and its path;
 

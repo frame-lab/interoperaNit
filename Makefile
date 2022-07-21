@@ -1,6 +1,7 @@
 APIDOC_TITLE = "Base aligner"
 APIDOC_DESCRIPTION = "Documentation of the aligner"
 APIDOC_VERSION = "1.0"
+SHELL := /bin/bash
 
 .PHONY: clean help uninstall install_programs install_sigma install install_python install_java install_node
 .DEFAULT_GOAL := help
@@ -87,7 +88,7 @@ install_sigma: ## Instala as dependências do sigma Install all Sigma dependenci
 	cp -R ~/workspace/sumo/* KBs;	\
 	me="$(whoami)";	\
 	cp ~/workspace/sigmakee/config.xml ~/.sigmakee/KBs;	\
-	sed -i "s/theuser/$me/g" KBs/config.xml;	\
+	sed -i "s/theuser/$$me/g" KBs/config.xml;	\
 	cd ~/programs;	\
 	gunzip WordNet-3.0.tar.gz;	\
 	tar -xvf WordNet-3.0.tar;	\
@@ -96,16 +97,18 @@ install_sigma: ## Instala as dependências do sigma Install all Sigma dependenci
 	echo "export SIGMA_HOME=~/.sigmakee" >> .bashrc;	\
 	echo "export SIGMA_SRC=~/workspace/sigmakee" >> .bashrc;	\
 	echo "export ONTOLOGYPORTAL_GIT=~/workspace" >> .bashrc;	\
-	echo "export CATALINA_OPTS=\"$CATALINA_OPTS -Xmx10g\"" >> .bashrc;	\
+	echo "export CATALINA_OPTS=\"$$CATALINA_OPTS -Xmx10g\"" >> .bashrc;	\
 	echo "export CATALINA_HOME=~/programs/apache-tomcat-8.5.23" >> .bashrc;	\
-	echo $ONTOLOGYPORTAL_GIT
-	source .bashrc;	\
+	source .bashrc
+
+configure_sigma: ## Make the last configurations in the sigma
 	cd ~/programs/E;	\
 	./configure;	\
 	make;	\
 	make install;	\
 	cd ~/workspace/sigmakee;	\
 	ant
+
 
 install: clean uninstall ## Install all dependencies of the project
 	cd interopera;	\
