@@ -57,7 +57,7 @@ install_programs: ## Install all programs dependencies
 	sudo apt-get install ant
 	sudo apt-get install pip
 
-install_sigma: ## Instala as dependências do sigma Install all Sigma dependencies
+install_sigma: ## Install all Sigma dependencies
 	cd ~;	\
 	touch .bashrc;	\
 	echo "alias dir='ls --color=auto --format=vertical -la'" >> .bashrc;	\
@@ -109,6 +109,12 @@ configure_sigma: ## Make the last configurations in the sigma
 	cd ~/workspace/sigmakee;	\
 	ant
 
+install_vampire: ## Install Vampire
+	cd $ONTOLOGYPORTAL_GIT;	\
+	git clone https://github.com/vprover/vampire;	\
+	cd vampire;	\
+	make vampire_rel;	\
+	mv vampire_rel_master* vampire
 
 install: clean uninstall ## Install all dependencies of the project
 	cd interopera;	\
