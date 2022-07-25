@@ -89,3 +89,6 @@ class OutputGenerator:
         csvwriter.writerow(sumo.header)
         csvwriter.writerows(sumo.data)
         alignment.close()
+
+        if self.verbose:
+            print(sumo.get_words())

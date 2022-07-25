@@ -30,6 +30,16 @@ class Word:
             meaning += f" {word}"
         return meaning.lstrip()
 
+    def __str__(self) -> str:
+        return f"""
+            Word: {self.word}
+            Translation: {self.translation}
+            Synonym: {self.syn}
+            Code: {self.code}
+            SUMO Relation: {self.relation}
+            Meaning: {self.meaning}
+        """
+
 
 class NullWord:
     def __init__(self, word, translation):
@@ -39,6 +49,16 @@ class NullWord:
         self.code = "null"
         self.relation = "null"
         self.meaning = "null"
+
+    def __str__(self):
+        return f"""
+                    Word: {self.word}
+                    Translation: {self.translation}
+                    Synonym: null
+                    Code: null
+                    SUMO Relation: null
+                    Meaning: null
+                """
 
 
 class SumoCheck:
@@ -111,3 +131,6 @@ class SumoCheck:
                         list(w.syn for w in self.selected_words),
                         list(w.relation for w in self.selected_words),
                         list(w.meaning for w in self.selected_words))
+
+    def get_words(self) -> tuple:
+        return tuple(word.translation for word in self.selected_words)
