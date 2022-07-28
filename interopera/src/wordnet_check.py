@@ -87,7 +87,6 @@ class SumoCheck:
         for i in range(len(wl)):
             wl[i] = wl[i].split("_")[-1].replace("\n", "")
         wl = sorted(list(set(wl)))
-        wl.append("Código")
 
         return wl
 
@@ -108,22 +107,23 @@ class SumoCheck:
 
     def wordnet_search(self) -> None:
         for word in self.input_list:
-            translated_word = self.get_translation(word)
-            match_list = []
-            match = False
-            for file_number, file in self.wordnet.items():
-                for line in file:
-                    phrase = str(line).split()
-                    lower_phrase = str(line).lower().split()[
-                        :phrase.index("|")]
-                    if translated_word.lower() in lower_phrase:
-                        match_list.append(
-                            Word(word, translated_word, phrase, file_number))
-                        match = True
-            if match:
-                self.distance_select(translated_word, match_list)
-            else:
-                self.selected_words.append(NullWord(word, translated_word))
+            if word:
+                translated_word = self.get_translation(word)
+                match_list = []
+                match = False
+                for file_number, file in self.wordnet.items():
+                    for line in file:
+                        phrase = str(line).split()
+                        lower_phrase = str(line).lower().split()[
+                            :phrase.index("|")]
+                        if translated_word.lower() in lower_phrase:
+                            match_list.append(
+                                Word(word, translated_word, phrase, file_number))
+                            match = True
+                if match:
+                    self.distance_select(translated_word, match_list)
+                else:
+                    self.selected_words.append(NullWord(word, translated_word))
 
         self.data = zip(list(w.word for w in self.selected_words),
                         list(w.translation for w in self.selected_words),
@@ -133,4 +133,7 @@ class SumoCheck:
                         list(w.meaning for w in self.selected_words))
 
     def get_words(self) -> tuple:
+        return tuple(word for word in self.selected_words)
+
+    def get_translations(self) -> tuple:
         return tuple(word.translation for word in self.selected_words)

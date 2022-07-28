@@ -95,7 +95,7 @@ class Controler:
 
     def link_with_sigma(self):
         self.sigma = Sigma()
-        self.sigma.link()
+        self.sigma.link(self.sumo.get_translations())
 
 
     def make_sigma_inferences(self):

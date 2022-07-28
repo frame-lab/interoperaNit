@@ -90,4 +90,4 @@ class OutputGenerator:
         sumo_alignment.close()
 
         if self.verbose:
-            print(self.sumo.get_words())
+            print(sumo.get_words())

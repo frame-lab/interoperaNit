@@ -23,7 +23,7 @@
 ;; Note that these mappings were done originally with WordNet 1.6 and then
 ;; mapped to 2.0, 2.1 and 3.0.  As a result, some new synsets in each version
 ;; may not initially have a mapping to SUMO.
-;; The WordNet mappings are courtesy of Jordi Daudé, Lluis Padró and German
+;; The WordNet mappings are courtesy of Jordi Daudï¿½, Lluis Padrï¿½ and German
 ;; Rigau, members of the Natural Language Research Group within TALP Research Center
 ;; for Language and Speech Technology and Applications of the UPC. The mappings are
 ;; available at <http://www.lsi.upc.es/~nlp/tools/mapping.html>
