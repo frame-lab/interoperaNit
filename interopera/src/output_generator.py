@@ -2,11 +2,9 @@ from csv import writer
 from src.verbose import Verbose
 
 class OutputGenerator:
-    def __init__(self, bases, verbose, sumo) -> None:
+    def __init__(self, bases, verbose) -> None:
         self.bases = bases
         self.verbose = verbose
-        self.sumo = sumo
-
 
     def generate_bigbase(self):
         f = open(f'csv/bigbase.csv', 'w', encoding='utf-8')
@@ -80,15 +78,15 @@ class OutputGenerator:
 
         f.close()
 
-    def generate_sumo_alignment(self):
+    def generate_sumo_alignment(self, sumo):
 
         sumo_alignment = open('csv/sumo_alignment.csv', 'w',
                          encoding='utf-8', newline='')
 
-        self.sumo.wordnet_search()
+        sumo.wordnet_search()
         csvwriter = writer(sumo_alignment)
-        csvwriter.writerow(self.sumo.header)
-        csvwriter.writerows(self.sumo.data)
+        csvwriter.writerow(sumo.header)
+        csvwriter.writerows(sumo.data)
         sumo_alignment.close()
 
         if self.verbose:

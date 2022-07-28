@@ -87,11 +87,11 @@ class Controler:
         self.aligner.align_magellan_entities()
 
     def generate_outputs(self):
-        self.sumo = SumoCheck()
         output = OutputGenerator(
-            self.aligner.get_aligned_bases(), options['verbose'], self.sumo)
+            self.aligner.get_aligned_bases(), options['verbose'])
         output.generate_bigbase()
-        output.generate_sumo_alignment()
+        self.sumo = SumoCheck()
+        output.generate_sumo_alignment(self.sumo)
 
     def link_with_sigma(self):
         self.sigma = Sigma()
