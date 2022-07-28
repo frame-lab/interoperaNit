@@ -1,14 +1,14 @@
 from csv import writer
 from src.verbose import Verbose
-from src.wordnet_check import SumoCheck
-
 
 class OutputGenerator:
-    def __init__(self, bases, verbose) -> None:
+    def __init__(self, bases, verbose, sumo) -> None:
         self.bases = bases
         self.verbose = verbose
+        self.sumo = sumo
 
-    def generate_csv(self):
+
+    def generate_bigbase(self):
         f = open(f'csv/bigbase.csv', 'w', encoding='utf-8')
 
         separator = ','
@@ -80,15 +80,16 @@ class OutputGenerator:
 
         f.close()
 
-        alignment = open('csv/alignment.csv', 'w',
+    def generate_sumo_alignment(self):
+
+        sumo_alignment = open('csv/sumo_alignment.csv', 'w',
                          encoding='utf-8', newline='')
 
-        sumo = SumoCheck()
-        sumo.wordnet_search()
-        csvwriter = writer(alignment)
-        csvwriter.writerow(sumo.header)
-        csvwriter.writerows(sumo.data)
-        alignment.close()
+        self.sumo.wordnet_search()
+        csvwriter = writer(sumo_alignment)
+        csvwriter.writerow(self.sumo.header)
+        csvwriter.writerows(self.sumo.data)
+        sumo_alignment.close()
 
         if self.verbose:
-            print(sumo.get_words())
+            print(self.sumo.get_words())

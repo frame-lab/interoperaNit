@@ -2,6 +2,8 @@ from src.base_files import BaseFiles
 from src.preparer import Preparer
 from src.aligner import Aligner
 from src.output_generator import OutputGenerator
+from src.wordnet_check import SumoCheck
+from src.sigma import Sigma
 from src.consultant import Consultant
 from src.validate import Validate
 from dotenv import load_dotenv
@@ -84,10 +86,20 @@ class Controler:
     def align_magellan_entities(self):
         self.aligner.align_magellan_entities()
 
-    def generate_csv(self):
+    def generate_outputs(self):
+        self.sumo = SumoCheck()
         output = OutputGenerator(
-            self.aligner.get_aligned_bases(), options['verbose'])
-        output.generate_csv()
+            self.aligner.get_aligned_bases(), options['verbose'], self.sumo)
+        output.generate_bigbase()
+        output.generate_sumo_alignment()
+
+    def link_with_sigma(self):
+        self.sigma = Sigma()
+        self.sigma.link()
+
+
+    def make_sigma_inferences(self):
+        self.sigma.make_inferences()
 
     def run_queries(self, query):
         consultant = Consultant()
@@ -153,18 +165,18 @@ if arg_len > 1:
         controler.align_translation_entities()
     if options['distance']:
         controler.align_distance_entities(options['max'], options['percent'])
-
-    if options['verbose']:
-        print('Generating csv files')
-
-    controler.generate_csv()
-
     if '-dm' in sys.argv:
         controler.align_deep_matcher_entities()
         sys.argv.remove('-d')
     if '-m' in sys.argv:
         controler.align_magellan_entities()
         sys.argv.remove('-m')
+
+    if options['verbose']:
+        print('Generating csv files')
+
+    controler.generate_outputs()
+    controler.link_with_sigma()
 
 queries = [
     line.replace('\n', '') for line in open('queries', 'r')]
@@ -173,6 +185,11 @@ if options['verbose']:
     print('Searching for queries')
 
 controler.run_queries(queries)
+
+if options['verbose']:
+    print('Making inferences')
+
+controler.make_sigma_inferences()
 
 if options['verbose']:
     print('Process has ended')
