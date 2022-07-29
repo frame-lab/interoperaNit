@@ -1,4 +1,5 @@
 from src.techniques.translation import Translation
+from src.sumo import Sumo
 
 from textdistance import hamming
 
@@ -125,15 +126,10 @@ class SumoCheck:
                 else:
                     self.selected_words.append(NullWord(word, translated_word))
 
-        self.data = zip(list(w.word for w in self.selected_words),
-                        list(w.translation for w in self.selected_words),
-                        list(w.code for w in self.selected_words),
-                        list(w.syn for w in self.selected_words),
-                        list(w.relation for w in self.selected_words),
-                        list(w.meaning for w in self.selected_words))
-
-    def get_words(self) -> tuple:
-        return tuple(word for word in self.selected_words)
-
-    def get_translations(self) -> tuple:
-        return tuple(word.translation for word in self.selected_words)
+        self.sumo_list = [Sumo(
+            w.word, 
+            w.translation, 
+            w.code, 
+            w.syn, 
+            w.relation, 
+            w.meaning) for w in self.selected_words]

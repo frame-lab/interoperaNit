@@ -90,4 +90,4 @@ class OutputGenerator:
         sumo_alignment.close()
 
         if self.verbose:
-            print(sumo.get_words())
+            print([data.translation for data in sumo.sumo_list])

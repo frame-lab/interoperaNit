@@ -93,12 +93,8 @@ class Controler:
         self.sumo = SumoCheck()
         output.generate_sumo_alignment(self.sumo)
 
-    def link_with_sigma(self):
-        self.sigma = Sigma()
-        self.sigma.link(self.sumo.get_translations())
-
-
     def make_sigma_inferences(self):
+        self.sigma = Sigma(self.sumo.sumo_list)
         self.sigma.make_inferences()
 
     def run_queries(self, query):
@@ -176,7 +172,6 @@ if arg_len > 1:
         print('Generating csv files')
 
     controler.generate_outputs()
-    controler.link_with_sigma()
 
 queries = [
     line.replace('\n', '') for line in open('queries', 'r')]
