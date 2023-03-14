@@ -19,7 +19,8 @@ class Base:
         return 'Base()'
 
     def __str__(self):
-        return f'name: {self.name} {{\n' + \
+        return f'  {{\n' + \
+            f'  name: {self.name} \n' + \
             f'  parameters: {self.parameters},\n' + \
             f'  entities: {self.entities},\n' + \
             f'  extension: {self.extension},\n' + \
