@@ -67,8 +67,8 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      processType,
-      haveQueries,
+      processType: processType || {},
+      haveQueries: haveQueries || {},
     },
   };
 }
