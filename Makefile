@@ -81,6 +81,8 @@ install_sigma: ## Install all Sigma dependencies
 	git clone https://github.com/ontologyportal/sumo;	\
 	git clone https://github.com/ontologyportal/TPTP-ANTLR;	\
 	git clone https://github.com/ontologyportal/SigmaUtils;	\
+	cd sigmakee;    \
+	git checkout 53cad0c14a9ddfeb04c11933ac2042cc816890ef;  \
 	cd ~;	\
 	mkdir .sigmakee;	\
 	cd .sigmakee;	\
@@ -110,7 +112,7 @@ configure_sigma: ## Make the last configurations in the sigma
 	ant
 
 install_vampire: ## Install Vampire
-	cd $ONTOLOGYPORTAL_GIT;	\
+	cd $$ONTOLOGYPORTAL_GIT;	\
 	git clone https://github.com/vprover/vampire;	\
 	cd vampire;	\
 	make vampire_rel;	\
@@ -139,4 +141,5 @@ install_java: ## Install java and set its path
 
 install_node: ## Install node
 	sudo apt-get install nodejs
-	sudo apt-get install npm 
+	sudo apt-get install npm
+
