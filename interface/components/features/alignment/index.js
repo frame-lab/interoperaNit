@@ -6,6 +6,7 @@ import Definitions from "../../modules/definitions";
 import Process from "../../modules/process";
 import Files from "../../modules/files";
 import Queries from "../../modules/queries";
+import Inferences from "../../modules/inferences";
 import Button from "../../elements/button";
 import { formatRouterPushObject } from "../../../utils/formatter";
 import * as Styles from "./styles";
@@ -18,6 +19,7 @@ function Alignment() {
   const [split, setSplit] = useState([""]);
   const [approximate, setApproximate] = useState([""]);
   const [queries, setQueries] = useState([""]);
+  const [inferences, setInferences] = useState([""]);
   const [options, setOptions] = useState([
     { title: "Approximate", value: false, code: "-a" },
     { title: "Synonym", value: false, code: "-s" },
@@ -41,11 +43,16 @@ function Alignment() {
         break;
       case 3: {
         setStep(4);
+        break;
+      }
+      case 4: {
+        setStep(5);
         const stringfiedQuery = formatRouterPushObject({
           approximate,
           files,
           options,
           queries,
+          inferences,
           split,
           unique,
           processType,
@@ -90,6 +97,10 @@ function Alignment() {
       case 3:
         return <Queries queries={queries} setQueries={setQueries} />;
       case 4:
+        return (
+          <Inferences inferences={inferences} setInferences={setInferences} />
+        );
+      case 5:
         return <Process processType={processType} />;
       default:
         return <> </>;
@@ -97,7 +108,7 @@ function Alignment() {
   };
 
   const showButton = () => {
-    return step !== 4 ? (
+    return step !== 5 ? (
       <Button onClick={nextStep} size="large" variant="default" width="200px">
         <Typography fontSize="20px" width="auto" variant="h1" tAlign="center">
           CONFIRM
@@ -109,7 +120,7 @@ function Alignment() {
   return (
     <Styles.Body>
       <Typography fontSize="35px" variant="h1">
-        Step {step}/4
+        Step {step}/5
       </Typography>
       {shouldShow()}
       {showButton()}

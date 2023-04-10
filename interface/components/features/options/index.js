@@ -9,7 +9,7 @@ import * as Styles from "./styles";
 function Options() {
   const router = useRouter();
   const [selectedOption, setselectedOption] = useState("");
-  const optionsList = ["Deep matcher", "Pandas"];
+  const optionsList = ["Deep matcher", "Pandas", "SUMO"];
 
   const showOptions = () => {
     return optionsList.map((optTitle, index) => {

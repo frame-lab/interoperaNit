@@ -4,5 +4,5 @@ export const verifyToolErrors = (error) => {
   ) {
     return "Please revise your queries and try again.";
   }
-  return;
+  return "";
 };
