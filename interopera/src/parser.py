@@ -1,6 +1,5 @@
 from os import walk
-# from src.node import Node
-from node import Node
+from src.node import Node
 
 
 class Parser:
@@ -35,15 +34,16 @@ class Parser:
             for line in sample['file'].readlines():
                 if line[:2] != ';;':
                     parentheses += line.count('(')
-                    if 'instance' in line:
+                    if '(instance' in line:
                         name = line.strip().split()[-1].replace(')', '')
-                        if not has_node:
-                            node = Node(name, [])
-                            nodes[name] = node
-                            has_node = True
-                            previous_name = name
-                        else:
-                            nodes[previous_name].childs.append(name)
+                        if '?' not in name:
+                            if not has_node:
+                                node = Node(name, [])
+                                nodes[name] = node
+                                has_node = True
+                                previous_name = name
+                            else:
+                                nodes[previous_name].childs.append(name)
                     parentheses -= line.count(')')
                     if parentheses == 0:
                         has_node = False
