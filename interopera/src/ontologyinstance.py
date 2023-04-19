@@ -11,6 +11,9 @@ class OntologyInstance:
     def add_class(self, name: str) -> None:
         self.classes.add(name)
 
+    def add_attribute(self, key: str, attribute: dict) -> None:
+        self.attributes[key] = (attribute)
+
     def __str__(self):
         return f'''
             Name: {self.name},
