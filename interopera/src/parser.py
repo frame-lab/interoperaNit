@@ -1,6 +1,7 @@
 from os import walk
 from ontologyinstance import OntologyInstance
 from ontologyclass import OntologyClass
+import re
 
 
 class Parser:
@@ -28,69 +29,77 @@ class Parser:
     def make_tree(self) -> None:
         samples = self.samples()
         for sample in samples:
-            parentheses = 0
 
-            is_inference = False
-            is_text = False
-            multiline_content = ''
             ontology_classes = dict()
             ontology_instances = dict()
+            is_inference = False
+            parentheses = 0
+            line_holder = ''
+            blank_line = True
             for line in sample['file'].readlines():
-                if line[:2] != ';;':
-                    line_check = line.split('"')
-                    if len(line_check) == 1:
-                        parentheses += line.count('(')
-                    elif len(line_check) > 1:
-                        parentheses += line_check[0].count('(')
-                        if line.count('"') == 1:
-                            is_text = True
+                if len(line.strip()) == 0 or line[0] == ';':
+                    if not blank_line:
+                        _, lines = self.format_lines(line_holder.rstrip())
+                        multiline_content = ''
+                        line_list = list()
+                        for string in lines:
+                            parentheses += string.count("(")
+                            if parentheses >= 1:
+                                line_list = [*line_list, *string.strip().split(' ')]
+                                first_operation = line_list[0][1:]
 
-                    if parentheses >= 1:
-                        line_list = line.strip().split(' ')
-                        first_operation = line_list[0][1:]
+                                if first_operation == "=>" or first_operation == "exists" or first_operation == "<=>":
+                                    is_inference = True
+                                parentheses -= string.count(')')
 
-                        if first_operation == '=>' or first_operation == 'exists' or first_operation == '<=>':
-                            is_inference = True
-
-                        if not is_inference:
-                            if ')' not in line:
-                                if multiline_content == '':
-                                    multiline_content = line.strip()
-                                else:
-                                    multiline_content += f' {line.strip()}'
-                            else:
-                                if multiline_content != '':
-                                    line_list = multiline_content.split(' ')
-                                if first_operation == 'subclass':
-                                    self.create_subclass(
-                                        line_list, ontology_classes)
-                                elif first_operation == 'instance':
-                                    self.create_instance(
-                                        line_list, ontology_instances)
-                                else:
-                                    self.create_attribute(
-                                        line_list, ontology_instances, ontology_classes)
-                                multiline_content = ''
-
-                    if len(line_check) == 1:
-                        parentheses -= line.count(')')
-                    elif len(line_check) > 1 and line[-1] == ')':
-                        parentheses -= line_check[-1].count(')')
-
-                    if parentheses == 0:
-                        is_inference = False
+                                if not is_inference and parentheses == 0:
+                                    if ')' not in string:
+                                        if multiline_content == '':
+                                            multiline_content = string.strip()
+                                        else:
+                                            multiline_content += f" {string.strip()}"
+                                    else:
+                                        if multiline_content != '':
+                                            line_list = multiline_content.split(' ')
+                                        if first_operation == "subclass":
+                                            self.create_subclass(
+                                                line_list, ontology_classes)
+                                        elif first_operation == "instance":
+                                            self.create_instance(
+                                                line_list, ontology_instances)
+                                        else:
+                                            self.create_attribute(
+                                                line_list, ontology_instances, ontology_classes)
+                                        multiline_content = ''
+                            if parentheses == 0:
+                                is_inference = False
+                        line_holder = ''
+                    blank_line = True
+                else:
+                    line_holder += line.strip() + '\n'
+                    blank_line = False
             self.ontology_context[sample['name']] = dict()
             self.ontology_context[sample['name']
                                   ]['instances'] = ontology_instances
             self.ontology_context[sample['name']]['classes'] = ontology_classes
 
     @staticmethod
-    def format_class(line_list: str) -> str:
+    def format_lines(text: str) -> tuple[list[str], list[str]]:
+        strings = re.findall('("[^"]*")', text)
+        new_text = text
+        for count, string in enumerate(strings):
+            new_text = new_text.replace(string, f"var{count}")
+
+        return strings, new_text.split('\n')
+
+    @staticmethod
+    def format_class(line_list: list) -> str:
         return line_list[2].replace(')', '')
 
-    def create_attribute(self, line_list: str, instance_dict: dict[str, OntologyInstance], class_dict: dict[str, OntologyClass]) -> None:
+    def create_attribute(self, line_list: list, instance_dict: dict[str, OntologyInstance], class_dict: dict[str, OntologyClass]) -> None:
         attribute_key = line_list[0]
-        if "\"" in line_list:
+        var = [re.findall("(var[0-9]*)", line) for line in line_list]
+        if len(var) > 0:
             value = line_list[1]
             entity = line_list[-1]
         else:
@@ -108,7 +117,7 @@ class Parser:
             instance_dict[entity].add_attribute(
                 attribute_key.replace('(', ''), new_attribute)
 
-    def create_subclass(self, line_list: str, class_dict: dict[str, OntologyClass]) -> None:
+    def create_subclass(self, line_list: list, class_dict: dict[str, OntologyClass]) -> None:
         subclass = line_list[1]
         _class = self.format_class(line_list)
         keys = class_dict.keys()
@@ -121,7 +130,7 @@ class Parser:
             class_dict[subclass] = new_subclass
         class_dict[subclass].add_class(_class)
 
-    def create_instance(self, line_list: str, instance_dict: dict[str, OntologyInstance]) -> None:
+    def create_instance(self, line_list: list, instance_dict: dict[str, OntologyInstance]) -> None:
         target_instance = line_list[1]
         _class = self.format_class(line_list)
         if target_instance not in instance_dict.keys():
@@ -133,9 +142,9 @@ class Parser:
 
 parser = Parser('../sumo/', True)
 parser.make_tree()
-for file, context in parser.ontology_context.items():
-    print(file)
-    for category, items in context.items():
-        print(f'\t{category}\n')
-        for key, value in items.items():
-            print(f'{key}:\n{value}')
+# for file, context in parser.ontology_context.items():
+#     print(file)
+#     for category, items in context.items():
+#         print(f'\t{category}\n')
+#         for key, value in items.items():
+#             print(f'{key}:\n{value}')
