@@ -12,7 +12,7 @@ class OntologyClass:
         self.classes.add(new_class)
 
     def add_attribute(self, key: str,  attribute: dict) -> None:
-        self.attributes[key] = (attribute)
+        self.attributes[key] = attribute
 
     def __str__(self):
         return f'''

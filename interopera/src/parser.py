@@ -9,6 +9,21 @@ class Parser:
         self.path = path
         self.verbose = verbose
         self.ontology_context = dict()
+        self.vars = dict()
+        self.var_count = 0
+
+        self.class_index = {
+            '1': (
+                'located',
+                'documentation',
+                'domainSubclass'
+            ),
+            '2': (
+                'abbreviation',
+                'termFormat',
+                'relatedInternalConcept'
+            ),
+        }
 
     def samples(self) -> list:
         file_objects = []
@@ -71,6 +86,7 @@ class Parser:
                                             self.create_attribute(
                                                 line_list, ontology_instances, ontology_classes)
                                         multiline_content = ''
+                                        line_list = []
                             if parentheses == 0:
                                 is_inference = False
                         line_holder = ''
@@ -83,12 +99,14 @@ class Parser:
                                   ]['instances'] = ontology_instances
             self.ontology_context[sample['name']]['classes'] = ontology_classes
 
-    @staticmethod
-    def format_lines(text: str) -> tuple[list[str], list[str]]:
+    def format_lines(self, text: str) -> tuple[list[str], list[str]]:
         strings = re.findall('("[^"]*")', text)
         new_text = text
-        for count, string in enumerate(strings):
-            new_text = new_text.replace(string, f"var{count}")
+        for string in strings:
+            var = f"var{self.var_count}"
+            self.var_count += 1
+            new_text = new_text.replace(string, var)
+            self.vars[var] = string
 
         return strings, new_text.split('\n')
 
@@ -97,25 +115,41 @@ class Parser:
         return line_list[2].replace(')', '')
 
     def create_attribute(self, line_list: list, instance_dict: dict[str, OntologyInstance], class_dict: dict[str, OntologyClass]) -> None:
-        attribute_key = line_list[0]
-        var = [re.findall("(var[0-9]*)", line) for line in line_list]
+        attribute_key = line_list[0].replace('(', '')
+        result = [re.findall("^(var[0-9]*)", line) for line in line_list]
+        value = ''
+        var = list()
+        for element in result:
+            if element:
+                var.append(element)
         if len(var) > 0:
-            value = line_list[1]
-            entity = line_list[-1]
-        else:
-            value = line_list[-1]
+            index = self.find_index(line_list, var[0][0])
+            value = self.vars[line_list[index].replace(')', '').replace(';', '')]
             entity = line_list[1]
+        else:
+            if attribute_key in self.class_index['1']:
+                values = line_list[-1]
+                entity = line_list[1]
+            else:
+                if len(line_list) == 2:
+                    # Create instance
+                    return
+                else:
+                    values = list(line_list[1]) + line_list[3:]
+                    entity = line_list[2]
+                    for v in values:
+                        value += f"{v}, "
 
-        new_attribute = {"value": value, "options": line_list[1:-2]}
+        new_attribute = {"value": value}
 
         class_keys = class_dict.keys()
         instance_keys = instance_dict.keys()
         if entity in class_keys:
             class_dict[entity].add_attribute(
-                attribute_key.replace('(', ''), new_attribute)
+                attribute_key, new_attribute)
         elif entity in instance_keys:
             instance_dict[entity].add_attribute(
-                attribute_key.replace('(', ''), new_attribute)
+                attribute_key, new_attribute)
 
     def create_subclass(self, line_list: list, class_dict: dict[str, OntologyClass]) -> None:
         subclass = line_list[1]
@@ -139,6 +173,12 @@ class Parser:
         else:
             instance_dict[target_instance].add_class(_class)
 
+    @staticmethod
+    def find_index(collection: list[str], text: str):
+        for index, item in enumerate(collection):
+            if text in item:
+                return index
+
 
 parser = Parser('../sumo/', True)
 parser.make_tree()
@@ -148,3 +188,27 @@ parser.make_tree()
 #         print(f'\t{category}\n')
 #         for key, value in items.items():
 #             print(f'{key}:\n{value}')
+
+'''Show all'''
+for file, context in parser.ontology_context.items():
+    print(file)
+    for category, items in context.items():
+        print(f'\t{category}')
+        for key, value in items.items():
+            print(f'\t\t{key}:{value}')
+        print()
+
+
+# '''Show instances'''
+# for file, context in parser.ontology_context.items():
+#     print(f"File: {file}")
+#     for key, value in context["instances"].items():
+#         print(f'\t{key}')
+#     print()
+
+# '''Show classes'''
+# for file, context in parser.ontology_context.items():
+#     print(f"File: {file}")
+#     for key, value in context["classes"].items():
+#         print(f'\t{key}')
+#     print()
