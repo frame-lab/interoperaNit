@@ -10,7 +10,9 @@ class Parser:
         self.verbose = verbose
         self.ontology_context = dict()
         self.vars = dict()
+        self.terms = dict()
         self.var_count = 0
+        self.language = "EnglishLanguage"
 
         self.class_index = {
             '1': (
@@ -111,10 +113,21 @@ class Parser:
         return strings, new_text.split('\n')
 
     @staticmethod
-    def format_class(line_list: list) -> str:
-        return line_list[2].replace(')', '')
+    def format_class(text: str) -> str:
+        characters = (
+            ')',
+            '(',
+            '.',
+            ',',
+        )
+        new_text = text
+        for char in characters:
+            new_text = new_text.replace(char, '')
+        return new_text
 
     def create_attribute(self, line_list: list, instance_dict: dict[str, OntologyInstance], class_dict: dict[str, OntologyClass]) -> None:
+        class_keys = class_dict.keys()
+        instance_keys = instance_dict.keys()
         attribute_key = line_list[0].replace('(', '')
         result = [re.findall("^(var[0-9]*)", line) for line in line_list]
         value = ''
@@ -124,8 +137,20 @@ class Parser:
                 var.append(element)
         if len(var) > 0:
             index = self.find_index(line_list, var[0][0])
-            value = self.vars[line_list[index].replace(')', '').replace(';', '')]
-            entity = line_list[1]
+            value = self.vars[line_list[index].replace(')', '').replace(';', '')].replace('\n', ' ')[1:-1]
+            if attribute_key == "termFormat":
+                entity = line_list[2]
+                try:
+                    self.terms[line_list[1]]
+                except KeyError:
+                    self.terms[line_list[1]] = dict()
+                self.terms[line_list[1]][entity] = value
+                value = {line_list[1]: value}
+                if entity not in class_keys:
+                    new_class = OntologyClass(entity)
+                    class_dict[entity] = new_class
+            else:
+                entity = line_list[1]
         else:
             if attribute_key in self.class_index['1']:
                 values = line_list[-1]
@@ -141,9 +166,6 @@ class Parser:
                         value += f"{v}, "
 
         new_attribute = {"value": value}
-
-        class_keys = class_dict.keys()
-        instance_keys = instance_dict.keys()
         if entity in class_keys:
             class_dict[entity].add_attribute(
                 attribute_key, new_attribute)
@@ -153,7 +175,7 @@ class Parser:
 
     def create_subclass(self, line_list: list, class_dict: dict[str, OntologyClass]) -> None:
         subclass = line_list[1]
-        _class = self.format_class(line_list)
+        _class = self.format_class(line_list[2])
         keys = class_dict.keys()
 
         if _class not in keys:
@@ -166,7 +188,7 @@ class Parser:
 
     def create_instance(self, line_list: list, instance_dict: dict[str, OntologyInstance]) -> None:
         target_instance = line_list[1]
-        _class = self.format_class(line_list)
+        _class = self.format_class(line_list[2])
         if target_instance not in instance_dict.keys():
             new_instance = OntologyInstance(target_instance, _class)
             instance_dict[target_instance] = new_instance
@@ -179,15 +201,33 @@ class Parser:
             if text in item:
                 return index
 
+    def translate_doc(self) -> None:
+        for context in self.ontology_context.values():
+            for instance in context["classes"].values():
+                if "documentation" in instance.attributes.keys():
+                    substring = instance.attributes["documentation"]["value"]
+                    while substring.count("&%") > 0:
+                        index = substring.index("&%")
+                        substring = substring[index + 2:]
+                        variable = self.format_class(substring.split(maxsplit=1)[0])
+                        try:
+                            text_value = self.terms[self.language][variable]
+                            instance.attributes["documentation"]["value"] = instance.attributes["documentation"]["value"].replace(f"&%{variable}", text_value)
+                        except KeyError:
+                            pass
+
 
 parser = Parser('../sumo/', True)
 parser.make_tree()
+# print(parser.terms)
+parser.translate_doc()
 # for file, context in parser.ontology_context.items():
 #     print(file)
 #     for category, items in context.items():
 #         print(f'\t{category}\n')
 #         for key, value in items.items():
 #             print(f'{key}:\n{value}')
+
 
 '''Show all'''
 for file, context in parser.ontology_context.items():
@@ -197,6 +237,14 @@ for file, context in parser.ontology_context.items():
         for key, value in items.items():
             print(f'\t\t{key}:{value}')
         print()
+
+
+# '''Show terms'''
+# for language, dicts in parser.terms.items():
+#     print(f"Language: {language}")
+#     for key, value in dicts.items():
+#         print(f'\t{key}: {value}')
+#         print()
 
 
 # '''Show instances'''
