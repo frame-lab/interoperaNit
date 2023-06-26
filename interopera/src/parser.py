@@ -1,6 +1,7 @@
 from os import walk
 from ontologyinstance import OntologyInstance
 from ontologyclass import OntologyClass
+from techniques.plural import Plural
 import re
 
 
@@ -119,6 +120,7 @@ class Parser:
             '(',
             '.',
             ',',
+            ';',
         )
         new_text = text
         for char in characters:
@@ -137,18 +139,18 @@ class Parser:
                 var.append(element)
         if len(var) > 0:
             index = self.find_index(line_list, var[0][0])
-            value = self.vars[line_list[index].replace(')', '').replace(';', '')].replace('\n', ' ')[1:-1]
+            value = self.vars[Parser.format_class(line_list[index])].replace('\n', ' ')[1:-1]
             if attribute_key == "termFormat":
-                entity = line_list[2]
+                entity = line_list[2].lower()
                 try:
                     self.terms[line_list[1]]
                 except KeyError:
                     self.terms[line_list[1]] = dict()
                 self.terms[line_list[1]][entity] = value
                 value = {line_list[1]: value}
-                if entity not in class_keys:
+                if entity not in class_keys and Plural.pluralize(entity) not in class_keys:
                     new_class = OntologyClass(entity)
-                    class_dict[entity] = new_class
+                    class_dict[entity.lower()] = new_class
             else:
                 entity = line_list[1]
         else:
@@ -166,12 +168,25 @@ class Parser:
                         value += f"{v}, "
 
         new_attribute = {"value": value}
+        has_found = False
+        entity = entity.lower()
         if entity in class_keys:
-            class_dict[entity].add_attribute(
+            class_dict[entity.lower()].add_attribute(
                 attribute_key, new_attribute)
+            has_found = True
         elif entity in instance_keys:
-            instance_dict[entity].add_attribute(
+            instance_dict[entity.lower()].add_attribute(
                 attribute_key, new_attribute)
+            has_found = True
+
+        if not has_found:
+            entity = Plural.pluralize(entity)
+            if entity in class_keys:
+                class_dict[entity.lower()].add_attribute(
+                    attribute_key, new_attribute)
+            elif entity in instance_keys:
+                instance_dict[entity.lower()].add_attribute(
+                    attribute_key, new_attribute)
 
     def create_subclass(self, line_list: list, class_dict: dict[str, OntologyClass]) -> None:
         subclass = line_list[1]
@@ -180,20 +195,20 @@ class Parser:
 
         if _class not in keys:
             new_class = OntologyClass(_class)
-            class_dict[_class] = new_class
+            class_dict[_class.lower()] = new_class
         if subclass not in keys:
             new_subclass = OntologyClass(subclass)
-            class_dict[subclass] = new_subclass
-        class_dict[subclass].add_class(_class)
+            class_dict[subclass.lower()] = new_subclass
+        class_dict[subclass.lower()].add_class(_class)
 
     def create_instance(self, line_list: list, instance_dict: dict[str, OntologyInstance]) -> None:
         target_instance = line_list[1]
         _class = self.format_class(line_list[2])
         if target_instance not in instance_dict.keys():
             new_instance = OntologyInstance(target_instance, _class)
-            instance_dict[target_instance] = new_instance
+            instance_dict[target_instance.lower()] = new_instance
         else:
-            instance_dict[target_instance].add_class(_class)
+            instance_dict[target_instance.lower()].add_class(_class)
 
     @staticmethod
     def find_index(collection: list[str], text: str):
@@ -211,10 +226,14 @@ class Parser:
                         substring = substring[index + 2:]
                         variable = self.format_class(substring.split(maxsplit=1)[0])
                         try:
-                            text_value = self.terms[self.language][variable]
+                            text_value = self.terms[self.language][variable.lower()]
                             instance.attributes["documentation"]["value"] = instance.attributes["documentation"]["value"].replace(f"&%{variable}", text_value)
                         except KeyError:
-                            pass
+                            try:
+                                text_value = self.terms[self.language][Plural.pluralize(variable.lower())]
+                                instance.attributes["documentation"]["value"] = instance.attributes["documentation"]["value"].replace(f"&%{variable}", Plural.pluralize(text_value))
+                            except KeyError:
+                                pass
 
 
 parser = Parser('../sumo/', True)
