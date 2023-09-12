@@ -50,6 +50,7 @@ class Parser:
 
             ontology_classes = dict()
             ontology_instances = dict()
+            ontology_inferences = []
             is_inference = False
             parentheses = 0
             line_holder = ''
@@ -91,6 +92,8 @@ class Parser:
                                         multiline_content = ''
                                         line_list = []
                             if parentheses == 0:
+                                if is_inference:
+                                    ontology_inferences.append(line_holder)
                                 is_inference = False
                         line_holder = ''
                     blank_line = True
@@ -101,6 +104,7 @@ class Parser:
             self.ontology_context[sample['name']
                                   ]['instances'] = ontology_instances
             self.ontology_context[sample['name']]['classes'] = ontology_classes
+            self.ontology_context[sample['name']]['inferences'] = ontology_inferences
 
     def format_lines(self, text: str) -> tuple[list[str], list[str]]:
         strings = re.findall('("[^"]*")', text)
@@ -159,7 +163,7 @@ class Parser:
                 entity = line_list[1]
             else:
                 if len(line_list) == 2:
-                    # Create instance
+                    # Criar instância
                     return
                 else:
                     values = list(line_list[1]) + line_list[3:]
@@ -218,64 +222,39 @@ class Parser:
 
     def translate_doc(self) -> None:
         for context in self.ontology_context.values():
-            for instance in context["classes"].values():
-                if "documentation" in instance.attributes.keys():
-                    substring = instance.attributes["documentation"]["value"]
+            for _class in context["classes"].values():
+                if "documentation" in _class.attributes.keys():
+                    substring = _class.attributes["documentation"]["value"]
                     while substring.count("&%") > 0:
                         index = substring.index("&%")
                         substring = substring[index + 2:]
                         variable = self.format_class(substring.split(maxsplit=1)[0])
                         try:
                             text_value = self.terms[self.language][variable.lower()]
-                            instance.attributes["documentation"]["value"] = instance.attributes["documentation"]["value"].replace(f"&%{variable}", text_value)
+                            _class.attributes["documentation"]["value"] = _class.attributes["documentation"]["value"].replace(f"&%{variable}", text_value)
                         except KeyError:
                             try:
                                 text_value = self.terms[self.language][Plural.pluralize(variable.lower())]
-                                instance.attributes["documentation"]["value"] = instance.attributes["documentation"]["value"].replace(f"&%{variable}", Plural.pluralize(text_value))
+                                _class.attributes["documentation"]["value"] = _class.attributes["documentation"]["value"].replace(f"&%{variable}", Plural.pluralize(text_value))
                             except KeyError:
                                 pass
 
+    def read_sentence(self, text: str) -> None:
+        parenthesis_stack = []
 
-parser = Parser('../sumo/', True)
+        for index, char in enumerate(text):
+            if char == '(':
+                parenthesis_stack.insert(0, index)
+
+        for parenthesis_index in parenthesis_stack:
+            closing_index = parenthesis_index + text[parenthesis_index:].find(')')
+            substring = text[parenthesis_index:closing_index + 1]
+            var_text = f"var{self.var_count}"
+            self.var_count += 1
+            self.vars[var_text] = substring.replace('\n', ' ')
+            text = text[:parenthesis_index] + var_text + text[closing_index + 1:]
+
+
+parser = Parser('sumo/', True)
 parser.make_tree()
-# print(parser.terms)
 parser.translate_doc()
-# for file, context in parser.ontology_context.items():
-#     print(file)
-#     for category, items in context.items():
-#         print(f'\t{category}\n')
-#         for key, value in items.items():
-#             print(f'{key}:\n{value}')
-
-
-'''Show all'''
-for file, context in parser.ontology_context.items():
-    print(file)
-    for category, items in context.items():
-        print(f'\t{category}')
-        for key, value in items.items():
-            print(f'\t\t{key}:{value}')
-        print()
-
-
-# '''Show terms'''
-# for language, dicts in parser.terms.items():
-#     print(f"Language: {language}")
-#     for key, value in dicts.items():
-#         print(f'\t{key}: {value}')
-#         print()
-
-
-# '''Show instances'''
-# for file, context in parser.ontology_context.items():
-#     print(f"File: {file}")
-#     for key, value in context["instances"].items():
-#         print(f'\t{key}')
-#     print()
-
-# '''Show classes'''
-# for file, context in parser.ontology_context.items():
-#     print(f"File: {file}")
-#     for key, value in context["classes"].items():
-#         print(f'\t{key}')
-#     print()
