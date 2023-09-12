@@ -29,6 +29,12 @@ class Parser:
         }
 
     def samples(self) -> list:
+        """
+        Lê cada arquivo do diretório da SUMO, definido no construtor da classe, e associa um dicionário para cada
+        arquivo.
+
+        Retorna a lista dos dicionários.
+        """
         file_objects = []
         for (_, _, filenames) in walk(self.path):
             for i in range(0, len(filenames)):
@@ -45,6 +51,13 @@ class Parser:
         return file_objects
 
     def make_tree(self) -> None:
+        """
+        Verifica cada linha dos arquivos, definindo os valores passados por texto e concatenando as linhas, caso
+        necessário. Inferências atualmente são desconsideradas.
+
+        Os valores obtidos são salvos no atributo ontology_context.
+        """
+
         samples = self.samples()
         for sample in samples:
 
@@ -107,6 +120,11 @@ class Parser:
             self.ontology_context[sample['name']]['inferences'] = ontology_inferences
 
     def format_lines(self, text: str) -> tuple[list[str], list[str]]:
+        """
+        Recebe uma string e filtra valores definidos entre parênteses, substituindo por variáveis em texto.
+
+        Retorna a string filtrada.
+        """
         strings = re.findall('("[^"]*")', text)
         new_text = text
         for string in strings:
@@ -119,6 +137,11 @@ class Parser:
 
     @staticmethod
     def format_class(text: str) -> str:
+        """
+        Recebe um texto e o formata, removendo os caracteres definidos internamente.
+
+        Retorna a string formatada.
+        """
         characters = (
             ')',
             '(',
@@ -132,6 +155,17 @@ class Parser:
         return new_text
 
     def create_attribute(self, line_list: list, instance_dict: dict[str, OntologyInstance], class_dict: dict[str, OntologyClass]) -> None:
+        """
+        Recebe uma linha do arquivo separada em uma lista, o dicionário das instâncias da ontologia e o dicionário das
+        classes da ontologia.
+
+        Cria um novo atributo vinculado a uma instância ou classe, adicionando-o em sua lista de atributos. Também
+        verifica casos em que o atributo está sendo utilizado como plural.
+
+        Caso uma classe seja mencionada mas não exista, ela é adicionada à lista de classes. Atualmente as instâncias
+        não possuem essa mesma funcionalidade.
+        """
+
         class_keys = class_dict.keys()
         instance_keys = instance_dict.keys()
         attribute_key = line_list[0].replace('(', '')
@@ -193,6 +227,13 @@ class Parser:
                     attribute_key, new_attribute)
 
     def create_subclass(self, line_list: list, class_dict: dict[str, OntologyClass]) -> None:
+        """
+        Recebe uma linha separada em lista, e também o dicionário das classes.
+
+        Cria uma nova classe a partir de uma linha pré-identificada.
+
+        Adiciona a nova classe no dicionário das classes e, caso seja uma subclasse, também vincula à classe superior.
+        """
         subclass = line_list[1]
         _class = self.format_class(line_list[2])
         keys = class_dict.keys()
@@ -206,6 +247,13 @@ class Parser:
         class_dict[subclass.lower()].add_class(_class)
 
     def create_instance(self, line_list: list, instance_dict: dict[str, OntologyInstance]) -> None:
+        """
+        Recebe uma linha separada em lista, e também o dicionário das instâncias.
+
+        Cria uma nova instância a partir de uma linha pré-identificada.
+
+        Adiciona a nova instância no dicionário das instâncias.
+        """
         target_instance = line_list[1]
         _class = self.format_class(line_list[2])
         if target_instance not in instance_dict.keys():
@@ -216,11 +264,20 @@ class Parser:
 
     @staticmethod
     def find_index(collection: list[str], text: str):
+        """
+        Recebe uma lista de textos e um texto a ser procurado.
+
+        Retorna o index do texto, caso exista na lista.
+        """
         for index, item in enumerate(collection):
             if text in item:
                 return index
 
     def translate_doc(self) -> None:
+        """
+        Busca cada classe presente nas ontologias e, caso possua um atributo de documentação, traduz todas as variáveis
+        internas.
+        """
         for context in self.ontology_context.values():
             for _class in context["classes"].values():
                 if "documentation" in _class.attributes.keys():
@@ -240,6 +297,12 @@ class Parser:
                                 pass
 
     def read_sentence(self, text: str) -> None:
+        """
+        Recebe uma string com uma sentença completa, definida na ontologia.
+
+        Converte todos os valores demarcados por parênteses em variáveis. Salva os valores reais junto do contador
+        associado na lista de variáveis, criada no construtor.
+        """
         parenthesis_stack = []
 
         for index, char in enumerate(text):
